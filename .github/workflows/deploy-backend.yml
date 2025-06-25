@@ -4,8 +4,7 @@ on:
   push:
     branches: [ jack.nguyen ]
     paths:
-      - 'backend/Dockerfile'
-      - 'backend/package.json'
+      # - 'backend/package.json'
   workflow_dispatch:
 
 env:
