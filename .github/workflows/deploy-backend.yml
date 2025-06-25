@@ -2,16 +2,20 @@ name: Deploy Backend to Cloud Run
 
 on:
   push:
-    branches: [jack.nguyen]
+    branches: [ main ]
+    paths:
+      - 'backend/Dockerfile'
+      - 'backend/package.json'
   workflow_dispatch:
 
 env:
-  SERVICE_NAME: Domain-Validator-NodeJS
-  IMAGE_NAME: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/Domain-Validator-NodeJS
+  SERVICE_NAME: domain-validator-service
+  IMAGE_NAME: asia.gcr.io/${{ secrets.GCP_PROJECT }}/domain-validator-service
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
