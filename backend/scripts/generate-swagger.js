@@ -6,7 +6,7 @@ const doc = {
     description: 'Auto-generated OpenAPI spec',
     version: '1.0.0'
   },
-  host: 'localhost:8080',
+  host: '',
   basePath: '/api',
   schemes: ['http'],
   consumes: ['application/json'],
