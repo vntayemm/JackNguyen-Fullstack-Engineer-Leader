@@ -15,109 +15,46 @@ A comprehensive fullstack application for testing and validating DNS records, SP
 ## Project Structure
 
 ```
-├── backend/                 # FastAPI backend
-│   ├── app/
-│   │   ├── api/            # API routes
-│   │   ├── core/           # Core configuration
-│   │   ├── models/         # Database models
+├── backend/                # FastAPI backend
+│   ├── scripts/            # This is auto generate the swagger. The slug is /api-docs
+│   ├── src/
+│   │   ├── controller/     # Validate the input, process the in/out put
+│   │   ├── routes/         # Collect all of routed
 │   │   ├── services/       # Business logic
-│   ├── tests/              # Backend tests
-│   └── requirements.txt    # Python dependencies
 ├── frontend/               # React frontend
+│   ├── scripts/            # Help developer to validate the environment
 │   ├── src/
 │   │   ├── components/     # React components
+│   │   ├── config/         # Collect important of config into index.ts and set default if empty
 │   │   ├── pages/          # Page components
 │   │   ├── services/       # API services
 │   ├── public/             # Static assets
-│   └── package.json        # Node.js dependencies
-├── tests/                  # Integration tests
-│   └── test_sample.py      # Original test file
-└── docker-compose.yml      # Docker configuration
 ```
 
-## Quick Start
-
-### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- Docker (optional)
-
-### Backend Setup
+## Backend Setup
 ```bash
 cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+npm i && npm run dev
 ```
 
-### Frontend Setup
+## Frontend Setup
 ```bash
 cd frontend
-npm install
-npm start
+npm i && npm start
 ```
 
-### Running Tests
-```bash
-# Backend tests
-cd backend
-pytest
+## Development
+- Backend: http://localhost:8080/api-docs
+- Frontend: http://localhost:3000
 
-# Frontend tests
-cd frontend
-npm test
-
-# Integration tests
-cd tests
-pytest test_sample.py -svv
-```
-
-## API Endpoints
-
-- `GET /api/domains/validate/{domain}` - Validate domain format
-- `POST /api/spf/analyze` - Analyze SPF records
-- `POST /api/dmarc/analyze` - Analyze DMARC records
-- `GET /api/dns/records/{domain}` - Get DNS records
-- `GET /api/health` - Health check
-
-## Technologies Used
-
-### Backend
-- FastAPI
-- SQLAlchemy
-- Pydantic
-- pytest
-- dns.resolver
-- validators
-- checkdmarc
-
-### Frontend
-- React 18
-- TypeScript
-- Tailwind CSS
-- Axios
-- React Query
-
-### DevOps
+## Deployment
 - Docker
-- Docker Compose
-- GitHub Actions (CI/CD)
+- GitHub Actions (CI/CD). For now. We listen changes at the [main] branch
+- Please set all Environment secrets into github
+GCP_SA_KEY=key.json
+GCP_PROJECT_ID=your-project-name
+GCP_REGION=asia-southeast1
 
-## Testing
-
-The project includes comprehensive testing:
-- Unit tests for backend services
-- Integration tests for API endpoints
-- Frontend component tests
-- E2E tests for critical user flows
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-## License
-
-MIT License
+## Production with Cloud Run
+- Backend: https://domain-validator-service-533675451276.asia-southeast1.run.app/api-docs
+- Frontend: https://domain-validator-reactjs-533675451276.asia-southeast1.run.app
