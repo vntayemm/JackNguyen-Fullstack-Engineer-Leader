@@ -24,8 +24,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:prod": "REACT_APP_API_URL=https://your-backend-url.com react-scripts build",
-    "build:dev": "REACT_APP_API_URL=http://localhost:3001 react-scripts build"
+    "build:prod": "REACT_APP_API_URL=https://domain-validator-service-533675451276.asia-southeast1.run.app react-scripts build",
+    "build:dev": "REACT_APP_API_URL=http://localhost:8080 react-scripts build"
   },
   "eslintConfig": {
     "extends": [
