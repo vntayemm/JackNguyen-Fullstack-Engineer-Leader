@@ -31,7 +31,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd backend
+          cd frontend
           docker build -f Dockerfile -t $IMAGE_NAME .
 
       - name: Push to Container Registry
