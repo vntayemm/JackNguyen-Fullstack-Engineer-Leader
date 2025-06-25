@@ -8,7 +8,7 @@ const doc = {
   },
   host: '',
   basePath: '/api',
-  schemes: ['http'],
+  schemes: ['http', 'https'],
   consumes: ['application/json'],
   produces: ['application/json'],
 };
