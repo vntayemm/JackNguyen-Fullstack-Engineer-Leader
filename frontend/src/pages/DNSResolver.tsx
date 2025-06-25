@@ -30,7 +30,7 @@ const DNSResolver: React.FC = () => {
     { value: 'A', label: 'A (IPv4 Address)' },
     { value: 'AAAA', label: 'AAAA (IPv6 Address)' },
     { value: 'CNAME', label: 'CNAME (Canonical Name)' },
-    { value: 'MX', label: 'MX (Mail Exchange)' },
+    // { value: 'MX', label: 'MX (Mail Exchange)' },
     { value: 'TXT', label: 'TXT (Text Record)' },
     { value: 'NS', label: 'NS (Name Server)' },
     { value: 'SOA', label: 'SOA (Start of Authority)' }
