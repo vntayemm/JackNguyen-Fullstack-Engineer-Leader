@@ -10,7 +10,7 @@ on:
 
 env:
   SERVICE_NAME: domain-validator-service
-  IMAGE_NAME: asia.gcr.io/${{ secrets.GCP_PROJECT }}/domain-validator-service
+  IMAGE_NAME: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/domain-validator-service
 
 jobs:
   deploy:
