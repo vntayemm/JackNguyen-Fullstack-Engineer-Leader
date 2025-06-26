@@ -93,7 +93,11 @@ class SuccessResponseDTO {
 // Error Response DTO
 class ErrorResponseDTO {
   constructor(error) {
-    this.error = error || 'An error occurred';
+    if (typeof error === 'string') {
+      this.error = { message: error };
+    } else {
+      this.error = error || { message: 'An error occurred' };
+    }
   }
 }
 

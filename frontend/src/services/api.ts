@@ -294,8 +294,8 @@ class ApiService {
 
   // Test domain - POST /api/domains/{id}/test
   async testDomain(id: number): Promise<Domain> {
-    const response = await this.api.post<Domain>(`/api/domains/${id}/test`);
-    return response.data;
+    const response = await this.api.post<{ domain: Domain; message: string }>(`/api/domains/${id}/test`);
+    return response.data.domain;
   }
 
   // Delete domain - DELETE /api/domains/{id}

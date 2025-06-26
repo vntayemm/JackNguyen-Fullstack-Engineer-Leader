@@ -100,8 +100,11 @@ export async function testDomain(userId, domainId) {
     // Test DMARC and other comprehensive tests using Python service
     try {
       const comprehensiveResult = await comprehensiveDomainTest(domainName);
-      if (comprehensiveResult.tests && comprehensiveResult.tests.spf) {
-        results.dmarc = comprehensiveResult.tests.spf; // Use SPF result as DMARC for now
+      if (comprehensiveResult.tests && comprehensiveResult.tests.dmarc_analysis) {
+        results.dmarc = comprehensiveResult.tests.dmarc_analysis;
+      } else if (comprehensiveResult.tests && comprehensiveResult.tests.spf_analysis) {
+        // Fallback to SPF if DMARC not available
+        results.dmarc = comprehensiveResult.tests.spf_analysis;
       } else {
         results.dmarc = { error: 'DMARC test not available' };
       }
@@ -124,18 +127,24 @@ export async function testDomain(userId, domainId) {
     domain.last_tested = new Date();
     await domain.save();
     
-    return {
-      id: domain.id,
-      domainName: domain.domain_name,
-      spfResult: results.spf,
-      dmarcResult: results.dmarc,
-      dnsResult: results.dns,
-      lastTested: domain.last_tested,
-      createdAt: domain.createdAt,
-      updatedAt: domain.updatedAt
+    const response = {
+      domain: {
+        id: domain.id,
+        domainName: domain.domain_name,
+        spfResult: results.spf,
+        dmarcResult: results.dmarc,
+        dnsResult: results.dns,
+        lastTested: domain.last_tested,
+        createdAt: domain.createdAt,
+        updatedAt: domain.updatedAt
+      },
+      message: 'Domain tests completed successfully'
     };
     
+    return response;
+    
   } catch (error) {
+    console.error('Service: General test error:', error.message);
     throw new Error(`Failed to test domain: ${error.message}`);
   }
 }

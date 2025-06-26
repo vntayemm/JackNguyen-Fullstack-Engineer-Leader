@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { apiService, UserProfile } from '../../services/api';
 
@@ -80,11 +80,19 @@ const Profile: React.FC = () => {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Profile</h1>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-          >
+          <div className="flex space-x-3">
+            <Link
+              to="/help"
+              className="flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm md:text-base"
+            >
+              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Help
+            </Link>
+          </div>
+          <button onClick={handleLogout} 
+            className="flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm md:text-base">
             Logout
           </button>
         </div>

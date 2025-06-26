@@ -15,17 +15,7 @@ const RegisterSuccess: React.FC = () => {
           <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Registration Successful!</h2>
         </div>
         
-        <div className="mb-6 text-gray-600 dark:text-gray-300">
-          <p className="mb-4">
-            Thank you for registering with DNS/Email Security Tool!
-          </p>
-          <p className="mb-4">
-            We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.
-          </p>
-          <p className="text-sm">
-            If you don't see the email, please check your spam folder.
-          </p>
-        </div>
+       
 
         <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
           <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">What's next?</h3>
@@ -42,13 +32,6 @@ const RegisterSuccess: React.FC = () => {
             className="block w-full bg-blue-600 text-white py-2 px-4 rounded font-semibold hover:bg-blue-700 transition text-center"
           >
             Go to Sign In
-          </Link>
-          
-          <Link
-            to="/register"
-            className="block w-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition text-center"
-          >
-            Register Another Account
           </Link>
         </div>
         

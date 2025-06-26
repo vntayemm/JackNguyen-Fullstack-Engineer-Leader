@@ -83,6 +83,11 @@ export const errorHandler = (err, req, res, next) => {
   let message = 'Internal server error';
   let errors = [];
 
+  // Ensure err is an Error object
+  if (typeof err === 'string') {
+    err = new Error(err);
+  }
+
   // Log error details
   console.error('Error occurred:', {
     message: err.message,
@@ -149,24 +154,39 @@ export const errorHandler = (err, req, res, next) => {
   } else if (err.code === 'ETIMEDOUT') {
     statusCode = 408;
     message = 'Request timeout';
+  } else {
+    // Handle regular Error objects - show the actual error message
+    // Check if it's a known error message that should be shown to users
+    const knownErrors = [
+      'Invalid or expired verification token',
+      'Email already verified',
+      'Invalid credentials',
+      'Please verify your email address before logging in. Check your email for the verification link.',
+      'Invalid or expired reset token',
+      'User not found',
+      'Current password is incorrect'
+    ];
+    
+    if (knownErrors.includes(err.message)) {
+      message = err.message;
+      // Set appropriate status codes for different error types
+      if (err.message.includes('verification token') || err.message.includes('reset token')) {
+        statusCode = 400;
+      } else if (err.message.includes('credentials') || err.message.includes('verify your email') || err.message.includes('Current password is incorrect')) {
+        statusCode = 401;
+      } else if (err.message.includes('already verified')) {
+        statusCode = 409;
+      } else if (err.message.includes('User not found')) {
+        statusCode = 404;
+      }
+    } else {
+      // For unknown errors, use generic message in production
+      message = config.NODE_ENV === 'development' ? err.message : 'Internal server error';
+    }
   }
 
-  // Create error response using DTO
-  const errorResponse = new ErrorResponseDTO(
-    config.NODE_ENV === 'development' ? err.message : message
-  );
-
-  // Add additional error details in development
-  if (config.NODE_ENV === 'development') {
-    errorResponse.error.stack = err.stack;
-    errorResponse.error.errors = errors.length > 0 ? errors : undefined;
-    errorResponse.error.url = req.url;
-    errorResponse.error.method = req.method;
-    errorResponse.error.timestamp = new Date().toISOString();
-  }
-
-  // Send error response
-  return sendErrorResponse(res, errorResponse.error, statusCode);
+  // Send error response with the appropriate message
+  return sendErrorResponse(res, message, statusCode);
 };
 
 /**
