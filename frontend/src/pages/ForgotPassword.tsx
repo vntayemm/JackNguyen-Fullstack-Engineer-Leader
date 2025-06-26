@@ -12,13 +12,16 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <AuthLayout>
-      <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white text-center">Forgot your password?</h2>
-      <form onSubmit={handleSubmit} className="w-full max-w-md">
-        <div className="mb-4">
-          <label className="block mb-1 text-gray-900 dark:text-white">Email</label>
+      <div className="text-center mb-4 md:mb-6">
+        <h1 className="text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2 md:hidden">DNS/Email Security Tool</h1>
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Forgot your password?</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="w-full space-y-4">
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
           <input
             type="email"
-            className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
             placeholder="Enter your email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -27,13 +30,13 @@ const ForgotPassword: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-medium hover:bg-blue-700 transition text-sm"
         >
           Send Reset Link
         </button>
       </form>
-      <div className="mt-6 text-center text-gray-600 dark:text-gray-300 text-sm">
-        Remember your password? <Link to="/login" className="text-blue-600 dark:text-blue-400 font-medium">Sign in</Link>
+      <div className="mt-4 md:mt-6 text-center text-gray-600 dark:text-gray-300 text-sm">
+        Remember your password? <Link to="/login" className="text-blue-600 dark:text-blue-400 font-medium hover:underline">Sign in</Link>
       </div>
     </AuthLayout>
   );

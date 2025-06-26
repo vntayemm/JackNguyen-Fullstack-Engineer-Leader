@@ -68,13 +68,13 @@ const AuthInfoPanel: React.FC<AuthInfoPanelProps> = ({ onClose }) => {
       <div className="flex flex-col items-center text-center flex-1 justify-center relative z-10">
         {/* App Title - Static header */}
         <div className="text-center relative z-10">
-          <h1 className="text-3xl font-bold text-white drop-shadow-lg mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg mb-6 md:mb-8">
             DNS/Email Security Tool
           </h1>
         </div>
-        <span className="text-4xl mb-4 select-none drop-shadow-lg">{feature.icon}</span>
-        <div className="text-xl font-bold text-white mb-2 drop-shadow-lg">{feature.title}</div>
-        <div className="text-white text-base mb-4 max-w-xs drop-shadow-lg leading-relaxed">{feature.desc}</div>
+        <span className="text-3xl md:text-4xl mb-4 select-none drop-shadow-lg">{feature.icon}</span>
+        <div className="text-lg md:text-xl font-bold text-white mb-2 drop-shadow-lg">{feature.title}</div>
+        <div className="text-white text-sm md:text-base mb-4 max-w-xs drop-shadow-lg leading-relaxed">{feature.desc}</div>
       </div>
       
       {/* Slider controls */}
