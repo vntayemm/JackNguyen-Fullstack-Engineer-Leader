@@ -1,0 +1,22 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="domainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#38ef7d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#56ab2f;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="domainPattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1.5" fill="#ffffff" opacity="0.12"/>
+      <circle cx="60" cy="40" r="1.5" fill="#ffffff" opacity="0.12"/>
+      <circle cx="40" cy="60" r="1.5" fill="#ffffff" opacity="0.12"/>
+      <circle cx="80" cy="80" r="1.5" fill="#ffffff" opacity="0.12"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#domainGradient)"/>
+  <rect width="800" height="600" fill="url(#domainPattern)"/>
+  <g opacity="0.3">
+    <circle cx="200" cy="200" r="80" fill="#ffffff" opacity="0.08"/>
+    <circle cx="600" cy="300" r="80" fill="#ffffff" opacity="0.08"/>
+    <circle cx="400" cy="450" r="80" fill="#ffffff" opacity="0.08"/>
+  </g>
+</svg> 

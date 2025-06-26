@@ -1,77 +1,306 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { apiService, Domain } from '../services/api';
 
 const Dashboard: React.FC = () => {
-  const features = [
-    {
-      title: 'Domain Validator',
-      description: 'Validate domain names and check their format',
-      path: '/domain-validator',
-      icon: '🌐',
-    },
-    {
-      title: 'SPF Analyzer',
-      description: 'Parse and validate SPF records for email authentication',
-      path: '/spf-analyzer',
-      icon: '📧',
-    },
-    {
-      title: 'DMARC Analyzer',
-      description: 'Analyze DMARC policies and configurations',
-      path: '/dmarc-analyzer',
-      icon: '🛡️',
-    },
-    {
-      title: 'DNS Lookup',
-      description: 'Query and display various DNS record types',
-      path: '/dns-lookup',
-      icon: '🔍',
-    },
-  ];
+  const [domains, setDomains] = useState<Domain[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [addingDomain, setAddingDomain] = useState(false);
+  const [newDomain, setNewDomain] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [testingDomain, setTestingDomain] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchDomains();
+  }, []);
+
+  const fetchDomains = async () => {
+    try {
+      setLoading(true);
+      const response = await apiService.getDomains();
+      setDomains(response);
+    } catch (err: any) {
+      setError('Failed to load domains');
+      console.error('Fetch domains error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddDomain = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newDomain.trim()) {
+      setError('Domain name is required');
+      return;
+    }
+
+    try {
+      setAddingDomain(true);
+      setError('');
+      const domain = await apiService.addDomain({ domainName: newDomain.trim() });
+      setDomains([domain, ...domains]);
+      setNewDomain('');
+      setSuccess('Domain added successfully!');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to add domain');
+    } finally {
+      setAddingDomain(false);
+    }
+  };
+
+  const handleDeleteDomain = async (domainId: number) => {
+    if (!window.confirm('Are you sure you want to delete this domain?')) {
+      return;
+    }
+
+    try {
+      await apiService.deleteDomain(domainId);
+      setDomains(domains.filter(d => d.id !== domainId));
+      setSuccess('Domain deleted successfully!');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to delete domain');
+    }
+  };
+
+  const handleTestDomain = async (domainId: number) => {
+    try {
+      setTestingDomain(domainId);
+      const updatedDomain = await apiService.testDomain(domainId);
+      setDomains(domains.map(d => d.id === domainId ? updatedDomain : d));
+      setSuccess('Domain test completed!');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to test domain');
+    } finally {
+      setTestingDomain(null);
+    }
+  };
+
+  const getTestStatus = (domain: Domain) => {
+    if (!domain.lastTested) return 'Not tested';
+    return 'Tested';
+  };
+
+  const getTestResult = (result: any, testType: string) => {
+    if (!result) return { status: 'Not tested', color: 'gray' };
+    if (result.error) return { status: 'Error', color: 'red' };
+    
+    switch (testType) {
+      case 'spf':
+        return result.is_valid 
+          ? { status: 'Pass', color: 'green' }
+          : { status: 'Fail', color: 'red' };
+      case 'dmarc':
+        return result.is_valid 
+          ? { status: 'Pass', color: 'green' }
+          : { status: 'Fail', color: 'red' };
+      case 'dns':
+        return result.records && result.records.length > 0
+          ? { status: 'Pass', color: 'green' }
+          : { status: 'Fail', color: 'red' };
+      default:
+        return { status: 'Unknown', color: 'gray' };
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-8">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          DNS/Email Security Testing
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Domain Dashboard
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Comprehensive tools for testing and validating DNS records, SPF, and DMARC configurations
-        </p>
+        <Link
+          to="/domain-validator"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Quick Test
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {features.map((feature) => (
-          <Link
-            key={feature.path}
-            to={feature.path}
-            className="card hover:shadow-lg transition-shadow cursor-pointer"
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-md">
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-md">
+          {success}
+        </div>
+      )}
+
+      {/* Add New Domain */}
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Add New Domain
+        </h2>
+        <form onSubmit={handleAddDomain} className="flex gap-4">
+          <input
+            type="text"
+            value={newDomain}
+            onChange={(e) => setNewDomain(e.target.value)}
+            placeholder="Enter domain name (e.g., example.com)"
+            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            disabled={addingDomain}
+          />
+          <button
+            type="submit"
+            disabled={addingDomain || !newDomain.trim()}
+            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="text-center">
-              <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 text-sm">
-                {feature.description}
-              </p>
-            </div>
-          </Link>
-        ))}
+            {addingDomain ? 'Adding...' : 'Add Domain'}
+          </button>
+        </form>
       </div>
 
-      <div className="card">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Tool</h2>
-        <div className="space-y-4 text-gray-600">
-          <p>
-            This application provides comprehensive testing and validation tools for DNS records,
-            SPF (Sender Policy Framework), and DMARC (Domain-based Message Authentication,
-            Reporting & Conformance) configurations.
-          </p>
-          <p>
-            Use these tools to ensure your email infrastructure is properly configured and secure
-            against spoofing and phishing attacks.
-          </p>
+      {/* Domain List */}
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Your Domains ({domains.length})
+        </h2>
+        
+        {domains.length === 0 ? (
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+            <p className="text-lg mb-2">No domains added yet</p>
+            <p>Add a domain above to start testing</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {domains.map((domain) => (
+              <div
+                key={domain.id}
+                className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                      {domain.domainName}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Added: {new Date(domain.createdAt).toLocaleDateString()}
+                      {domain.lastTested && (
+                        <span className="ml-4">
+                          Last tested: {new Date(domain.lastTested).toLocaleDateString()}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleTestDomain(domain.id)}
+                      disabled={testingDomain === domain.id}
+                      className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors disabled:opacity-50"
+                    >
+                      {testingDomain === domain.id ? 'Testing...' : 'Test'}
+                    </button>
+                    <button
+                      onClick={() => handleDeleteDomain(domain.id)}
+                      className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+
+                {/* Test Results */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* SPF Result */}
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-3">
+                    <h4 className="font-medium text-gray-900 dark:text-white mb-2">SPF</h4>
+                    {(() => {
+                      const result = getTestResult(domain.spfResult, 'spf');
+                      return (
+                        <div className="flex items-center">
+                          <span className={`inline-block w-3 h-3 rounded-full mr-2 bg-${result.color}-500`}></span>
+                          <span className="text-sm">{result.status}</span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* DMARC Result */}
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-3">
+                    <h4 className="font-medium text-gray-900 dark:text-white mb-2">DMARC</h4>
+                    {(() => {
+                      const result = getTestResult(domain.dmarcResult, 'dmarc');
+                      return (
+                        <div className="flex items-center">
+                          <span className={`inline-block w-3 h-3 rounded-full mr-2 bg-${result.color}-500`}></span>
+                          <span className="text-sm">{result.status}</span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* DNS Result */}
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-3">
+                    <h4 className="font-medium text-gray-900 dark:text-white mb-2">DNS (MX)</h4>
+                    {(() => {
+                      const result = getTestResult(domain.dnsResult, 'dns');
+                      return (
+                        <div className="flex items-center">
+                          <span className={`inline-block w-3 h-3 rounded-full mr-2 bg-${result.color}-500`}></span>
+                          <span className="text-sm">{result.status}</span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Quick Access Tools */}
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Quick Access Tools
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Link
+            to="/domain-validator"
+            className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+          >
+            <div className="text-2xl mb-2">🌐</div>
+            <h3 className="font-medium text-gray-900 dark:text-white">Domain Validator</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Validate domain names</p>
+          </Link>
+          <Link
+            to="/spf"
+            className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+          >
+            <div className="text-2xl mb-2">📧</div>
+            <h3 className="font-medium text-gray-900 dark:text-white">SPF Analyzer</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Analyze SPF records</p>
+          </Link>
+          <Link
+            to="/dmarc"
+            className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+          >
+            <div className="text-2xl mb-2">🛡️</div>
+            <h3 className="font-medium text-gray-900 dark:text-white">DMARC Analyzer</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Analyze DMARC policies</p>
+          </Link>
+          <Link
+            to="/dns"
+            className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+          >
+            <div className="text-2xl mb-2">🔍</div>
+            <h3 className="font-medium text-gray-900 dark:text-white">DNS Resolver</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Query DNS records</p>
+          </Link>
         </div>
       </div>
     </div>

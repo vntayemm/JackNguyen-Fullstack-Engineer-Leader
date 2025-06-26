@@ -14,6 +14,13 @@ const api: AxiosInstance = axios.create({
 api.interceptors.request.use(
   (config) => {
     console.log(`Making ${config.method?.toUpperCase()} request to: ${config.url}`);
+    
+    // Add auth token if available
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
     return config;
   },
   (error) => {
@@ -68,6 +75,87 @@ export interface DNSResponse {
   record_type: string;
   records: DNSRecord[];
   errors: string[];
+}
+
+// Auth interfaces
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface RegisterResponse {
+  message: string;
+  id: number;
+  username: string;
+  email: string;
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+  };
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+}
+
+export interface VerifyEmailResponse {
+  message: string;
+}
+
+export interface UserProfile {
+  id: number;
+  username: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  createdAt: string;
+  isVerified: boolean;
+}
+
+export interface UpdateProfileRequest {
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface Domain {
+  id: number;
+  domainName: string;
+  spfResult?: any;
+  dmarcResult?: any;
+  dnsResult?: any;
+  lastTested?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AddDomainRequest {
+  domainName: string;
 }
 
 // API Service class using axios
@@ -125,10 +213,85 @@ class ApiService {
     const response = await this.api.get(`/api/dns/records/${domain}/all`);
     return response.data;
   }
+
+  // Authentication methods
+
+  // Register - POST /api/auth/register
+  async register(data: RegisterRequest): Promise<RegisterResponse> {
+    const response = await this.api.post<RegisterResponse>('/api/auth/register', data);
+    return response.data;
+  }
+
+  // Login - POST /api/auth/login
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    const response = await this.api.post<LoginResponse>('/api/auth/login', data);
+    return response.data;
+  }
+
+  // Forgot Password - POST /api/auth/forgot-password
+  async forgotPassword(data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> {
+    const response = await this.api.post<ForgotPasswordResponse>('/api/auth/forgot-password', data);
+    return response.data;
+  }
+
+  // Reset Password - POST /api/auth/reset-password/{token}
+  async resetPassword(data: ResetPasswordRequest): Promise<ResetPasswordResponse> {
+    const response = await this.api.post<ResetPasswordResponse>(`/api/auth/reset-password/${data.token}`, {
+      password: data.newPassword
+    });
+    return response.data;
+  }
+
+  // Verify Email - GET /api/auth/verify-email/{token}
+  async verifyEmail(token: string): Promise<VerifyEmailResponse> {
+    const response = await this.api.get<VerifyEmailResponse>(`/api/auth/verify-email/${token}`);
+    return response.data;
+  }
+
+  // Get Profile - GET /api/auth/profile
+  async getProfile(): Promise<UserProfile> {
+    const response = await this.api.get<UserProfile>('/api/auth/profile');
+    return response.data;
+  }
+
+  // Update Profile - PUT /api/auth/profile
+  async updateProfile(data: UpdateProfileRequest): Promise<UserProfile> {
+    const response = await this.api.put<UserProfile>('/api/auth/profile', data);
+    return response.data;
+  }
+
+  // Domain management methods
+
+  // Get user domains - GET /api/domains
+  async getDomains(): Promise<Domain[]> {
+    const response = await this.api.get<Domain[]>('/api/domains');
+    return response.data;
+  }
+
+  // Add domain - POST /api/domains
+  async addDomain(data: AddDomainRequest): Promise<Domain> {
+    const response = await this.api.post<Domain>('/api/domains', data);
+    return response.data;
+  }
+
+  // Get domain details - GET /api/domains/{id}
+  async getDomainDetails(id: number): Promise<Domain> {
+    const response = await this.api.get<Domain>(`/api/domains/${id}`);
+    return response.data;
+  }
+
+  // Test domain - POST /api/domains/{id}/test
+  async testDomain(id: number): Promise<Domain> {
+    const response = await this.api.post<Domain>(`/api/domains/${id}/test`);
+    return response.data;
+  }
+
+  // Delete domain - DELETE /api/domains/{id}
+  async deleteDomain(id: number): Promise<{ message: string }> {
+    const response = await this.api.delete<{ message: string }>(`/api/domains/${id}`);
+    return response.data;
+  }
 }
 
 // Export singleton instance
 export const apiService = new ApiService(api);
-
-// Export axios instance for direct use if needed
-export default api; 

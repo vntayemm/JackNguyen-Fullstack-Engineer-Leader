@@ -10,6 +10,11 @@ const config = {
   // CORS Configuration
   CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3000',
   
+  // Frontend URL Configuration
+  FRONTEND_URL: process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' 
+    ? 'https://domain-validator-service-533675451276.asia-southeast1.run.app' 
+    : 'http://localhost:3000'),
+  
   // Security
   HELMET_ENABLED: process.env.HELMET_ENABLED === 'true',
   

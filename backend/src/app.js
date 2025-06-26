@@ -2,11 +2,15 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import config from './config.js';
-import routes from './routes/index.js';
+import nodejsDomainValidatorRoutes from './routes/nodejs-domain-validator.js';
 import swaggerUi from 'swagger-ui-express';
 import oas from 'express-oas-generator';
 import path from 'path';
 import fs from 'fs';
+import sequelize from './models/index.js';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/user.js';
+import domainRoutes from './routes/domain.js';
 
 const app = express();
 
@@ -34,11 +38,16 @@ app.use(cors({
 
 app.use(express.json());
 
-// Use merged routes
-app.use(config.API_PREFIX, routes);
+// Use NodeJS domain validator routes
+app.use(config.API_PREFIX, nodejsDomainValidatorRoutes);
+
+// Use auth and user routes
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/domains', domainRoutes);
 
 // Serve the generated swagger.json file
-app.get('/api-docs/swagger.json', (req, res) => {
+app.get('/docs/swagger.json', (req, res) => {
   const swaggerPath = path.join(process.cwd(), 'swagger.json');
   if (fs.existsSync(swaggerPath)) {
     res.sendFile(swaggerPath);
@@ -47,13 +56,23 @@ app.get('/api-docs/swagger.json', (req, res) => {
   }
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, { swaggerUrl: '/api-docs/swagger.json' }));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, { swaggerUrl: '/docs/swagger.json' }));
 
 app.get('/health', (req, res) => res.json({ 
   status: 'healthy',
   environment: config.NODE_ENV,
   timestamp: new Date().toISOString()
 }));
+
+// Sync DB and start server
+sequelize.sync({ alter: config.NODE_ENV === 'development' }).then(() => {
+  app.listen(config.PORT, () => {
+    console.log(`NodeJS Backend running on port ${config.PORT}`);
+    console.log(`Environment: ${config.NODE_ENV}`);
+    console.log(`API Base: ${config.API_PREFIX}`);
+    console.log(`Swagger UI: http://localhost:${config.PORT}/docs`);
+  });
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -62,11 +81,4 @@ app.use((err, req, res, next) => {
     error: 'Something went wrong!',
     message: config.NODE_ENV === 'development' ? err.message : 'Internal server error'
   });
-});
-
-app.listen(config.PORT, () => {
-  console.log(`NodeJS Backend running on port ${config.PORT}`);
-  console.log(`Environment: ${config.NODE_ENV}`);
-  console.log(`API Base: ${config.API_PREFIX}`);
-  console.log(`Swagger UI: http://localhost:${config.PORT}/api-docs`);
 }); 

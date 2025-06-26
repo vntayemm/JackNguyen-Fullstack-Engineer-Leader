@@ -25,7 +25,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:prod": "REACT_APP_API_URL=https://domain-validator-service-533675451276.asia-southeast1.run.app react-scripts build",
-    "build:dev": "REACT_APP_API_URL=http://localhost:8080 react-scripts build"
+    "build:dev": "REACT_APP_API_URL=http://localhost:8080 react-scripts build",
+    "test:api-url": "node scripts/test-api-url.js",
+    "test:login-api": "node scripts/test-login-api.js",
+    "verify:login-connection": "node scripts/verify-login-connection.js"
   },
   "eslintConfig": {
     "extends": [

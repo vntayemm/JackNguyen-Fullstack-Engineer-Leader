@@ -1,8 +1,12 @@
 import express from 'express';
-import { validateDomainController } from '../controllers/domainController.js';
-import { analyzeSPFController } from '../controllers/spfController.js';
-import { analyzeDMARCController } from '../controllers/dmarcController.js';
-import { getDNSRecordsController, getAllDNSRecordsController } from '../controllers/dnsController.js';
+import { 
+  validateDomainController,
+  analyzeSPFController,
+  analyzeDMARCController,
+  getDNSRecordsController,
+  getAllDNSRecordsController
+} from '../controllers/nodejsDomainValidatorController.js';
+import pythonDomainValidatorRoutes from './python-domain-validator.js';
 
 const router = express.Router();
 
@@ -18,5 +22,8 @@ router.post('/dmarc/analyze', analyzeDMARCController);
 // DNS routes
 router.get('/dns/records/:domain', getDNSRecordsController);
 router.get('/dns/records/:domain/all', getAllDNSRecordsController);
+
+// Python domain validator routes
+router.use('/python-domain-validator', pythonDomainValidatorRoutes);
 
 export default router; 
