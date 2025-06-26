@@ -10,6 +10,7 @@ const Dashboard: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [testingDomain, setTestingDomain] = useState<number | null>(null);
+  const [domainsExpanded, setDomainsExpanded] = useState(true);
 
   useEffect(() => {
     fetchDomains();
@@ -186,18 +187,12 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 p-4 md:p-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
           Domain Dashboard
         </h1>
-        <Link
-          to="/domain-validator"
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-center text-sm md:text-base"
-        >
-          Quick Test
-        </Link>
       </div>
 
       {error && (
@@ -238,105 +233,126 @@ const Dashboard: React.FC = () => {
 
       {/* Domain List */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 md:p-6">
-        <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">
-          Your Domains ({domains.length})
-        </h2>
-        
-        {domains.length === 0 ? (
-          <div className="text-center py-6 md:py-8 text-gray-500 dark:text-gray-400">
-            <p className="text-base md:text-lg mb-2">No domains added yet</p>
-            <p className="text-sm md:text-base">Add a domain above to start testing</p>
+        <button
+          onClick={() => setDomainsExpanded(!domainsExpanded)}
+          className="w-full flex items-center justify-between text-left mb-3 md:mb-4 group "
+        >
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            Your Domains ({domains.length})
+          </h2>
+          <div className="flex items-center space-x-2 rounded-full w-10 h-10 justify-center dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg
+              className={`h-5 w-5 text-gray-500 dark:text-gray-400 transform transition-transform duration-200 ${
+                domainsExpanded ? 'rotate-180' : ''
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
-        ) : (
-          <div className="space-y-3 md:space-y-4">
-            {domains.map((domain) => (
-              <div
-                key={domain.id}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-              >
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-3">
-                  <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-medium text-gray-900 dark:text-white mb-1">
-                      {domain.domainName}
-                    </h3>
-                    <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400 space-y-1">
-                      <p>Added: {new Date(domain.createdAt).toLocaleDateString()}</p>
-                      {domain.lastTested && (
-                        <p>Last tested: {new Date(domain.lastTested).toLocaleDateString()}</p>
-                      )}
+        </button>
+        
+        <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+          domainsExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          {domains.length === 0 ? (
+            <div className="text-center py-6 md:py-8 text-gray-500 dark:text-gray-400">
+              <p className="text-base md:text-lg mb-2">No domains added yet</p>
+              <p className="text-sm md:text-base">Add a domain above to start testing</p>
+            </div>
+          ) : (
+            <div className="space-y-3 md:space-y-4">
+              {domains.map((domain) => (
+                <div
+                  key={domain.id}
+                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-3">
+                    <div className="flex-1">
+                      <h3 className="text-base md:text-lg font-medium text-gray-900 dark:text-white mb-1">
+                        {domain.domainName}
+                      </h3>
+                      <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400 space-y-1">
+                        <p>Added: {new Date(domain.createdAt).toLocaleDateString()}</p>
+                        {domain.lastTested && (
+                          <p>Last tested: {new Date(domain.lastTested).toLocaleDateString()}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleTestDomain(domain.id)}
+                        disabled={testingDomain === domain.id}
+                        className="px-3 py-2 md:py-1 bg-green-600 text-white text-xs md:text-sm rounded hover:bg-green-700 transition-colors disabled:opacity-50"
+                      >
+                        {testingDomain === domain.id ? 'Testing...' : 'Test'}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteDomain(domain.id)}
+                        className="px-3 py-2 md:py-1 bg-red-600 text-white text-xs md:text-sm rounded hover:bg-red-700 transition-colors"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleTestDomain(domain.id)}
-                      disabled={testingDomain === domain.id}
-                      className="px-3 py-2 md:py-1 bg-green-600 text-white text-xs md:text-sm rounded hover:bg-green-700 transition-colors disabled:opacity-50"
-                    >
-                      {testingDomain === domain.id ? 'Testing...' : 'Test'}
-                    </button>
-                    <button
-                      onClick={() => handleDeleteDomain(domain.id)}
-                      className="px-3 py-2 md:py-1 bg-red-600 text-white text-xs md:text-sm rounded hover:bg-red-700 transition-colors"
-                    >
-                      Delete
-                    </button>
+
+                  {/* Test Results */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-4">
+                    {/* SPF Result */}
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 md:p-3">
+                      <h4 className="font-medium text-gray-900 dark:text-white mb-1 md:mb-2 text-sm md:text-base">SPF</h4>
+                      {(() => {
+                        const result = getTestResult(domain.spfResult, 'spf');
+                        return (
+                          <div className="flex items-center">
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
+                              <span className="mr-1">{result.icon}</span>
+                              {result.status}
+                            </span>
+                          </div>
+                        );
+                      })()}
+                    </div>
+
+                    {/* DMARC Result */}
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 md:p-3">
+                      <h4 className="font-medium text-gray-900 dark:text-white mb-1 md:mb-2 text-sm md:text-base">DMARC</h4>
+                      {(() => {
+                        const result = getTestResult(domain.dmarcResult, 'dmarc');
+                        return (
+                          <div className="flex items-center">
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
+                              <span className="mr-1">{result.icon}</span>
+                              {result.status}
+                            </span>
+                          </div>
+                        );
+                      })()}
+                    </div>
+
+                    {/* DNS Result */}
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 md:p-3">
+                      <h4 className="font-medium text-gray-900 dark:text-white mb-1 md:mb-2 text-sm md:text-base">DNS (MX)</h4>
+                      {(() => {
+                        const result = getTestResult(domain.dnsResult, 'dns');
+                        return (
+                          <div className="flex items-center">
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
+                              <span className="mr-1">{result.icon}</span>
+                              {result.status}
+                            </span>
+                          </div>
+                        );
+                      })()}
+                    </div>
                   </div>
                 </div>
-
-                {/* Test Results */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-4">
-                  {/* SPF Result */}
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 md:p-3">
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-1 md:mb-2 text-sm md:text-base">SPF</h4>
-                    {(() => {
-                      const result = getTestResult(domain.spfResult, 'spf');
-                      return (
-                        <div className="flex items-center">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
-                            <span className="mr-1">{result.icon}</span>
-                            {result.status}
-                          </span>
-                        </div>
-                      );
-                    })()}
-                  </div>
-
-                  {/* DMARC Result */}
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 md:p-3">
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-1 md:mb-2 text-sm md:text-base">DMARC</h4>
-                    {(() => {
-                      const result = getTestResult(domain.dmarcResult, 'dmarc');
-                      return (
-                        <div className="flex items-center">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
-                            <span className="mr-1">{result.icon}</span>
-                            {result.status}
-                          </span>
-                        </div>
-                      );
-                    })()}
-                  </div>
-
-                  {/* DNS Result */}
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-2 md:p-3">
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-1 md:mb-2 text-sm md:text-base">DNS (MX)</h4>
-                    {(() => {
-                      const result = getTestResult(domain.dnsResult, 'dns');
-                      return (
-                        <div className="flex items-center">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
-                            <span className="mr-1">{result.icon}</span>
-                            {result.status}
-                          </span>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Quick Access Tools */}
