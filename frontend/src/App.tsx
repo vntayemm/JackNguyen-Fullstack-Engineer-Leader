@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css';
@@ -21,6 +21,7 @@ import FloatingButtons from './components/FloatingButtons';
 import AuthInfoPanel from './components/AuthInfoPanel';
 import UserDropdown from './components/UserDropdown';
 import { apiService } from './services/api';
+import config from './config';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -131,24 +132,43 @@ const Navigation: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const { token, user, setUser } = useAuth();
+  const hasFetchedProfile = useRef(false);
 
   // Fetch user profile if we have a token but incomplete user data
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (token && user && (!user.firstName && !user.lastName)) {
+      // Only fetch if we have a token, user exists, and we haven't fetched profile yet
+      if (token && user && (!user.firstName && !user.lastName) && !hasFetchedProfile.current) {
         try {
           console.log('Fetching user profile to get complete user data...');
+          console.log('Current user data:', user);
+          console.log('API URL:', config.apiUrl);
+          
+          hasFetchedProfile.current = true;
           const userProfile = await apiService.getProfile();
-          console.log('User profile fetched:', userProfile);
+          console.log('User profile fetched successfully:', userProfile);
           setUser(userProfile);
         } catch (error) {
-          console.warn('Failed to fetch user profile:', error);
+          console.error('Failed to fetch user profile:', error);
+          console.error('Error details:', {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status,
+            config: error.config
+          });
+          // Reset the flag so we can try again later
+          hasFetchedProfile.current = false;
         }
       }
     };
 
     fetchUserProfile();
-  }, [token, user, setUser]);
+  }, [token, user]); // Removed setUser from dependencies
+
+  // Reset the flag when user changes
+  useEffect(() => {
+    hasFetchedProfile.current = false;
+  }, [user?.id]);
 
   // If not authenticated, show auth pages
   if (!token) {

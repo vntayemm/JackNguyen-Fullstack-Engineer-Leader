@@ -211,7 +211,7 @@ export async function resetPassword(token, newPassword) {
 
 export async function getProfile(userId) {
   const user = await User.findByPk(userId, {
-    attributes: ['id', 'username', 'email', 'first_name', 'last_name', 'created_at', 'is_verified']
+    attributes: ['id', 'username', 'email', 'first_name', 'last_name', 'createdAt', 'is_verified']
   });
   
   if (!user) {
@@ -224,7 +224,7 @@ export async function getProfile(userId) {
     email: user.email,
     firstName: user.first_name,
     lastName: user.last_name,
-    createdAt: user.created_at,
+    createdAt: user.createdAt,
     isVerified: user.is_verified
   };
 }
@@ -253,7 +253,7 @@ export async function updateProfile(userId, updateData) {
     email: user.email,
     firstName: user.first_name,
     lastName: user.last_name,
-    createdAt: user.created_at,
+    createdAt: user.createdAt,
     isVerified: user.is_verified
   };
 } 

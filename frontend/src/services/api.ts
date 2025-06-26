@@ -19,6 +19,9 @@ api.interceptors.request.use(
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('Token added to request:', token.substring(0, 20) + '...');
+    } else {
+      console.log('No token found in localStorage');
     }
     
     return config;
@@ -250,8 +253,17 @@ class ApiService {
 
   // Get Profile - GET /api/auth/profile
   async getProfile(): Promise<UserProfile> {
-    const response = await this.api.get<UserProfile>('/api/auth/profile');
-    return response.data;
+    try {
+      console.log('Making getProfile request to:', `${this.api.defaults.baseURL}/api/auth/profile`);
+      const response = await this.api.get<UserProfile>('/api/auth/profile');
+      console.log('getProfile response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('getProfile error:', error);
+      console.error('getProfile error response:', error.response?.data);
+      console.error('getProfile error status:', error.response?.status);
+      throw error;
+    }
   }
 
   // Update Profile - PUT /api/auth/profile

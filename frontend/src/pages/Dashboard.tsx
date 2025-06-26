@@ -181,7 +181,7 @@ const Dashboard: React.FC = () => {
             {domains.map((domain) => (
               <div
                 key={domain.id}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-3">
                   <div className="flex-1">
@@ -270,7 +270,7 @@ const Dashboard: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <Link
             to="/domain-validator"
-            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-center"
           >
             <div className="text-xl md:text-2xl mb-1 md:mb-2">🌐</div>
             <h3 className="font-medium text-gray-900 dark:text-white text-sm md:text-base">Domain Validator</h3>
@@ -278,7 +278,7 @@ const Dashboard: React.FC = () => {
           </Link>
           <Link
             to="/spf"
-            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-center"
           >
             <div className="text-xl md:text-2xl mb-1 md:mb-2">📧</div>
             <h3 className="font-medium text-gray-900 dark:text-white text-sm md:text-base">SPF Analyzer</h3>
@@ -286,7 +286,7 @@ const Dashboard: React.FC = () => {
           </Link>
           <Link
             to="/dmarc"
-            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-center"
           >
             <div className="text-xl md:text-2xl mb-1 md:mb-2">🛡️</div>
             <h3 className="font-medium text-gray-900 dark:text-white text-sm md:text-base">DMARC Analyzer</h3>
@@ -294,7 +294,7 @@ const Dashboard: React.FC = () => {
           </Link>
           <Link
             to="/dns"
-            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-center"
+            className="p-3 md:p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-center"
           >
             <div className="text-xl md:text-2xl mb-1 md:mb-2">🔍</div>
             <h3 className="font-medium text-gray-900 dark:text-white text-sm md:text-base">DNS Resolver</h3>
