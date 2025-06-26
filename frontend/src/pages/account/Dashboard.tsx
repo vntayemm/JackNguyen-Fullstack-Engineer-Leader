@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiService, Domain } from '../services/api';
+import { apiService, Domain } from '../../services/api';
 
 const Dashboard: React.FC = () => {
   const [domains, setDomains] = useState<Domain[]>([]);
@@ -18,11 +18,24 @@ const Dashboard: React.FC = () => {
   const fetchDomains = async () => {
     try {
       setLoading(true);
-      const response = await apiService.getDomains();
-      setDomains(response);
+      const response: any = await apiService.getDomains();
+      console.log('Domains response:', response);
+      
+      // Handle both array and object with domains property
+      let domainsArray: Domain[] = [];
+      if (Array.isArray(response)) {
+        domainsArray = response;
+      } else if (response && response.domains && Array.isArray(response.domains)) {
+        domainsArray = response.domains;
+      } else if (response && response.data && Array.isArray(response.data)) {
+        domainsArray = response.data;
+      }
+      
+      setDomains(domainsArray);
     } catch (err: any) {
       setError('Failed to load domains');
       console.error('Fetch domains error:', err);
+      setDomains([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -79,30 +92,88 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const getTestStatus = (domain: Domain) => {
-    if (!domain.lastTested) return 'Not tested';
-    return 'Tested';
-  };
-
   const getTestResult = (result: any, testType: string) => {
-    if (!result) return { status: 'Not tested', color: 'gray' };
-    if (result.error) return { status: 'Error', color: 'red' };
+    if (!result) return { 
+      status: 'Not Tested', 
+      color: 'gray', 
+      bgColor: 'bg-gray-100', 
+      textColor: 'text-gray-600', 
+      borderColor: 'border-gray-300',
+      icon: '⏳'
+    };
+    if (result.error) return { 
+      status: 'Error', 
+      color: 'red', 
+      bgColor: 'bg-red-100', 
+      textColor: 'text-red-700', 
+      borderColor: 'border-red-300',
+      icon: '⚠️'
+    };
     
     switch (testType) {
       case 'spf':
         return result.is_valid 
-          ? { status: 'Pass', color: 'green' }
-          : { status: 'Fail', color: 'red' };
+          ? { 
+              status: 'PASS', 
+              color: 'green', 
+              bgColor: 'bg-green-100', 
+              textColor: 'text-green-700', 
+              borderColor: 'border-green-300',
+              icon: '✅'
+            }
+          : { 
+              status: 'FAIL', 
+              color: 'red', 
+              bgColor: 'bg-red-100', 
+              textColor: 'text-red-700', 
+              borderColor: 'border-red-300',
+              icon: '❌'
+            };
       case 'dmarc':
         return result.is_valid 
-          ? { status: 'Pass', color: 'green' }
-          : { status: 'Fail', color: 'red' };
+          ? { 
+              status: 'PASS', 
+              color: 'green', 
+              bgColor: 'bg-green-100', 
+              textColor: 'text-green-700', 
+              borderColor: 'border-green-300',
+              icon: '✅'
+            }
+          : { 
+              status: 'FAIL', 
+              color: 'red', 
+              bgColor: 'bg-red-100', 
+              textColor: 'text-red-700', 
+              borderColor: 'border-red-300',
+              icon: '❌'
+            };
       case 'dns':
         return result.records && result.records.length > 0
-          ? { status: 'Pass', color: 'green' }
-          : { status: 'Fail', color: 'red' };
+          ? { 
+              status: 'PASS', 
+              color: 'green', 
+              bgColor: 'bg-green-100', 
+              textColor: 'text-green-700', 
+              borderColor: 'border-green-300',
+              icon: '✅'
+            }
+          : { 
+              status: 'FAIL', 
+              color: 'red', 
+              bgColor: 'bg-red-100', 
+              textColor: 'text-red-700', 
+              borderColor: 'border-red-300',
+              icon: '❌'
+            };
       default:
-        return { status: 'Unknown', color: 'gray' };
+        return { 
+          status: 'Unknown', 
+          color: 'gray', 
+          bgColor: 'bg-gray-100', 
+          textColor: 'text-gray-600', 
+          borderColor: 'border-gray-300',
+          icon: '❓'
+        };
     }
   };
 
@@ -221,8 +292,10 @@ const Dashboard: React.FC = () => {
                       const result = getTestResult(domain.spfResult, 'spf');
                       return (
                         <div className="flex items-center">
-                          <span className={`inline-block w-2 md:w-3 h-2 md:h-3 rounded-full mr-2 bg-${result.color}-500`}></span>
-                          <span className="text-xs md:text-sm">{result.status}</span>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
+                            <span className="mr-1">{result.icon}</span>
+                            {result.status}
+                          </span>
                         </div>
                       );
                     })()}
@@ -235,8 +308,10 @@ const Dashboard: React.FC = () => {
                       const result = getTestResult(domain.dmarcResult, 'dmarc');
                       return (
                         <div className="flex items-center">
-                          <span className={`inline-block w-2 md:w-3 h-2 md:h-3 rounded-full mr-2 bg-${result.color}-500`}></span>
-                          <span className="text-xs md:text-sm">{result.status}</span>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
+                            <span className="mr-1">{result.icon}</span>
+                            {result.status}
+                          </span>
                         </div>
                       );
                     })()}
@@ -249,8 +324,10 @@ const Dashboard: React.FC = () => {
                       const result = getTestResult(domain.dnsResult, 'dns');
                       return (
                         <div className="flex items-center">
-                          <span className={`inline-block w-2 md:w-3 h-2 md:h-3 rounded-full mr-2 bg-${result.color}-500`}></span>
-                          <span className="text-xs md:text-sm">{result.status}</span>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${result.bgColor} ${result.textColor} ${result.borderColor} dark:bg-opacity-20 dark:border-opacity-50`}>
+                            <span className="mr-1">{result.icon}</span>
+                            {result.status}
+                          </span>
                         </div>
                       );
                     })()}

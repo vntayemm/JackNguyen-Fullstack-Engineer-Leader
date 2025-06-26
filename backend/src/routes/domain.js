@@ -1,25 +1,49 @@
 import express from 'express';
-import { getDomains, createDomain, removeDomain, runDomainTest, getDomainDetail } from '../controllers/domainController.js';
+import { 
+  getUserDomains, 
+  addDomain, 
+  deleteDomain, 
+  testDomain, 
+  getDomainById,
+  validateDomain,
+  analyzeSPF,
+  analyzeDMARC,
+  getDNSRecords,
+  getAllDNSRecords
+} from '../controllers/domainController.js';
 import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// All domain routes require authentication
+// Domain validation (no auth required)
+router.get('/validate/:domain', validateDomain);
+
+// SPF analysis (no auth required)
+router.post('/spf/analyze', analyzeSPF);
+
+// DMARC analysis (no auth required)
+router.post('/dmarc/analyze', analyzeDMARC);
+
+// DNS records (no auth required)
+router.get('/dns/records/:domain', getDNSRecords);
+router.get('/dns/records/:domain/all', getAllDNSRecords);
+
+// All domain management routes require authentication
 router.use(auth);
 
 // Get user's domains
-router.get('/', getDomains);
+router.get('/', getUserDomains);
 
 // Add new domain
-router.post('/', createDomain);
+router.post('/', addDomain);
 
 // Get domain details
-router.get('/:id', getDomainDetail);
+router.get('/:id', getDomainById);
 
 // Run domain test
-router.post('/:id/test', runDomainTest);
+router.post('/:id/test', testDomain);
 
 // Delete domain
-router.delete('/:id', removeDomain);
+router.delete('/:id', deleteDomain);
 
 export default router; 

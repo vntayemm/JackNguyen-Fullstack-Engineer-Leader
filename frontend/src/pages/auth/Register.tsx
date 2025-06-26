@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthLayout from '../components/AuthLayout';
-import { apiService } from '../services/api';
+import AuthLayout from '../../components/AuthLayout';
+import { apiService } from '../../services/api';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ const Register: React.FC = () => {
     setError('');
 
     try {
-      const response = await apiService.register({
+      await apiService.register({
         username: formData.username,
         email: formData.email,
         password: formData.password

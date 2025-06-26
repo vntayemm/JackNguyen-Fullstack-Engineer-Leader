@@ -78,7 +78,7 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <span>.</span>
               </div>
               {/* Copyright text */}
-              <div className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+              <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
                 &copy; {new Date().getFullYear()} Amberos. All rights reserved.
               </div>
             </div>

@@ -1,67 +1,163 @@
-import { verifyEmail, registerUser, loginUser, forgotPassword, resetPassword, getProfile, updateProfile } from '../services/authService.js';
+import { 
+  verifyEmail as verifyEmailService,
+  registerUser,
+  loginUser,
+  forgotPassword as forgotPasswordService,
+  resetPassword as resetPasswordService,
+  getProfile as getProfileService,
+  updateProfile as updateProfileService,
+  changePassword as changePasswordService,
+  deleteAccount as deleteAccountService
+} from '../services/authService.js';
+import {
+  RegisterRequestDTO,
+  RegisterResponseDTO,
+  LoginRequestDTO,
+  LoginResponseDTO,
+  ForgotPasswordRequestDTO,
+  ForgotPasswordResponseDTO,
+  ResetPasswordRequestDTO,
+  ResetPasswordResponseDTO,
+  VerifyEmailResponseDTO,
+  UserProfileDTO,
+  UpdateProfileRequestDTO,
+  ChangePasswordRequestDTO,
+  ChangePasswordResponseDTO,
+  DeleteAccountResponseDTO
+} from '../dto/index.js';
+import {
+  validateRequest,
+  handleValidationErrors,
+  sendSuccessResponse,
+  sendErrorResponse,
+  sanitizeRequest
+} from '../dto/utils.js';
+import { asyncHandler, AuthenticationError, ValidationError, NotFoundError } from '../middleware/errorHandler.js';
 
-export const register = async (req, res) => {
-  try {
-    const result = await registerUser(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+export const register = asyncHandler(async (req, res) => {
+  const registerData = new RegisterRequestDTO(req.body);
+  
+  if (!registerData.isValid()) {
+    throw new ValidationError('Invalid registration data', registerData.getErrors());
   }
-};
 
-export const login = async (req, res) => {
-  try {
-    const result = await loginUser(req.body);
-    res.json(result);
-  } catch (error) {
-    res.status(401).json({ error: error.message });
-  }
-};
+  const result = await registerUser(registerData);
+  const response = new RegisterResponseDTO(result);
+  
+  return sendSuccessResponse(res, response, 201);
+});
 
-export const verifyEmailToken = async (req, res) => {
-  try {
-    const { token } = req.params;
-    const result = await verifyEmail(token);
-    res.json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+export const login = asyncHandler(async (req, res) => {
+  const loginData = new LoginRequestDTO(req.body);
+  
+  if (!loginData.isValid()) {
+    throw new ValidationError('Invalid login data', loginData.getErrors());
   }
-};
 
-export const forgotPasswordHandler = async (req, res) => {
-  try {
-    const result = await forgotPassword(req.body.email);
-    res.json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+  const result = await loginUser(loginData);
+  const response = new LoginResponseDTO(result);
+  
+  return sendSuccessResponse(res, response);
+});
 
-export const resetPasswordHandler = async (req, res) => {
-  try {
-    const { token } = req.params;
-    const { password } = req.body;
-    const result = await resetPassword(token, password);
-    res.json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+export const verifyEmail = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  
+  if (!token) {
+    throw new ValidationError('Token is required');
   }
-};
 
-export const getProfileHandler = async (req, res) => {
-  try {
-    const result = await getProfile(req.user.id);
-    res.json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+  const result = await verifyEmailService(token);
+  const response = new VerifyEmailResponseDTO(result);
+  
+  return sendSuccessResponse(res, response);
+});
 
-export const updateProfileHandler = async (req, res) => {
-  try {
-    const result = await updateProfile(req.user.id, req.body);
-    res.json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+export const forgotPassword = asyncHandler(async (req, res) => {
+  const forgotPasswordData = new ForgotPasswordRequestDTO(req.body);
+  
+  if (!forgotPasswordData.isValid()) {
+    throw new ValidationError('Invalid email', forgotPasswordData.getErrors());
   }
-}; 
+
+  const result = await forgotPasswordService(forgotPasswordData);
+  const response = new ForgotPasswordResponseDTO(result);
+  
+  return sendSuccessResponse(res, response);
+});
+
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const resetPasswordData = new ResetPasswordRequestDTO(req.body);
+  
+  if (!resetPasswordData.isValid()) {
+    throw new ValidationError('Invalid password data', resetPasswordData.getErrors());
+  }
+
+  const result = await resetPasswordService(token, resetPasswordData);
+  const response = new ResetPasswordResponseDTO(result);
+  
+  return sendSuccessResponse(res, response);
+});
+
+export const getProfile = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  
+  if (!userId) {
+    throw new AuthenticationError('User not authenticated');
+  }
+
+  const result = await getProfileService(userId);
+  const response = new UserProfileDTO(result);
+  
+  return sendSuccessResponse(res, response);
+});
+
+export const updateProfile = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const updateData = new UpdateProfileRequestDTO(req.body);
+  
+  if (!userId) {
+    throw new AuthenticationError('User not authenticated');
+  }
+  
+  if (!updateData.isValid()) {
+    throw new ValidationError('Invalid profile data', updateData.getErrors());
+  }
+
+  const result = await updateProfileService(userId, updateData);
+  const response = new UserProfileDTO(result);
+  
+  return sendSuccessResponse(res, response);
+});
+
+export const changePassword = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const changePasswordData = new ChangePasswordRequestDTO(req.body);
+  
+  if (!userId) {
+    throw new AuthenticationError('User not authenticated');
+  }
+  
+  if (!changePasswordData.isValid()) {
+    throw new ValidationError('Invalid password data', changePasswordData.getErrors());
+  }
+
+  const result = await changePasswordService(userId, changePasswordData);
+  const response = new ChangePasswordResponseDTO(result);
+  
+  return sendSuccessResponse(res, response);
+});
+
+export const deleteAccount = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  
+  if (!userId) {
+    throw new AuthenticationError('User not authenticated');
+  }
+
+  const result = await deleteAccountService(userId);
+  const response = new DeleteAccountResponseDTO(result);
+  
+  return sendSuccessResponse(res, response);
+}); 

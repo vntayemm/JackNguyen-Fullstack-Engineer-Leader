@@ -1,5 +1,20 @@
 import User from '../models/user.js';
 import { hashPassword, comparePassword } from '../utils/hash.js';
+import {
+  UserProfileDTO,
+  UpdateProfileRequestDTO,
+  ChangePasswordRequestDTO,
+  ChangePasswordResponseDTO,
+  DeleteAccountResponseDTO,
+  ErrorResponseDTO
+} from '../dto/index.js';
+import {
+  validateRequest,
+  handleValidationErrors,
+  sendSuccessResponse,
+  sendErrorResponse,
+  sanitizeRequest
+} from '../dto/utils.js';
 
 export async function getProfile(req, res) {
   try {
@@ -8,7 +23,8 @@ export async function getProfile(req, res) {
     });
     
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      const errorResponse = new ErrorResponseDTO('User not found');
+      return sendErrorResponse(res, errorResponse.error, 404);
     }
     
     // Transform the response to match frontend expectations
@@ -22,27 +38,37 @@ export async function getProfile(req, res) {
       createdAt: user.createdAt
     };
     
-    res.json(userProfile);
+    // Create response using DTO
+    const response = new UserProfileDTO(userProfile);
+    return sendSuccessResponse(res, response);
   } catch (error) {
     console.error('Error fetching profile:', error);
-    res.status(500).json({ error: 'Failed to fetch profile' });
+    const errorResponse = new ErrorResponseDTO('Failed to fetch profile');
+    return sendErrorResponse(res, errorResponse.error, 500);
   }
 }
 
 export async function updateProfile(req, res) {
   try {
-    const { username, email, firstName, lastName } = req.body;
+    // Validate and sanitize request data
+    const validation = validateRequest(UpdateProfileRequestDTO, req.body);
+    if (!validation.isValid) {
+      return handleValidationErrors(res, validation.errors);
+    }
+
+    // Sanitize the data
+    const sanitizedData = sanitizeRequest(UpdateProfileRequestDTO, req.body);
+    
     const user = await User.findByPk(req.user.id);
     
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      const errorResponse = new ErrorResponseDTO('User not found');
+      return sendErrorResponse(res, errorResponse.error, 404);
     }
     
     // Update fields if provided
-    if (username !== undefined) user.username = username;
-    if (email !== undefined) user.email = email;
-    if (firstName !== undefined) user.first_name = firstName;
-    if (lastName !== undefined) user.last_name = lastName;
+    if (sanitizedData.firstName !== undefined) user.first_name = sanitizedData.firstName;
+    if (sanitizedData.lastName !== undefined) user.last_name = sanitizedData.lastName;
     
     await user.save();
     
@@ -57,32 +83,47 @@ export async function updateProfile(req, res) {
       createdAt: user.createdAt
     };
     
-    res.json(updatedProfile);
+    // Create response using DTO
+    const response = new UserProfileDTO(updatedProfile);
+    return sendSuccessResponse(res, response);
   } catch (error) {
     console.error('Error updating profile:', error);
-    res.status(500).json({ error: 'Failed to update profile' });
+    const errorResponse = new ErrorResponseDTO('Failed to update profile');
+    return sendErrorResponse(res, errorResponse.error, 500);
   }
 }
 
 export async function changePassword(req, res) {
   try {
-    const { oldPassword, newPassword } = req.body;
+    // Validate request data
+    const validation = validateRequest(ChangePasswordRequestDTO, req.body);
+    if (!validation.isValid) {
+      return handleValidationErrors(res, validation.errors);
+    }
+
+    const { oldPassword, newPassword } = validation.dto;
     const user = await User.findByPk(req.user.id);
     
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      const errorResponse = new ErrorResponseDTO('User not found');
+      return sendErrorResponse(res, errorResponse.error, 404);
     }
     
     if (!await comparePassword(oldPassword, user.password_hash)) {
-      return res.status(400).json({ error: 'Old password incorrect' });
+      const errorResponse = new ErrorResponseDTO('Old password incorrect');
+      return sendErrorResponse(res, errorResponse.error, 400);
     }
     
     user.password_hash = await hashPassword(newPassword);
     await user.save();
-    res.json({ message: 'Password changed' });
+    
+    // Create response using DTO
+    const response = new ChangePasswordResponseDTO();
+    return sendSuccessResponse(res, response);
   } catch (error) {
     console.error('Error changing password:', error);
-    res.status(500).json({ error: 'Failed to change password' });
+    const errorResponse = new ErrorResponseDTO('Failed to change password');
+    return sendErrorResponse(res, errorResponse.error, 500);
   }
 }
 
@@ -91,13 +132,18 @@ export async function deleteAccount(req, res) {
     const user = await User.findByPk(req.user.id);
     
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      const errorResponse = new ErrorResponseDTO('User not found');
+      return sendErrorResponse(res, errorResponse.error, 404);
     }
     
     await User.destroy({ where: { id: req.user.id } });
-    res.json({ message: 'Account deleted' });
+    
+    // Create response using DTO
+    const response = new DeleteAccountResponseDTO();
+    return sendSuccessResponse(res, response);
   } catch (error) {
     console.error('Error deleting account:', error);
-    res.status(500).json({ error: 'Failed to delete account' });
+    const errorResponse = new ErrorResponseDTO('Failed to delete account');
+    return sendErrorResponse(res, errorResponse.error, 500);
   }
 } 

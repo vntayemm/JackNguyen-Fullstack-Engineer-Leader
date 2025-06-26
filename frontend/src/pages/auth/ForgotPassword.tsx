@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AuthLayout from '../components/AuthLayout';
+import AuthLayout from '../../components/AuthLayout';
+import { apiService } from '../../services/api';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: handle forgot password logic
+    setError('');
+    setSuccess('');
+    setLoading(true);
+    try {
+      await apiService.forgotPassword({ email });
+      setSuccess('If this email is registered, a reset link has been sent. Please check your inbox.');
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to send reset link. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -17,6 +31,12 @@ const ForgotPassword: React.FC = () => {
         <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Forgot your password?</h2>
       </div>
       <form onSubmit={handleSubmit} className="w-full space-y-4">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-md text-sm mb-2">{error}</div>
+        )}
+        {success && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-md text-sm mb-2">{success}</div>
+        )}
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
           <input
@@ -26,13 +46,15 @@ const ForgotPassword: React.FC = () => {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
+            disabled={loading}
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-medium hover:bg-blue-700 transition text-sm"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-medium hover:bg-blue-700 transition text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={loading || !email}
         >
-          Send Reset Link
+          {loading ? 'Sending...' : 'Send Reset Link'}
         </button>
       </form>
       <div className="mt-4 md:mt-6 text-center text-gray-600 dark:text-gray-300 text-sm">

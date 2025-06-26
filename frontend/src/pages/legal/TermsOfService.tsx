@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-const PrivacyPolicy: React.FC = () => {
+const TermsOfService: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 md:py-8 px-2 md:px-4">
       <div className="max-w-4xl mx-auto">
@@ -17,7 +16,7 @@ const PrivacyPolicy: React.FC = () => {
               </button>
             </div>
             <div className="text-center">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Privacy Policy</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Terms of Service</h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">DNS/Email Security Tool</p>
             </div>
           </div>
@@ -28,58 +27,58 @@ const PrivacyPolicy: React.FC = () => {
             </p>
             
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">1. Information We Collect</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">1. Acceptance of Terms</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                We collect information you provide directly to us, such as when you create an account, use DNS/Email Security Tool, or contact us for support. This may include your name, email address, domain information, and other contact details.
+                By accessing and using DNS/Email Security Tool, you accept and agree to be bound by the terms and provision of this agreement.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">2. How We Use Your Information</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">2. Use License</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                We use the information we collect to provide, maintain, and improve DNS/Email Security Tool, to communicate with you, and to develop new features and services.
+                Permission is granted to temporarily download one copy of the materials (information or software) on DNS/Email Security Tool for personal, non-commercial transitory viewing only.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">3. Information Sharing</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">3. Disclaimer</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this privacy policy or as required by law.
+                The materials on DNS/Email Security Tool are provided on an 'as is' basis. Amberos makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">4. Data Security</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">4. Limitations</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+                In no event shall Amberos or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on DNS/Email Security Tool.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">5. Cookies and Tracking</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">5. Revisions and Errata</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                We use cookies and similar tracking technologies to enhance your experience on DNS/Email Security Tool and to analyze how our services are used.
+                The materials appearing on DNS/Email Security Tool could include technical, typographical, or photographic errors. Amberos does not warrant that any of the materials on its website are accurate, complete or current.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">6. Your Rights</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">6. Links</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                You have the right to access, update, or delete your personal information. You may also have the right to restrict or object to certain processing of your information.
+                Amberos has not reviewed all of the sites linked to DNS/Email Security Tool and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Amberos of the site.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">7. Changes to This Policy</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">7. Site Terms of Use Modifications</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                We may update this privacy policy from time to time. We will notify you of any changes by posting the new privacy policy on DNS/Email Security Tool and updating the "Last updated" date.
+                Amberos may revise these terms of use for DNS/Email Security Tool at any time without notice. By using this website you are agreeing to be bound by the then current version of these Terms and Conditions of Use.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">8. Contact Us</h2>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">8. Governing Law</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                If you have any questions about this privacy policy, please contact us at privacy@amberos.com.
+                Any claim relating to DNS/Email Security Tool shall be governed by the laws of the State of California without regard to its conflict of law provisions.
               </p>
             </section>
           </div>
@@ -104,4 +103,4 @@ const PrivacyPolicy: React.FC = () => {
   );
 };
 
-export default PrivacyPolicy; 
+export default TermsOfService; 

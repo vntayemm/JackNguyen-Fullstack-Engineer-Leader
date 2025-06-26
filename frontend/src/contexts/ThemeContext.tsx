@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import AuthInfoPanel from '../components/AuthInfoPanel';
 
 interface ThemeContextType {
   isDarkMode: boolean;

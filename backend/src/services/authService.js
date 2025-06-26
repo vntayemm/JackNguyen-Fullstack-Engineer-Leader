@@ -4,6 +4,7 @@ import { signToken } from '../utils/jwt.js';
 import { sendMail } from '../utils/mailer.js';
 import config from '../config.js';
 import crypto from 'crypto';
+import { Op } from 'sequelize';
 
 export async function verifyEmail(token) {
   const user = await User.findOne({ where: { verification_token: token } });
@@ -23,25 +24,9 @@ export async function verifyEmail(token) {
   return { message: 'Email verified successfully! You can now log in.' };
 }
 
-export async function registerUser(userData) {
-  const { username, email, password } = userData;
-  
-  // Validation
-  if (!username || !email || !password) {
-    throw new Error('Username, email, and password are required');
-  }
-  
-  if (username.trim().length < 3) {
-    throw new Error('Username must be at least 3 characters long');
-  }
-  
-  if (!email.includes('@')) {
-    throw new Error('Please enter a valid email address');
-  }
-  
-  if (password.length < 6) {
-    throw new Error('Password must be at least 6 characters long');
-  }
+export async function registerUser(registerDTO) {
+  // DTO validation is already handled in controller
+  const { username, email, password } = registerDTO;
   
   const password_hash = await hashPassword(password);
   const verification_token = crypto.randomBytes(32).toString('hex');
@@ -85,12 +70,9 @@ export async function registerUser(userData) {
   };
 }
 
-export async function loginUser(credentials) {
-  const { username, password } = credentials;
-  
-  if (!username || !password) {
-    throw new Error('Username and password are required');
-  }
+export async function loginUser(loginDTO) {
+  // DTO validation is already handled in controller
+  const { username, password } = loginDTO;
   
   const user = await User.findOne({ where: { username } });
   if (!user) {
@@ -119,10 +101,9 @@ export async function loginUser(credentials) {
   };
 }
 
-export async function forgotPassword(email) {
-  if (!email) {
-    throw new Error('Email is required');
-  }
+export async function forgotPassword(forgotPasswordDTO) {
+  // DTO validation is already handled in controller
+  const { email } = forgotPasswordDTO;
   
   const user = await User.findOne({ where: { email: email.trim().toLowerCase() } });
   if (!user) {
@@ -164,19 +145,14 @@ export async function forgotPassword(email) {
   return { message: 'If an account with this email exists, a password reset link has been sent.' };
 }
 
-export async function resetPassword(token, newPassword) {
-  if (!token || !newPassword) {
-    throw new Error('Token and new password are required');
-  }
-  
-  if (newPassword.length < 6) {
-    throw new Error('Password must be at least 6 characters long');
-  }
+export async function resetPassword(token, resetPasswordDTO) {
+  // DTO validation is already handled in controller
+  const { password } = resetPasswordDTO;
   
   const user = await User.findOne({ 
     where: { 
       reset_token: token,
-      reset_token_expires: { [require('sequelize').Op.gt]: new Date() }
+      reset_token_expires: { [Op.gt]: new Date() }
     }
   });
   
@@ -185,7 +161,7 @@ export async function resetPassword(token, newPassword) {
   }
   
   // Update password and clear reset token
-  user.password_hash = await hashPassword(newPassword);
+  user.password_hash = await hashPassword(password);
   user.reset_token = null;
   user.reset_token_expires = null;
   await user.save();
@@ -229,8 +205,9 @@ export async function getProfile(userId) {
   };
 }
 
-export async function updateProfile(userId, updateData) {
-  const { firstName, lastName } = updateData;
+export async function updateProfile(userId, updateProfileDTO) {
+  // DTO validation and sanitization is already handled in controller
+  const { firstName, lastName } = updateProfileDTO;
   
   const user = await User.findByPk(userId);
   if (!user) {
@@ -239,10 +216,10 @@ export async function updateProfile(userId, updateData) {
   
   // Update fields if provided
   if (firstName !== undefined) {
-    user.first_name = firstName?.trim() || null;
+    user.first_name = firstName;
   }
   if (lastName !== undefined) {
-    user.last_name = lastName?.trim() || null;
+    user.last_name = lastName;
   }
   
   await user.save();
@@ -256,4 +233,74 @@ export async function updateProfile(userId, updateData) {
     createdAt: user.createdAt,
     isVerified: user.is_verified
   };
+}
+
+export async function changePassword(userId, changePasswordDTO) {
+  // DTO validation is already handled in controller
+  const { oldPassword, newPassword } = changePasswordDTO;
+  
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  
+  // Verify old password
+  const validOldPassword = await comparePassword(oldPassword, user.password_hash);
+  if (!validOldPassword) {
+    throw new Error('Current password is incorrect');
+  }
+  
+  // Hash new password
+  const newPasswordHash = await hashPassword(newPassword);
+  
+  // Update password
+  user.password_hash = newPasswordHash;
+  await user.save();
+  
+  // Send confirmation email
+  await sendMail({
+    to: user.email,
+    subject: 'Password Changed Successfully - DNS/Email Security Tool',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #059669;">Password Changed Successfully</h2>
+        <p>Hi ${user.username},</p>
+        <p>Your password for DNS/Email Security Tool has been successfully changed.</p>
+        <p>If you didn't make this change, please contact our support team immediately.</p>
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+        <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
+      </div>
+    `
+  });
+  
+  return { message: 'Password changed successfully' };
+}
+
+export async function deleteAccount(userId) {
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  
+  // Send goodbye email
+  await sendMail({
+    to: user.email,
+    subject: 'Account Deleted - DNS/Email Security Tool',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #dc2626;">Account Deleted</h2>
+        <p>Hi ${user.username},</p>
+        <p>Your DNS/Email Security Tool account has been successfully deleted.</p>
+        <p>We're sorry to see you go. If you change your mind, you can always create a new account.</p>
+        <p>Thank you for using our service.</p>
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+        <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
+      </div>
+    `
+  });
+  
+  // Delete user
+  await user.destroy();
+  
+  return { message: 'Account deleted successfully' };
 } 

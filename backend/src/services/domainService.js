@@ -6,7 +6,7 @@ import { getDNSRecords } from './nodejsDomainValidatorService.js';
 export async function getUserDomains(userId) {
   const domains = await Domain.findAll({
     where: { user_id: userId },
-    order: [['updated_at', 'DESC']]
+    order: [['updatedAt', 'DESC']]
   });
   
   return domains.map(domain => ({
@@ -16,18 +16,16 @@ export async function getUserDomains(userId) {
     dmarcResult: domain.dmarc_result,
     dnsResult: domain.dns_result,
     lastTested: domain.last_tested,
-    createdAt: domain.created_at,
-    updatedAt: domain.updated_at
+    createdAt: domain.createdAt,
+    updatedAt: domain.updatedAt
   }));
 }
 
-export async function addDomain(userId, domainName) {
-  // Validate domain name
-  if (!domainName || !domainName.trim()) {
-    throw new Error('Domain name is required');
-  }
+export async function addDomain(userId, addDomainDTO) {
+  // DTO validation is already handled in controller
+  const { domainName } = addDomainDTO;
   
-  const cleanDomain = domainName.trim().toLowerCase();
+  const cleanDomain = domainName.toLowerCase();
   
   // Check if domain already exists for this user
   const existingDomain = await Domain.findOne({
@@ -54,8 +52,8 @@ export async function addDomain(userId, domainName) {
     dmarcResult: domain.dmarc_result,
     dnsResult: domain.dns_result,
     lastTested: domain.last_tested,
-    createdAt: domain.created_at,
-    updatedAt: domain.updated_at
+    createdAt: domain.createdAt,
+    updatedAt: domain.updatedAt
   };
 }
 
@@ -133,8 +131,8 @@ export async function testDomain(userId, domainId) {
       dmarcResult: results.dmarc,
       dnsResult: results.dns,
       lastTested: domain.last_tested,
-      createdAt: domain.created_at,
-      updatedAt: domain.updated_at
+      createdAt: domain.createdAt,
+      updatedAt: domain.updatedAt
     };
     
   } catch (error) {
@@ -161,7 +159,7 @@ export async function getDomainDetails(userId, domainId) {
     dmarcResult: domain.dmarc_result,
     dnsResult: domain.dns_result,
     lastTested: domain.last_tested,
-    createdAt: domain.created_at,
-    updatedAt: domain.updated_at
+    createdAt: domain.createdAt,
+    updatedAt: domain.updatedAt
   };
 } 

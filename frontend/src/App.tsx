@@ -6,19 +6,19 @@ import DomainValidator from './pages/DomainValidator';
 import SPFAnalyzer from './pages/SPFAnalyzer';
 import DMARCAnalyzer from './pages/DMARCAnalyzer';
 import DNSResolver from './pages/DNSResolver';
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import RegisterSuccess from './pages/RegisterSuccess';
-import ForgotPassword from './pages/ForgotPassword';
-import VerifyEmail from './pages/VerifyEmail';
-import TermsOfService from './pages/TermsOfService';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import Profile from './pages/Profile';
+import Dashboard from './pages/account/Dashboard';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import RegisterSuccess from './pages/auth/RegisterSuccess';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import VerifyEmail from './pages/auth/VerifyEmail';
+import TermsOfService from './pages/legal/TermsOfService';
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import Profile from './pages/account/Profile';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import FloatingButtons from './components/FloatingButtons';
-import AuthInfoPanel from './components/AuthInfoPanel';
 import UserDropdown from './components/UserDropdown';
 import { apiService } from './services/api';
 import config from './config';
@@ -163,7 +163,7 @@ const AppContent: React.FC = () => {
     };
 
     fetchUserProfile();
-  }, [token, user]); // Removed setUser from dependencies
+  }, [token, user, setUser]); // Added setUser to dependencies
 
   // Reset the flag when user changes
   useEffect(() => {
@@ -179,6 +179,7 @@ const AppContent: React.FC = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/register-success" element={<RegisterSuccess />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -215,7 +216,7 @@ const AppContent: React.FC = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+        <div className="px-4 py-4 sm:px-0">
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/domain-validator" element={<DomainValidator />} />

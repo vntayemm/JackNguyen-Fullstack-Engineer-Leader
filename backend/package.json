@@ -11,7 +11,8 @@
     "db:update": "node scripts/update-database.js",
     "db:force-update": "node scripts/force-update-database.js",
     "db:test": "node scripts/test-database.js",
-    "test:urls": "node scripts/test-urls.js"
+    "test:urls": "node scripts/test-urls.js",
+    "swagger:generate": "node scripts/generate-swagger.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

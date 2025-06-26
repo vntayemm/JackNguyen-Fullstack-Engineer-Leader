@@ -11,6 +11,9 @@ import sequelize from './models/index.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import domainRoutes from './routes/domain.js';
+import { HealthCheckResponseDTO, ErrorResponseDTO } from './dto/index.js';
+import { sendSuccessResponse, sendErrorResponse } from './dto/utils.js';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -52,17 +55,30 @@ app.get('/docs/swagger.json', (req, res) => {
   if (fs.existsSync(swaggerPath)) {
     res.sendFile(swaggerPath);
   } else {
-    res.status(404).json({ error: 'swagger.json not found. Make sure to hit your API endpoints first.' });
+    const errorResponse = new ErrorResponseDTO('swagger.json not found. Make sure to hit your API endpoints first.');
+    return sendErrorResponse(res, errorResponse.error, 404);
   }
 });
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, { swaggerUrl: '/docs/swagger.json' }));
 
-app.get('/health', (req, res) => res.json({ 
-  status: 'healthy',
-  environment: config.NODE_ENV,
-  timestamp: new Date().toISOString()
-}));
+app.get('/health', (req, res) => {
+  try {
+    // Create response using DTO
+    const response = new HealthCheckResponseDTO(config.NODE_ENV);
+    return sendSuccessResponse(res, response);
+  } catch (error) {
+    console.error('Health check error:', error);
+    const errorResponse = new ErrorResponseDTO('Health check failed');
+    return sendErrorResponse(res, errorResponse.error, 500);
+  }
+});
+
+// 404 handler for unmatched routes
+app.use(notFoundHandler);
+
+// Global error handler middleware
+app.use(errorHandler);
 
 // Sync DB and start server
 sequelize.sync({ alter: config.NODE_ENV === 'development' }).then(() => {
@@ -71,14 +87,5 @@ sequelize.sync({ alter: config.NODE_ENV === 'development' }).then(() => {
     console.log(`Environment: ${config.NODE_ENV}`);
     console.log(`API Base: ${config.API_PREFIX}`);
     console.log(`Swagger UI: http://localhost:${config.PORT}/docs`);
-  });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Something went wrong!',
-    message: config.NODE_ENV === 'development' ? err.message : 'Internal server error'
   });
 }); 

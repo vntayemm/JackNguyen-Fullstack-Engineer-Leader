@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { apiService, UserProfile } from '../services/api';
+import { useAuth } from '../../contexts/AuthContext';
+import { apiService, UserProfile } from '../../services/api';
 
 const Profile: React.FC = () => {
   const { user, setUser, logout } = useAuth();
