@@ -43,7 +43,7 @@ const FloatingButtons: React.FC = () => {
           </svg>
         ) : (
           <svg
-            className="w-6 h-6 text-gray-700 group-hover:scale-110 transition-transform"
+            className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:scale-110 transition-transform"
             fill="currentColor"
             viewBox="0 0 20 20"
           >

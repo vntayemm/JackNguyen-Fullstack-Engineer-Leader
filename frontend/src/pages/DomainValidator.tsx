@@ -25,8 +25,8 @@ const DomainValidator: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold dark:text-white mb-2">Domain Validator</h1>
-        <p className="dark:text-gray-300">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Domain Validator</h1>
+        <p className="text-gray-600 dark:text-gray-300">
           Validate domain names and check their format
         </p>
       </div>
@@ -34,7 +34,7 @@ const DomainValidator: React.FC = () => {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="domain" className="block text-sm font-medium dark:text-gray-300 mb-2">
+            <label htmlFor="domain" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Domain Name
             </label>
             <input
@@ -58,7 +58,7 @@ const DomainValidator: React.FC = () => {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-2 dark:text-gray-300">Validating domain...</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">Validating domain...</p>
           </div>
         </div>
       )}
@@ -72,16 +72,16 @@ const DomainValidator: React.FC = () => {
 
       {data && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold dark:text-white mb-4">Validation Results</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Validation Results</h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="font-medium dark:text-gray-300">Domain:</span>
-              <span className="dark:text-gray-400">{data.domain}</span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">Domain:</span>
+              <span className="text-gray-900 dark:text-gray-400">{data.domain}</span>
             </div>
             
             <div className="flex items-center justify-between">
-              <span className="font-medium dark:text-gray-300">Status:</span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>
               <span className={`font-semibold ${data.is_valid ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {data.is_valid ? 'Valid' : 'Invalid'}
               </span>
@@ -89,7 +89,7 @@ const DomainValidator: React.FC = () => {
 
             {data.errors && data.errors.length > 0 && (
               <div>
-                <span className="font-medium block mb-2 dark:text-gray-300">Errors:</span>
+                <span className="font-medium block mb-2 text-gray-700 dark:text-gray-300">Errors:</span>
                 <ul className="list-disc list-inside space-y-1">
                   {data.errors.map((error, index) => (
                     <li key={index} className="text-red-600 dark:text-red-400">{error}</li>
@@ -121,10 +121,10 @@ const DomainValidator: React.FC = () => {
 
       {/* Additional content to make page longer for testing scroll-to-top */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold dark:text-white mb-4">Domain Validation Guidelines</h2>
-        <div className="space-y-4 dark:text-gray-300">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Domain Validation Guidelines</h2>
+        <div className="space-y-4 text-gray-600 dark:text-gray-300">
           <div>
-            <h3 className="font-medium dark:text-white mb-2">Valid Domain Examples:</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Valid Domain Examples:</h3>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>example.com</li>
               <li>subdomain.example.com</li>
@@ -135,7 +135,7 @@ const DomainValidator: React.FC = () => {
           </div>
           
           <div>
-            <h3 className="font-medium dark:text-white mb-2">Invalid Domain Examples:</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Invalid Domain Examples:</h3>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>example..com (double dots)</li>
               <li>.example.com (starts with dot)</li>
@@ -146,7 +146,7 @@ const DomainValidator: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="font-medium dark:text-white mb-2">Domain Naming Rules:</h3>
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">Domain Naming Rules:</h3>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>Must be between 1 and 253 characters long</li>
               <li>Can contain letters (a-z, A-Z), numbers (0-9), and hyphens (-)</li>
@@ -160,46 +160,46 @@ const DomainValidator: React.FC = () => {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold dark:text-white mb-4">Common Domain Extensions</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Common Domain Extensions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.com</div>
-            <div className="text-sm dark:text-gray-300">Commercial</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.com</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Commercial</div>
           </div>
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.org</div>
-            <div className="text-sm dark:text-gray-300">Organization</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.org</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Organization</div>
           </div>
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.net</div>
-            <div className="text-sm dark:text-gray-300">Network</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.net</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Network</div>
           </div>
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.edu</div>
-            <div className="text-sm dark:text-gray-300">Education</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.edu</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Education</div>
           </div>
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.gov</div>
-            <div className="text-sm dark:text-gray-300">Government</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.gov</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Government</div>
           </div>
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.mil</div>
-            <div className="text-sm dark:text-gray-300">Military</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.mil</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Military</div>
           </div>
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.io</div>
-            <div className="text-sm dark:text-gray-300">Technology</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.io</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Technology</div>
           </div>
           <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <div className="font-semibold dark:text-white">.co</div>
-            <div className="text-sm dark:text-gray-300">Company</div>
+            <div className="font-semibold text-gray-900 dark:text-white">.co</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">Company</div>
           </div>
         </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold dark:text-white mb-4">Why Domain Validation Matters</h2>
-        <div className="space-y-3 dark:text-gray-300">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Why Domain Validation Matters</h2>
+        <div className="space-y-3 text-gray-600 dark:text-gray-300">
           <p>
             Domain validation is crucial for ensuring that email addresses, websites, and other online services 
             function correctly. Invalid domain names can cause:

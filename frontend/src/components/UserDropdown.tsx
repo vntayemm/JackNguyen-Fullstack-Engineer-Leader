@@ -31,6 +31,9 @@ const UserDropdown: React.FC = () => {
     if (user?.firstName) {
       return user.firstName[0].toUpperCase();
     }
+    if (user?.username) {
+      return user.username[0].toUpperCase();
+    }
     if (user?.email) {
       return user.email[0].toUpperCase();
     }
@@ -44,7 +47,32 @@ const UserDropdown: React.FC = () => {
     if (user?.firstName) {
       return user.firstName;
     }
-    return user?.email || 'User';
+    if (user?.lastName) {
+      return user.lastName;
+    }
+    if (user?.username) {
+      return user.username;
+    }
+    if (user?.email) {
+      return user.email.split('@')[0]; // Show part before @ in email
+    }
+    return 'User';
+  };
+
+  const getDisplayName = () => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    if (user?.firstName) {
+      return user.firstName;
+    }
+    if (user?.lastName) {
+      return user.lastName;
+    }
+    if (user?.username) {
+      return user.username;
+    }
+    return 'User';
   };
 
   return (
@@ -60,7 +88,7 @@ const UserDropdown: React.FC = () => {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 border border-gray-200 dark:border-gray-700">
           <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-            <p className="text-sm font-medium text-gray-900 dark:text-white">{getUserName()}</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">{getDisplayName()}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
           </div>
           

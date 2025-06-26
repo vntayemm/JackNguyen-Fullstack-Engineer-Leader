@@ -9,12 +9,12 @@ const PrivacyPolicy: React.FC = () => {
           <div className="flex flex-col items-center mb-6 md:mb-8">
             <div className="flex items-center justify-between w-full mb-4">
               <img src="/assets/logo.png" alt="Logo" className="h-8 md:h-12 w-auto" />
-              <Link 
-                to="/login" 
+              <button 
+                onClick={() => window.history.back()}
                 className="text-blue-600 dark:text-blue-400 hover:underline text-sm md:text-base"
               >
-                ← Back to Login
-              </Link>
+                ← Back
+              </button>
             </div>
             <div className="text-center">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Privacy Policy</h1>
@@ -86,12 +86,12 @@ const PrivacyPolicy: React.FC = () => {
           
           {/* Bottom Back to Login Button */}
           <div className="mt-8 md:mt-12 text-center">
-            <Link 
-              to="/login" 
+            <button 
+              onClick={() => window.history.back()}
               className="inline-flex items-center px-4 md:px-6 py-2 md:py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 text-sm md:text-base"
             >
-              ← Back to Login
-            </Link>
+              ← Back
+            </button>
           </div>
           
           {/* Copyright */}

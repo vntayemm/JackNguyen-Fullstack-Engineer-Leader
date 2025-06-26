@@ -56,9 +56,18 @@ const Login: React.FC = () => {
 
       console.log('Login successful:', response);
 
-      // Store token and user data using AuthContext
+      // Store token first
       setToken(response.token);
-      setUser(response.user);
+      
+      // Fetch complete user profile to get firstName and lastName
+      try {
+        const userProfile = await apiService.getProfile();
+        console.log('User profile fetched:', userProfile);
+        setUser(userProfile);
+      } catch (profileError) {
+        console.warn('Failed to fetch user profile, using login response:', profileError);
+        setUser(response.user);
+      }
       
       // Redirect to dashboard
       navigate('/dashboard');
