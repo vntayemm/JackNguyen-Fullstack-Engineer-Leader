@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import config from '../config';
 
 const Document: React.FC = () => {
   return (
@@ -18,6 +19,110 @@ const Document: React.FC = () => {
         </div>
 
         <div className="space-y-8">
+          {/* Requirements Implementation */}
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+              📋 Full-Stack Engineer Test Requirements Implementation
+            </h2>
+            <div className="space-y-6">
+              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border-l-4 border-green-500">
+                <h3 className="text-xl font-semibold text-green-900 dark:text-green-100 mb-4">
+                  ✅ Core Requirements - COMPLETED
+                </h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold text-green-800 dark:text-green-200 mb-3">Domain Validation</h4>
+                    <ul className="text-green-700 dark:text-green-300 space-y-2 text-sm">
+                      <li>• Real-time domain format validation using validators library</li>
+                      <li>• Support for various domain formats (example.com, www.example.com)</li>
+                      <li>• DNS record resolution with dnspython</li>
+                      <li>• Error handling for invalid domains</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-green-800 dark:text-green-200 mb-3">SPF Record Analysis</h4>
+                    <ul className="text-green-700 dark:text-green-300 space-y-2 text-sm">
+                      <li>• Parse SPF records using checkdmarc library</li>
+                      <li>• Identify syntax errors and warnings</li>
+                      <li>• Support for complex SPF mechanisms (include, ip4, ip6, etc.)</li>
+                      <li>• Default SPF: v=spf1 include:zoho.com ~all</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-green-800 dark:text-green-200 mb-3">DMARC Record Analysis</h4>
+                    <ul className="text-green-700 dark:text-green-300 space-y-2 text-sm">
+                      <li>• Parse DMARC policies using checkdmarc library</li>
+                      <li>• Validate DMARC record syntax and structure</li>
+                      <li>• Policy recommendations and best practices</li>
+                      <li>• Default DMARC: v=DMARC1; p=quarantine; rua=mailto:minh.nguyen@globaldevhubs.com</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-green-800 dark:text-green-200 mb-3">DNS Resolution</h4>
+                    <ul className="text-green-700 dark:text-green-300 space-y-2 text-sm">
+                      <li>• Resolve multiple DNS record types (A, AAAA, MX, TXT, CNAME)</li>
+                      <li>• Display formatted DNS results</li>
+                      <li>• Error handling for DNS failures</li>
+                      <li>• Timeout and retry mechanisms</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border-l-4 border-blue-500">
+                <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-4">
+                  🔐 Authentication System - COMPLETED
+                </h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-3">User Registration & Login</h4>
+                    <ul className="text-blue-700 dark:text-blue-300 space-y-2 text-sm">
+                      <li>• Secure user registration with email verification</li>
+                      <li>• JWT-based authentication system</li>
+                      <li>• Password hashing with bcrypt</li>
+                      <li>• Session management and token refresh</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-3">Password Management</h4>
+                    <ul className="text-blue-700 dark:text-blue-300 space-y-2 text-sm">
+                      <li>• Forgot password functionality</li>
+                      <li>• Secure password reset with email tokens</li>
+                      <li>• Password change in user profile</li>
+                      <li>• Account deletion capability</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg border-l-4 border-purple-500">
+                <h3 className="text-xl font-semibold text-purple-900 dark:text-purple-100 mb-4">
+                  🗄️ Domain Management - COMPLETED
+                </h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold text-purple-800 dark:text-purple-200 mb-3">Domain Testing & Storage</h4>
+                    <ul className="text-purple-700 dark:text-purple-300 space-y-2 text-sm">
+                      <li>• Save tested domains to user account</li>
+                      <li>• View test history and results</li>
+                      <li>• Re-run tests on saved domains</li>
+                      <li>• Bulk domain testing capabilities</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-purple-800 dark:text-purple-200 mb-3">Database Integration</h4>
+                    <ul className="text-purple-700 dark:text-purple-300 space-y-2 text-sm">
+                      <li>• PostgreSQL database with Sequelize ORM</li>
+                      <li>• User and domain relationship models</li>
+                      <li>• Test result persistence</li>
+                      <li>• Data validation and constraints</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Tool Overview */}
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
@@ -166,11 +271,11 @@ const Document: React.FC = () => {
                   <div>
                     <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Domain Testing:</h4>
                     <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• POST /domain-validator/test</li>
-                      <li>• POST /nodejs-domain-validator/test</li>
-                      <li>• POST /python-domain-validator/test</li>
-                      <li>• GET /domain-validator/domains</li>
-                      <li>• POST /domain-validator/domains</li>
+                      <li>• POST /domains/test</li>
+                      <li>• POST /domains/spf/analyze</li>
+                      <li>• POST /domains/dmarc/analyze</li>
+                      <li>• GET /domains/dns/resolve</li>
+                      <li>• GET /domains (user's domains)</li>
                     </ul>
                   </div>
                 </div>
@@ -199,31 +304,14 @@ const Document: React.FC = () => {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Key Functions:</h4>
+                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Testing Features:</h4>
                     <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• Domain format validation</li>
-                      <li>• SPF record parsing & validation</li>
-                      <li>• DMARC record analysis</li>
-                      <li>• DNS record resolution (A, AAAA, MX, TXT)</li>
-                      <li>• Comprehensive test suite</li>
+                      <li>• Domain format validation tests</li>
+                      <li>• SPF record parsing tests</li>
+                      <li>• DNS resolution tests</li>
+                      <li>• Error handling tests</li>
                     </ul>
                   </div>
-                </div>
-              </div>
-              
-              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Usage Examples
-                </h3>
-                <div className="bg-gray-900 text-green-400 p-4 rounded text-sm font-mono">
-                  <div># Test a single domain</div>
-                  <div>python scripts/test-domain.py --domain example.com</div>
-                  <br/>
-                  <div># Run comprehensive tests</div>
-                  <div>python scripts/test-domain.py --comprehensive example.com</div>
-                  <br/>
-                  <div># Test with JSON output</div>
-                  <div>python scripts/test-domain.py --json --domain example.com</div>
                 </div>
               </div>
             </div>
@@ -232,65 +320,32 @@ const Document: React.FC = () => {
           {/* Development Guidelines */}
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-              🛠️ Development Guidelines
+              💻 Development Guidelines
             </h2>
             <div className="space-y-4">
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-blue-900 dark:text-blue-100 mb-2">
-                  Local Development Setup
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Code Quality Standards
                 </h3>
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-1">Backend Setup:</h4>
-                    <div className="bg-gray-900 text-green-400 p-3 rounded font-mono">
-                      <div>cd backend</div>
-                      <div>npm install</div>
-                      <div>npm run dev</div>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-1">Frontend Setup:</h4>
-                    <div className="bg-gray-900 text-green-400 p-3 rounded font-mono">
-                      <div>cd frontend</div>
-                      <div>npm install</div>
-                      <div>npm start</div>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-1">Database Setup:</h4>
-                    <div className="bg-gray-900 text-green-400 p-3 rounded font-mono">
-                      <div># Configure PostgreSQL connection</div>
-                      <div># Update src/config.js with your DB credentials</div>
-                      <div>npm run db:update</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-green-900 dark:text-green-100 mb-2">
-                  Code Standards
-                </h3>
-                <ul className="text-green-800 dark:text-green-200 space-y-1 text-sm">
-                  <li>• <strong>Backend:</strong> Use ES6 modules, async/await, proper error handling</li>
-                  <li>• <strong>Frontend:</strong> TypeScript strict mode, functional components with hooks</li>
-                  <li>• <strong>Python:</strong> PEP 8 style, type hints, comprehensive docstrings</li>
-                  <li>• <strong>Database:</strong> Use Sequelize migrations, proper indexing</li>
-                  <li>• <strong>API:</strong> RESTful design, consistent error responses</li>
-                  <li>• <strong>Security:</strong> Input validation, SQL injection prevention, XSS protection</li>
+                <ul className="text-gray-600 dark:text-gray-400 space-y-1 text-sm">
+                  <li>• <strong>TypeScript:</strong> Strict type checking enabled</li>
+                  <li>• <strong>ESLint:</strong> Code linting and formatting</li>
+                  <li>• <strong>Prettier:</strong> Consistent code formatting</li>
+                  <li>• <strong>Error Handling:</strong> Comprehensive try-catch blocks</li>
+                  <li>• <strong>Validation:</strong> Input validation on all endpoints</li>
+                  <li>• <strong>Security:</strong> SQL injection prevention, XSS protection</li>
                 </ul>
               </div>
               
-              <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-purple-900 dark:text-purple-100 mb-2">
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Testing Strategy
                 </h3>
-                <ul className="text-purple-800 dark:text-purple-200 space-y-1 text-sm">
-                  <li>• <strong>Backend:</strong> Jest for unit tests, endpoint testing with test-endpoints.js</li>
-                  <li>• <strong>Frontend:</strong> React Testing Library, component testing</li>
-                  <li>• <strong>Python:</strong> Pytest for script testing, comprehensive test cases</li>
-                  <li>• <strong>Integration:</strong> API endpoint testing, database integration tests</li>
-                  <li>• <strong>E2E:</strong> Manual testing of complete user workflows</li>
+                <ul className="text-gray-600 dark:text-gray-400 space-y-1 text-sm">
+                  <li>• <strong>Unit Tests:</strong> Python script testing with pytest</li>
+                  <li>• <strong>Integration Tests:</strong> API endpoint testing</li>
+                  <li>• <strong>Frontend Tests:</strong> Component testing with React Testing Library</li>
+                  <li>• <strong>E2E Tests:</strong> User workflow testing</li>
                 </ul>
               </div>
             </div>
@@ -304,27 +359,25 @@ const Document: React.FC = () => {
             <div className="space-y-4">
               <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Docker Configuration
+                  Deployment Options
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Backend Dockerfile:</h4>
+                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Docker Deployment:</h4>
                     <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• Python 3.11-slim base image</li>
-                      <li>• Node.js 20.x installation</li>
-                      <li>• Multi-stage build for optimization</li>
-                      <li>• Non-root user for security</li>
-                      <li>• Port 8080 exposure</li>
+                      <li>• Multi-stage Docker builds</li>
+                      <li>• Docker Compose for local development</li>
+                      <li>• Production-ready containerization</li>
+                      <li>• Environment variable management</li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Frontend Dockerfile:</h4>
+                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Cloud Deployment:</h4>
                     <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• Node.js 20-alpine build stage</li>
-                      <li>• Nginx alpine production stage</li>
-                      <li>• Static file serving</li>
-                      <li>• Custom nginx configuration</li>
-                      <li>• Port 8080 exposure</li>
+                      <li>• Google Cloud Run (recommended)</li>
+                      <li>• AWS Elastic Beanstalk</li>
+                      <li>• Heroku deployment</li>
+                      <li>• Vercel for frontend</li>
                     </ul>
                   </div>
                 </div>
@@ -332,196 +385,77 @@ const Document: React.FC = () => {
               
               <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Google Cloud Run Deployment
+                  CI/CD Pipeline
                 </h3>
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Deployment Commands:</h4>
-                    <div className="bg-gray-900 text-green-400 p-3 rounded font-mono">
-                      <div># Build and push image</div>
-                      <div>docker build -t gcr.io/PROJECT_ID/dns-email-security-backend .</div>
-                      <div>docker push gcr.io/PROJECT_ID/dns-email-security-backend</div>
-                      <br/>
-                      <div># Deploy to Cloud Run</div>
-                      <div>gcloud run deploy dns-email-security-backend \</div>
-                      <div>  --image gcr.io/PROJECT_ID/dns-email-security-backend \</div>
-                      <div>  --platform managed --region asia-southeast1 \</div>
-                      <div>  --allow-unauthenticated --port 8080</div>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Configuration:</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• Memory: 1Gi, CPU: 1 vCPU</li>
-                      <li>• Max instances: 10, Timeout: 300s</li>
-                      <li>• Environment variables for production settings</li>
-                      <li>• CORS configuration for frontend access</li>
-                    </ul>
-                  </div>
-                </div>
+                <ul className="text-gray-600 dark:text-gray-400 space-y-1 text-sm">
+                  <li>• <strong>GitHub Actions:</strong> Automated testing and deployment</li>
+                  <li>• <strong>Code Quality:</strong> Automated linting and type checking</li>
+                  <li>• <strong>Security Scanning:</strong> Dependency vulnerability checks</li>
+                  <li>• <strong>Deployment:</strong> Automated deployment to staging/production</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Monitoring & Troubleshooting */}
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+              📊 Monitoring & Troubleshooting
+            </h2>
+            <div className="space-y-4">
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Monitoring Tools
+                </h3>
+                <ul className="text-gray-600 dark:text-gray-400 space-y-1 text-sm">
+                  <li>• <strong>Application Monitoring:</strong> New Relic, DataDog</li>
+                  <li>• <strong>Error Tracking:</strong> Sentry for error monitoring</li>
+                  <li>• <strong>Logging:</strong> Structured logging with Winston</li>
+                  <li>• <strong>Health Checks:</strong> API health endpoint monitoring</li>
+                </ul>
               </div>
               
               <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Environment Variables
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Backend (Production):</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• NODE_ENV=production</li>
-                      <li>• PORT=8080</li>
-                      <li>• CORS_ORIGIN=https://frontend-url</li>
-                      <li>• FRONTEND_URL=https://frontend-url</li>
-                      <li>• HELMET_ENABLED=true</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Frontend (Production):</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• REACT_APP_API_URL=https://backend-url</li>
-                      <li>• REACT_APP_ENVIRONMENT=production</li>
-                      <li>• Build-time environment configuration</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Monitoring & Maintenance */}
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-              📊 Monitoring & Maintenance
-            </h2>
-            <div className="space-y-4">
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-yellow-900 dark:text-yellow-100 mb-2">
-                  Health Checks & Monitoring
-                </h3>
-                <ul className="text-yellow-800 dark:text-yellow-200 space-y-1 text-sm">
-                  <li>• <strong>Health Endpoint:</strong> GET /health for service status</li>
-                  <li>• <strong>Cloud Run Console:</strong> Monitor requests, errors, performance</li>
-                  <li>• <strong>Cloud Logging:</strong> Application logs and error tracking</li>
-                  <li>• <strong>Cloud Monitoring:</strong> Set up alerts for errors and performance</li>
-                  <li>• <strong>Database Monitoring:</strong> Connection pool and query performance</li>
-                </ul>
-              </div>
-              
-              <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-red-900 dark:text-red-100 mb-2">
-                  Security Considerations
-                </h3>
-                <ul className="text-red-800 dark:text-red-200 space-y-1 text-sm">
-                  <li>• <strong>Authentication:</strong> JWT tokens with proper expiration</li>
-                  <li>• <strong>Authorization:</strong> Role-based access control</li>
-                  <li>• <strong>Input Validation:</strong> Sanitize all user inputs</li>
-                  <li>• <strong>HTTPS:</strong> Enforce secure connections</li>
-                  <li>• <strong>Rate Limiting:</strong> Prevent abuse and DDoS</li>
-                  <li>• <strong>Database Security:</strong> Connection encryption, prepared statements</li>
-                </ul>
-              </div>
-              
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-blue-900 dark:text-blue-100 mb-2">
-                  Backup & Recovery
-                </h3>
-                <ul className="text-blue-800 dark:text-blue-200 space-y-1 text-sm">
-                  <li>• <strong>Database Backups:</strong> Automated PostgreSQL backups</li>
-                  <li>• <strong>Code Versioning:</strong> Git repository with proper branching</li>
-                  <li>• <strong>Configuration Management:</strong> Environment-specific configs</li>
-                  <li>• <strong>Disaster Recovery:</strong> Multi-region deployment strategy</li>
-                  <li>• <strong>Rollback Procedures:</strong> Quick deployment rollback capability</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          {/* Troubleshooting */}
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-              🔧 Troubleshooting Guide
-            </h2>
-            <div className="space-y-4">
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Common Issues & Solutions
                 </h3>
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Backend Issues:</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• <strong>Database Connection:</strong> Check PostgreSQL credentials and SSL settings</li>
-                      <li>• <strong>Python Script Errors:</strong> Verify dependencies in requirements.txt</li>
-                      <li>• <strong>CORS Errors:</strong> Update CORS_ORIGIN environment variable</li>
-                      <li>• <strong>Memory Issues:</strong> Increase Cloud Run memory allocation</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Frontend Issues:</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• <strong>API Connection:</strong> Verify REACT_APP_API_URL configuration</li>
-                      <li>• <strong>Build Errors:</strong> Check TypeScript compilation and dependencies</li>
-                      <li>• <strong>Authentication:</strong> Clear localStorage and re-login</li>
-                      <li>• <strong>Styling Issues:</strong> Verify Tailwind CSS compilation</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Deployment Issues:</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• <strong>Docker Build Failures:</strong> Check Dockerfile syntax and dependencies</li>
-                      <li>• <strong>Cloud Run Timeouts:</strong> Increase timeout and memory settings</li>
-                      <li>• <strong>Environment Variables:</strong> Verify all required env vars are set</li>
-                      <li>• <strong>SSL/TLS Issues:</strong> Check certificate configuration</li>
-                    </ul>
-                  </div>
-                </div>
+                <ul className="text-gray-600 dark:text-gray-400 space-y-1 text-sm">
+                  <li>• <strong>Database Connection:</strong> Check DATABASE_URL and SSL settings</li>
+                  <li>• <strong>Email Service:</strong> Verify SMTP credentials and settings</li>
+                  <li>• <strong>CORS Issues:</strong> Ensure proper CORS configuration</li>
+                  <li>• <strong>JWT Tokens:</strong> Check JWT_SECRET and token expiration</li>
+                </ul>
               </div>
             </div>
           </section>
 
-          {/* Support & Resources */}
+          {/* Support & Contact */}
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-              📚 Support & Resources
+              🆘 Support & Contact
             </h2>
-            <div className="space-y-4">
-              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Documentation & References
-                </h3>
-                <ul className="text-gray-600 dark:text-gray-400 space-y-1 text-sm">
-                  <li>• <strong>API Documentation:</strong> Swagger UI at /api-docs endpoint</li>
-                  <li>• <strong>Database Schema:</strong> Sequelize models in src/models/</li>
-                  <li>• <strong>Python Script:</strong> Detailed comments in scripts/test-domain.py</li>
-                  <li>• <strong>Cloud Run Guide:</strong> CLOUD_RUN_DEPLOYMENT.md</li>
-                  <li>• <strong>Testing Guide:</strong> TEST_DOMAIN_ENDPOINTS.md</li>
-                </ul>
-              </div>
-              
-              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Development Commands
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Backend Commands:</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• npm run dev (Development server)</li>
-                      <li>• npm run test (Run tests)</li>
-                      <li>• npm run swagger:generate (Update API docs)</li>
-                      <li>• npm run db:update (Database migrations)</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Frontend Commands:</h4>
-                    <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• npm start (Development server)</li>
-                      <li>• npm run build (Production build)</li>
-                      <li>• npm test (Run tests)</li>
-                      <li>• npm run build:prod (Production build with API URL)</li>
-                    </ul>
-                  </div>
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                    Technical Support
+                  </h3>
+                  <ul className="text-gray-600 dark:text-gray-400 space-y-2 text-sm">
+                    <li>• <strong>Email:</strong> <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a></li>
+                    <li>• <strong>Website:</strong> <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">https://amberos.com</a></li>
+                    <li>• <strong>API Documentation:</strong> <a href={`${config.apiUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">API Document</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                    Development Team
+                  </h3>
+                  <ul className="text-gray-600 dark:text-gray-400 space-y-2 text-sm">
+                    <li>• <strong>Company:</strong> Amberos Pte. Ltd</li>
+                    <li>• <strong>Experience:</strong> 10+ years in IT solutions</li>
+                    <li>• <strong>Specialization:</strong> Full-stack development</li>
+                    <li>• <strong>Location:</strong> Singapore & Vietnam</li>
+                  </ul>
                 </div>
               </div>
             </div>

@@ -1,18 +1,27 @@
-# DNS/Email Security Testing Project
+# DNS/Email Security Tool
 
-A comprehensive fullstack application for testing and validating DNS records, SPF (Sender Policy Framework), and DMARC (Domain-based Message Authentication, Reporting & Conformance) configurations.
+A comprehensive full-stack application for testing and validating DNS records, SPF, and DMARC configurations with user authentication and domain management capabilities.
 
-## Features
+## 👥 Production Info
+**Developed by**: Jack Nguyen
+- **Contact**: [phuminh88@gmail.com](phuminh88@gmail.com)
+- **API Documentation For Demo**: [API Document](https://domain-validator-service-533675451276.asia-southeast1.run.app/api/docs)
+- **Website For Demo**: [DNS/Email Security Tool](https://domain-validator-reactjs-533675451276.asia-southeast1.run.app/)
 
-- **Domain Validation**: Validate domain names and check their format
-- **SPF Record Analysis**: Parse and validate SPF records for email authentication
-- **DMARC Record Checking**: Analyze DMARC policies and configurations
-- **DNS Record Resolution**: Query and display various DNS record types
-- **Web Interface**: Modern React frontend with real-time validation
-- **API Backend**: FastAPI backend with comprehensive testing endpoints
-- **Database Integration**: Store and track validation results
 
-## Project Structure
+## 🚀 Project Overview
+
+This tool provides a complete solution for:
+- **Domain Validation**: Test domain names and validate their format
+- **SPF Analysis**: Parse and validate SPF records for email authentication
+- **DMARC Analysis**: Analyze DMARC policies and configurations
+- **DNS Resolution**: Resolve and display DNS records
+- **User Management**: Secure authentication with email verification
+- **Domain Management**: Save and manage tested domains
+
+## 🏗️ Architecture
+
+#### Project Structure
 
 ```
 ├── backend/                # FastAPI backend
@@ -31,51 +40,177 @@ A comprehensive fullstack application for testing and validating DNS records, SP
 │   ├── public/             # Static assets
 ```
 
-## Backend Setup
+### Frontend (React/TypeScript)
+- **Framework**: React 18 with TypeScript
+- **Styling**: Tailwind CSS with responsive design
+- **State Management**: React Context API
+- **Routing**: React Router DOM
+- **HTTP Client**: Axios with React Query
+- **Build Tool**: Create React App
+
+### Backend (Node.js/Express)
+- **Framework**: Express.js with TypeScript
+- **Database**: PostgreSQL with Sequelize ORM
+- **Authentication**: JWT with bcrypt password hashing
+- **Email Service**: Nodemailer for verification emails
+- **API Documentation**: Swagger/OpenAPI with TSOA
+- **Security**: Helmet, CORS, input validation
+
+### Python Script
+- **DNS Resolution**: dnspython for DNS queries
+- **Domain Validation**: validators library
+- **SPF/DMARC Analysis**: checkdmarc library
+- **Testing**: pytest framework
+- **Output**: JSON format for API integration
+
+## 📋 Requirements Implementation
+
+### Core Features ✅
+
+1. **Domain Validation**
+   - Real-time domain format validation
+   - DNS record resolution
+   - Support for various domain formats
+
+2. **SPF Record Analysis**
+   - Parse SPF records with detailed validation
+   - Identify syntax errors and warnings
+   - Support for complex SPF mechanisms
+   - Default SPF record: `v=spf1 include:zoho.com ~all`
+
+3. **DMARC Record Analysis**
+   - Parse DMARC policies and configurations
+   - Validate DMARC record syntax
+   - Identify policy issues and recommendations
+   - Default DMARC record: `v=DMARC1; p=quarantine; rua=mailto:minh.nguyen@globaldevhubs.com`
+
+4. **DNS Resolution**
+   - Resolve various DNS record types (A, AAAA, MX, TXT, etc.)
+   - Display formatted DNS results
+   - Error handling for DNS failures
+
+### User Authentication System ✅
+
+1. **Registration & Login**
+   - User registration with email verification
+   - Secure login with JWT tokens
+   - Password reset functionality
+   - Email verification system
+
+2. **User Profile Management**
+   - Profile information updates
+   - Password change functionality
+   - Account deletion
+
+3. **Security Features**
+   - Password hashing with bcrypt
+   - JWT token authentication
+   - Email verification for new accounts
+   - Secure password reset flow
+
+### Domain Management ✅
+
+1. **Domain Testing**
+   - Save tested domains to user account
+   - View test history and results
+   - Re-run tests on saved domains
+
+2. **Test Results Storage**
+   - Persistent storage of test results
+   - Historical data tracking
+   - Result comparison and analysis
+
+## 🛠️ Installation & Setup
+
+### Prerequisites
+- Node.js 18+ and npm/yarn
+- Python 3.8+ and pip
+- PostgreSQL database
+- SMTP server for email functionality
+
+### Backend Setup
 ```bash
 cd backend
-npm i && npm run dev
+npm install
+cp .env.example .env
+# Configure environment variables
+npm run dev
 ```
 
-## Frontend Setup
+### Frontend Setup
 ```bash
 cd frontend
-npm i && npm start
+npm install
+cp env.example .env
+# Configure environment variables
+npm start
 ```
 
-## Development
-- Backend: http://localhost:8080/api/docs
-- Frontend: http://localhost:3000
+### Python Dependencies
+```bash
+pip install dnspython validators checkdmarc pytest
+```
 
-## Deployment
-- Docker
-- GitHub Actions (CI/CD). For now. We listen changes at the [main] branch
-- Please set all Environment secrets into github
-GCP_SA_KEY=key.json
-GCP_PROJECT_ID=your-project-name
-GCP_REGION=asia-southeast1
+## 🔧 Environment Configuration
 
-## Production with Cloud Run
-- Backend: https://domain-validator-service-533675451276.asia-southeast1.run.app/api/docs
-- Frontend: https://domain-validator-reactjs-533675451276.asia-southeast1.run.app
+### Backend (.env)
+```env
+NODE_ENV=development
+PORT=8080
+DATABASE_URL=postgresql://username:password@localhost:5432/database
+JWT_SECRET=your-secret-key
+EMAIL_HOST=smtp-relay.brevo.com
+EMAIL_USER=your-email@domain.com
+EMAIL_PASS=your-email-password
+EMAIL_FROM=Amberos Pte. Ltd <your-email@domain.com>
+```
 
-##  Database information - https://dashboard.render.com/new/database
-Workspace: JackNguyen
-Project: DomainValidator
-dbname: domain_validator_db
-user: jack_nguyen
-region: Singapore (Southeast Asia)
+### Frontend (.env)
+```env
+REACT_APP_API_URL=http://localhost:8080
+REACT_APP_ENVIRONMENT=development
+```
 
-##  Instance:
-host: dpg-d1eaaf2li9vc739r9nbg-a
-port: 5432
-dbname: domain_validator_db
-user: jack_nguyen
-pass: DumPdGrF9K5y3EXVMzqj7nDggCquRGsv
+## 🚀 Deployment
 
-#   internal url: 
-postgresql://jack_nguyen:DumPdGrF9K5y3EXVMzqj7nDggCquRGsv@dpg-d1eaaf2li9vc739r9nbg-a/domain_validator_db
-#   external url: 
-postgresql://jack_nguyen:DumPdGrF9K5y3EXVMzqj7nDggCquRGsv@dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com/domain_validator_db
-#   psql command:
-PGPASSWORD=DumPdGrF9K5y3EXVMzqj7nDggCquRGsv psql -h dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com -U jack_nguyen domain_validator_db
+### Docker Deployment
+- [x] Frontend and Backend with Dockerfile and Deploy into Cloud Run with the Cloud Run (Google Cloud)
+
+## 📊 Features Summary
+
+### ✅ Implemented Features
+- [x] Domain validation with real-time feedback
+- [x] SPF record parsing and analysis
+- [x] DMARC record parsing and analysis
+- [x] DNS record resolution
+- [x] User authentication system
+- [x] Email verification
+- [x] Password reset functionality
+- [x] Domain management (CRUD operations)
+- [x] Responsive web interface
+- [x] Dark mode support
+- [x] API documentation with Swagger
+- [x] Error handling and validation
+- [x] Security best practices
+- [x] Database integration
+- [x] Email service integration
+
+### 🎯 Technical Achievements
+- **Full-Stack TypeScript**: Both frontend and backend use TypeScript
+- **Modern React Patterns**: Hooks, Context API, React Query
+- **Secure Authentication**: JWT, bcrypt, email verification
+- **Database Design**: Proper relationships and constraints
+- **API Design**: RESTful endpoints with proper error handling
+- **Documentation**: Comprehensive API documentation
+- **Deployment Ready**: Docker configuration and environment setup
+
+## 👥 Team & Contact
+
+**Developed by**: Jack Nguyen
+- **Contact**: [phuminh88@gmail.com](phuminh88@gmail.com)
+- **API Documentation For Demo**: [API Document](https://domain-validator-service-533675451276.asia-southeast1.run.app/api/docs)
+- **Website For Demo**: [DNS/Email Security Tool](https://domain-validator-reactjs-533675451276.asia-southeast1.run.app/)
+
+
+**Version**: 1.0.0  
+**Last Updated**: June 27, 2025

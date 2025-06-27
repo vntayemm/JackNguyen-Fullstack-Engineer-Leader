@@ -35,8 +35,26 @@ if (config.HELMET_ENABLED) {
 
 // CORS configuration
 app.use(cors({
-  origin: config.CORS_ORIGIN,
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if the origin is in our allowed list
+    if (config.CORS_ORIGINS.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    
+    // For development, allow localhost origins
+    if (config.NODE_ENV === 'development' && origin.startsWith('http://localhost')) {
+      return callback(null, true);
+    }
+    
+    // Block the request
+    return callback(new Error('Not allowed by CORS'), false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 app.use(express.json());

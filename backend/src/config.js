@@ -11,9 +11,10 @@ const config = {
   CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3000',
   
   // Frontend URL Configuration
-  FRONTEND_URL: process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' 
-    ? 'https://domain-validator-service-533675451276.asia-southeast1.run.app' 
-    : 'http://localhost:3000'),
+  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
+  
+  // CORS Origins for different environments
+  CORS_ORIGINS: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['http://localhost:3000'],
   
   // Security
   HELMET_ENABLED: process.env.HELMET_ENABLED === 'true',
@@ -24,6 +25,29 @@ const config = {
   
   // Database Configuration
   DATABASE_URL: process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database',
+  
+  // Database Configuration Details
+  DATABASE: {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT) || 5432,
+    database: process.env.DB_NAME || 'domain_validator_db',
+    username: process.env.DB_USER || 'username',
+    password: process.env.DB_PASSWORD || 'password',
+    dialect: 'postgres',
+    logging: process.env.NODE_ENV === 'development',
+    pool: {
+      max: parseInt(process.env.DB_POOL_MAX) || 5,
+      min: parseInt(process.env.DB_POOL_MIN) || 0,
+      acquire: parseInt(process.env.DB_POOL_ACQUIRE) || 30000,
+      idle: parseInt(process.env.DB_POOL_IDLE) || 10000
+    },
+    dialectOptions: {
+      ssl: {
+        require: process.env.DB_SSL_REQUIRE === 'true',
+        rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'true'
+      }
+    }
+  },
   
   // Email Configuration
   EMAIL_HOST: process.env.EMAIL_HOST || 'smtp-relay.brevo.com',

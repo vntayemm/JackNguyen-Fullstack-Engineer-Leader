@@ -1,10 +1,6 @@
 const config = {
   // API Configuration
-  apiUrl: process.env.REACT_APP_API_URL || (
-    process.env.NODE_ENV === 'production' 
-      ? 'https://domain-validator-service-533675451276.asia-southeast1.run.app' 
-      : 'http://localhost:8080'
-  ),
+  apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8080',
   apiTimeout: parseInt(process.env.REACT_APP_API_TIMEOUT || '10000'), // 10 seconds default
   
   // Environment

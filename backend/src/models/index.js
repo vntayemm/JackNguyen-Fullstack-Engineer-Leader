@@ -1,16 +1,19 @@
 import { Sequelize } from 'sequelize';
+import config from '../config.js';
 
-const sequelize = new Sequelize('domain_validator_db', 'jack_nguyen', 'DumPdGrF9K5y3EXVMzqj7nDggCquRGsv', {
-  host: 'dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com',
-  dialect: 'postgres',
-  port: 5432,
-  logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false // This is needed for most cloud DBs!
-    }
+// Use DATABASE_URL if provided, otherwise use individual database config
+const sequelize = new Sequelize(
+  process.env.DATABASE_URL || {
+    host: config.DATABASE.host,
+    port: config.DATABASE.port,
+    database: config.DATABASE.database,
+    username: config.DATABASE.username,
+    password: config.DATABASE.password,
+    dialect: config.DATABASE.dialect,
+    logging: config.DATABASE.logging,
+    pool: config.DATABASE.pool,
+    dialectOptions: config.DATABASE.dialectOptions
   }
-});
+);
 
 export default sequelize; 
