@@ -1,0 +1,22 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="emailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f093fb;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="emailPattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+      <circle cx="30" cy="30" r="2" fill="#ffffff" opacity="0.15"/>
+      <circle cx="90" cy="60" r="2" fill="#ffffff" opacity="0.15"/>
+      <circle cx="60" cy="90" r="2" fill="#ffffff" opacity="0.15"/>
+      <circle cx="120" cy="120" r="2" fill="#ffffff" opacity="0.15"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#emailGradient)"/>
+  <rect width="800" height="600" fill="url(#emailPattern)"/>
+  <g opacity="0.4">
+    <rect x="150" y="150" width="200" height="120" rx="10" fill="#ffffff" opacity="0.1"/>
+    <rect x="450" y="250" width="200" height="120" rx="10" fill="#ffffff" opacity="0.1"/>
+    <rect x="300" y="350" width="200" height="120" rx="10" fill="#ffffff" opacity="0.1"/>
+  </g>
+</svg> 

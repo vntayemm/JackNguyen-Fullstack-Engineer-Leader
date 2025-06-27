@@ -1,0 +1,4 @@
+checkdmarc 
+pytest 
+dnspython 
+validators
