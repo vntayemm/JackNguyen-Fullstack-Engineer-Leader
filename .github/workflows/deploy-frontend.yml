@@ -2,7 +2,7 @@ name: Deploy Frontend to Cloud Run
 
 on:
   push:
-    branches: [ main ]
+    branches: [ jack.nguyen ]
     paths:
       # - 'backend/package.json'
   workflow_dispatch:

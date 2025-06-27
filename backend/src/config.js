@@ -18,6 +18,20 @@ const config = {
   // Security
   HELMET_ENABLED: process.env.HELMET_ENABLED === 'true',
   
+  // JWT Configuration
+  JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key-change-this-in-production',
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
+  
+  // Database Configuration
+  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database',
+  
+  // Email Configuration
+  EMAIL_HOST: process.env.EMAIL_HOST || 'smtp-relay.brevo.com',
+  EMAIL_PORT: parseInt(process.env.EMAIL_PORT) || 587,
+  EMAIL_USER: process.env.EMAIL_USER || '459a0c001@smtp-brevo.com',
+  EMAIL_PASS: process.env.EMAIL_PASS || '7qa84DCrOzITKtG5',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'Domain Validator <459a0c001@smtp-brevo.com>',
+  
   // DNS Configuration
   DNS_TIMEOUT: parseInt(process.env.DNS_TIMEOUT) || 10000,
   DNS_RETRIES: parseInt(process.env.DNS_RETRIES) || 3,
