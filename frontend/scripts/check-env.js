@@ -11,12 +11,12 @@ if (!fs.existsSync(envPath)) {
   console.log('⚠️  .env file not found!');
   
   if (fs.existsSync(envExamplePath)) {
-    console.log('📋 Copying env.example to .env...');
+    console.log('📋 Copying env.development to .env...');
     fs.copyFileSync(envExamplePath, envPath);
     console.log('✅ .env file created from env.example');
     console.log('🔧 Please update .env file with your configuration');
   } else {
-    console.log('❌ env.example file not found!');
+    console.log('❌ env.development file not found!');
     process.exit(1);
   }
 }

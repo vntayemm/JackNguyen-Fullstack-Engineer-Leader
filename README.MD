@@ -132,7 +132,7 @@ This tool provides a complete solution for:
 ```bash
 cd backend
 npm install
-cp .env.example .env
+cp .env.development .env
 # Configure environment variables
 npm run dev
 ```
@@ -141,7 +141,7 @@ npm run dev
 ```bash
 cd frontend
 npm install
-cp env.example .env
+cp env.development .env
 # Configure environment variables
 npm start
 ```
