@@ -79,13 +79,3 @@ postgresql://jack_nguyen:DumPdGrF9K5y3EXVMzqj7nDggCquRGsv@dpg-d1eaaf2li9vc739r9n
 postgresql://jack_nguyen:DumPdGrF9K5y3EXVMzqj7nDggCquRGsv@dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com/domain_validator_db
 #   psql command:
 PGPASSWORD=DumPdGrF9K5y3EXVMzqj7nDggCquRGsv psql -h dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com -U jack_nguyen domain_validator_db
-
-const transporter = nodemailer.createTransport({
-            host: "smtp-relay.brevo.com",
-            port: 587,
-            secure: false,
-            auth: {
-                user: '459a0c001@smtp-brevo.com',
-                pass: '7qa84DCrOzITKtG5'
-            }
-        })

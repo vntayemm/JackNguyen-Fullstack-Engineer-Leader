@@ -1,10 +1,6 @@
-import { 
-  getUserDomains as getUserDomainsService,
-  addDomain as addDomainService,
-  deleteDomain as deleteDomainService,
-  testDomain as testDomainService,
-  getDomainDetails as getDomainDetailsService
-} from '../services/domainService.js';
+import domainService from '../services/domainService.js';
+// import nodejsDomainValidatorService from '../services/nodejsDomainValidatorService.js';
+import pythonDomainValidatorService from '../services/pythonDomainValidatorService.js';
 import { 
   DomainDTO,
   AddDomainRequestDTO,
@@ -28,7 +24,7 @@ export const getUserDomains = asyncHandler(async (req, res) => {
     throw new AuthenticationError('User not authenticated');
   }
 
-  const result = await getUserDomainsService(userId);
+  const result = await domainService.getUserDomains(userId);
   const response = new DomainListResponseDTO(result);
   
   return sendSuccessResponse(res, response);
@@ -47,7 +43,7 @@ export const addDomain = asyncHandler(async (req, res) => {
     throw new ValidationError('Invalid domain data', addDomainData.getErrors());
   }
 
-  const result = await addDomainService(userId, addDomainData);
+  const result = await domainService.addDomain(userId, addDomainData);
   const response = new DomainDTO(result);
   
   return sendSuccessResponse(res, response, 201);
@@ -66,7 +62,7 @@ export const getDomainById = asyncHandler(async (req, res) => {
     throw new ValidationError('Valid domain ID is required');
   }
 
-  const result = await getDomainDetailsService(userId, parseInt(id));
+  const result = await domainService.getDomainDetails(userId, parseInt(id));
   
   if (!result) {
     throw new NotFoundError('Domain not found');
@@ -90,7 +86,7 @@ export const deleteDomain = asyncHandler(async (req, res) => {
     throw new ValidationError('Valid domain ID is required');
   }
 
-  const result = await deleteDomainService(userId, parseInt(id));
+  const result = await domainService.deleteDomain(userId, parseInt(id));
   
   if (!result) {
     throw new NotFoundError('Domain not found');
@@ -112,7 +108,7 @@ export const testDomain = asyncHandler(async (req, res) => {
     throw new ValidationError('Valid domain ID is required');
   }
 
-  const result = await testDomainService(userId, parseInt(id));
+  const result = await domainService.testDomain(userId, parseInt(id));
   
   if (!result) {
     throw new NotFoundError('Domain not found');
@@ -131,16 +127,7 @@ export const validateDomain = asyncHandler(async (req, res) => {
     throw new ValidationError('Domain name is required');
   }
 
-  // Simple domain validation
-  const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  const isValid = domainRegex.test(domain) && domain.length <= 253;
-  
-  const result = {
-    domain,
-    is_valid: isValid,
-    errors: isValid ? [] : ['Invalid domain format']
-  };
-  
+  const result = await pythonDomainValidatorService.validateDomain(domain);
   const response = new DomainValidationResponseDTO(result);
   
   return sendSuccessResponse(res, response);
@@ -154,9 +141,7 @@ export const analyzeSPF = asyncHandler(async (req, res) => {
     throw new ValidationError('Invalid SPF analysis data', spfData.getErrors());
   }
 
-  // Import SPF analysis function
-  const { analyzeSPF: analyzeSPFService } = await import('../services/nodejsDomainValidatorService.js');
-  const result = await analyzeSPFService(spfData.domain, spfData.spf_record);
+  const result = await pythonDomainValidatorService.analyzeSPF(spfData.domain, spfData.spf_record);
   const response = new SPFAnalysisResponseDTO(result);
   
   return sendSuccessResponse(res, response);
@@ -170,9 +155,7 @@ export const analyzeDMARC = asyncHandler(async (req, res) => {
     throw new ValidationError('Invalid DMARC analysis data', dmarcData.getErrors());
   }
 
-  // Import DMARC analysis function
-  const { comprehensiveDomainTest } = await import('../services/pythonDomainValidatorService.js');
-  const result = await comprehensiveDomainTest(dmarcData.domain);
+  const result = await pythonDomainValidatorService.comprehensiveDomainTest(dmarcData.domain);
   const response = new DMARCAnalysisResponseDTO(result);
   
   return sendSuccessResponse(res, response);
@@ -187,8 +170,7 @@ export const getDNSRecords = asyncHandler(async (req, res) => {
     throw new ValidationError('Domain name is required');
   }
 
-  const { getDNSRecords: getDNSRecordsService } = await import('../services/nodejsDomainValidatorService.js');
-  const result = await getDNSRecordsService(domain, record_type);
+  const result = await pythonDomainValidatorService.getDNSRecords(domain, record_type);
   const response = new DNSResponseDTO(result);
   
   return sendSuccessResponse(res, response);
@@ -202,8 +184,7 @@ export const getAllDNSRecords = asyncHandler(async (req, res) => {
     throw new ValidationError('Domain name is required');
   }
 
-  const { getDNSRecords: getDNSRecordsService } = await import('../services/nodejsDomainValidatorService.js');
-  const result = await getDNSRecordsService(domain);
+  const result = await pythonDomainValidatorService.getAllDNSRecords(domain);
   
   return sendSuccessResponse(res, result);
 }); 

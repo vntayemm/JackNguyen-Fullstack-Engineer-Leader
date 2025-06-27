@@ -213,11 +213,11 @@
       "ChangePasswordRequest": {
         "type": "object",
         "required": [
-          "oldPassword",
+          "currentPassword",
           "newPassword"
         ],
         "properties": {
-          "oldPassword": {
+          "currentPassword": {
             "type": "string",
             "description": "Current password"
           },
@@ -460,34 +460,29 @@
           }
         }
       },
-      "HealthCheckResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "healthy"
-          },
-          "environment": {
-            "type": "string",
-            "example": "development"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "ErrorResponse": {
         "type": "object",
         "properties": {
           "error": {
             "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
           }
         }
       },
       "SuccessResponse": {
         "type": "object",
         "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object"
+          },
           "message": {
             "type": "string"
           }
@@ -495,20 +490,12 @@
       }
     }
   },
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
   "paths": {
     "/api/auth/register": {
       "post": {
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "summary": "Register a new user",
-        "description": "Register a new user account. An email verification link will be sent to the provided email address.",
-        "security": [],
+        "description": "Register a new user account. Email verification will be sent.",
         "requestBody": {
           "required": true,
           "content": {
@@ -531,7 +518,7 @@
             }
           },
           "400": {
-            "description": "Bad request",
+            "description": "Invalid input data",
             "content": {
               "application/json": {
                 "schema": {
@@ -545,12 +532,9 @@
     },
     "/api/auth/login": {
       "post": {
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "summary": "Login user",
         "description": "Authenticate user and return JWT token",
-        "security": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -585,109 +569,11 @@
         }
       }
     },
-    "/api/auth/forgot-password": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "summary": "Request password reset",
-        "description": "Send password reset email to user",
-        "security": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ForgotPasswordRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password reset email sent",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ForgotPasswordResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/auth/reset-password/{token}": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "summary": "Reset password with token",
-        "description": "Reset user password using the token from email",
-        "security": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Password reset token from email"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResetPasswordRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password reset successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResetPasswordResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid or expired token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/auth/verify-email/{token}": {
       "get": {
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "summary": "Verify email address",
-        "description": "Verify user email address using token from email",
-        "security": [],
+        "description": "Verify user email address using verification token",
         "parameters": [
           {
             "name": "token",
@@ -696,7 +582,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Email verification token from email"
+            "description": "Email verification token"
           }
         ],
         "responses": {
@@ -723,13 +609,95 @@
         }
       }
     },
-    "/api/auth/profile": {
-      "get": {
-        "tags": [
-          "User Management"
+    "/api/auth/forgot-password": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Request password reset",
+        "description": "Send password reset email to user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/reset-password/{token}": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Reset password",
+        "description": "Reset user password using reset token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Password reset token"
+          }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/profile": {
+      "get": {
+        "tags": ["User Management"],
         "summary": "Get user profile",
-        "description": "Get current user's profile information",
+        "description": "Get current user profile information",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "User profile retrieved successfully",
@@ -754,11 +722,14 @@
         }
       },
       "put": {
-        "tags": [
-          "User Management"
-        ],
+        "tags": ["User Management"],
         "summary": "Update user profile",
-        "description": "Update current user's profile information",
+        "description": "Update current user profile information",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -780,6 +751,16 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -795,11 +776,14 @@
     },
     "/api/user/change-password": {
       "put": {
-        "tags": [
-          "User Management"
+        "tags": ["User Management"],
+        "summary": "Change password",
+        "description": "Change current user password",
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
-        "summary": "Change user password",
-        "description": "Change current user's password",
         "requestBody": {
           "required": true,
           "content": {
@@ -822,7 +806,7 @@
             }
           },
           "400": {
-            "description": "Bad request",
+            "description": "Invalid input data",
             "content": {
               "application/json": {
                 "schema": {
@@ -846,11 +830,14 @@
     },
     "/api/user/delete-account": {
       "delete": {
-        "tags": [
-          "User Management"
+        "tags": ["User Management"],
+        "summary": "Delete account",
+        "description": "Delete current user account",
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
-        "summary": "Delete user account",
-        "description": "Permanently delete current user's account",
         "responses": {
           "200": {
             "description": "Account deleted successfully",
@@ -875,251 +862,16 @@
         }
       }
     },
-    "/api/domains/validate/{domain}": {
-      "get": {
-        "tags": [
-          "Domain Validation"
-        ],
-        "summary": "Validate domain name",
-        "description": "Validate domain name format and structure",
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name to validate",
-            "example": "example.com"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Domain validation result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DomainValidationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/spf/analyze": {
-      "post": {
-        "tags": [
-          "SPF Analysis"
-        ],
-        "summary": "Analyze SPF record",
-        "description": "Analyze SPF record for a domain",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SPFAnalysisRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "SPF analysis result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SPFAnalysisResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/dmarc/analyze": {
-      "post": {
-        "tags": [
-          "DMARC Analysis"
-        ],
-        "summary": "Analyze DMARC record",
-        "description": "Analyze DMARC record for a domain",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DMARCAnalysisRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "DMARC analysis result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DMARCAnalysisResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/dns/records/{domain}": {
-      "get": {
-        "tags": [
-          "DNS Records"
-        ],
-        "summary": "Get DNS records",
-        "description": "Get DNS records for a domain",
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name",
-            "example": "example.com"
-          },
-          {
-            "name": "record_type",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "A",
-                "AAAA",
-                "CNAME",
-                "MX",
-                "TXT",
-                "NS",
-                "SOA"
-              ]
-            },
-            "description": "DNS record type",
-            "example": "TXT"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "DNS records retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DNSResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/dns/records/{domain}/all": {
-      "get": {
-        "tags": [
-          "DNS Records"
-        ],
-        "summary": "Get all DNS records",
-        "description": "Get all DNS records for a domain",
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name",
-            "example": "example.com"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "All DNS records retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "domain": {
-                      "type": "string"
-                    },
-                    "records": {
-                      "type": "object"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/domains": {
       "get": {
-        "tags": [
-          "Domain Management"
-        ],
+        "tags": ["Domain Management"],
         "summary": "Get user domains",
-        "description": "Get all domains for the current user",
+        "description": "Get all domains for the authenticated user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "User domains retrieved successfully",
@@ -1144,11 +896,14 @@
         }
       },
       "post": {
-        "tags": [
-          "Domain Management"
-        ],
+        "tags": ["Domain Management"],
         "summary": "Add domain",
-        "description": "Add a new domain for the current user",
+        "description": "Add a new domain to user's list",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1171,7 +926,7 @@
             }
           },
           "400": {
-            "description": "Bad request",
+            "description": "Invalid input data",
             "content": {
               "application/json": {
                 "schema": {
@@ -1195,11 +950,14 @@
     },
     "/api/domains/{id}": {
       "get": {
-        "tags": [
-          "Domain Management"
-        ],
+        "tags": ["Domain Management"],
         "summary": "Get domain details",
-        "description": "Get detailed information about a specific domain",
+        "description": "Get details of a specific domain",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1245,11 +1003,14 @@
         }
       },
       "delete": {
-        "tags": [
-          "Domain Management"
-        ],
+        "tags": ["Domain Management"],
         "summary": "Delete domain",
-        "description": "Delete a domain for the current user",
+        "description": "Delete a domain from user's list",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1267,7 +1028,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Domain deleted successfully"
+                    }
+                  }
                 }
               }
             }
@@ -1297,11 +1064,14 @@
     },
     "/api/domains/{id}/test": {
       "post": {
-        "tags": [
-          "Domain Management"
-        ],
+        "tags": ["Domain Management"],
         "summary": "Test domain",
-        "description": "Run tests on a domain (SPF, DMARC, DNS)",
+        "description": "Run comprehensive tests on a domain (SPF, DMARC, DNS)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1347,21 +1117,301 @@
         }
       }
     },
+    "/api/domains/validate/{domain}": {
+      "get": {
+        "tags": ["Domain Analysis"],
+        "summary": "Validate domain",
+        "description": "Validate domain name format",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Domain name to validate"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Domain validation completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainValidationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/domains/spf/analyze": {
+      "post": {
+        "tags": ["Domain Analysis"],
+        "summary": "Analyze SPF record",
+        "description": "Analyze SPF record for a domain",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SPFAnalysisRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "SPF analysis completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SPFAnalysisResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/domains/dmarc/analyze": {
+      "post": {
+        "tags": ["Domain Analysis"],
+        "summary": "Analyze DMARC record",
+        "description": "Analyze DMARC record for a domain",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DMARCAnalysisRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "DMARC analysis completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DMARCAnalysisResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/domains/dns/records/{domain}": {
+      "get": {
+        "tags": ["Domain Analysis"],
+        "summary": "Get DNS records",
+        "description": "Get DNS records for a domain",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Domain name"
+          },
+          {
+            "name": "record_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "TXT"
+            },
+            "description": "DNS record type (A, AAAA, MX, TXT, CNAME, NS, SOA)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DNS records retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/domains/dns/records/{domain}/all": {
+      "get": {
+        "tags": ["Domain Analysis"],
+        "summary": "Get all DNS records",
+        "description": "Get all DNS record types for a domain",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Domain name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All DNS records retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    },
+                    "records": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
-        "tags": [
-          "System"
-        ],
+        "tags": ["System"],
         "summary": "Health check",
         "description": "Check API health status",
-        "security": [],
         "responses": {
           "200": {
             "description": "API is healthy",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HealthCheckResponse"
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "healthy"
+                        },
+                        "environment": {
+                          "type": "string",
+                          "example": "development"
+                        },
+                        "timestamp": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -1369,39 +1419,5 @@
         }
       }
     }
-  },
-  "tags": [
-    {
-      "name": "Authentication",
-      "description": "User authentication endpoints (no authentication required)"
-    },
-    {
-      "name": "User Management",
-      "description": "User profile and account management endpoints"
-    },
-    {
-      "name": "Domain Validation",
-      "description": "Domain name validation endpoints"
-    },
-    {
-      "name": "SPF Analysis",
-      "description": "SPF record analysis endpoints"
-    },
-    {
-      "name": "DMARC Analysis",
-      "description": "DMARC record analysis endpoints"
-    },
-    {
-      "name": "DNS Records",
-      "description": "DNS record retrieval endpoints"
-    },
-    {
-      "name": "Domain Management",
-      "description": "User domain management endpoints"
-    },
-    {
-      "name": "System",
-      "description": "System health and status endpoints"
-    }
-  ]
+  }
 }
