@@ -4,17 +4,14 @@ dotenv.config();
 
 const config = {
   // Server Configuration
-  NODE_ENV: process.env.NODE_ENV || 'development',
+  NODE_ENV: process.env.NODE_ENV || 'production',
   PORT: process.env.PORT || 8080,
   
   // CORS Configuration
-  CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  CORS_ORIGIN: process.env.CORS_ORIGIN || 'https://domain-validator-reactjs-533675451276.asia-southeast1.run.app',
   
   // Frontend URL Configuration
-  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
-  
-  // CORS Origins for different environments
-  CORS_ORIGINS: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['http://localhost:3000'],
+  FRONTEND_URL: process.env.FRONTEND_URL || 'https://domain-validator-reactjs-533675451276.asia-southeast1.run.app',
   
   // Security
   HELMET_ENABLED: process.env.HELMET_ENABLED === 'true',
@@ -28,19 +25,19 @@ const config = {
   
   // Database Configuration Details
   DATABASE: {
-    host: process.env.DB_HOST || 'localhost',
+    host: process.env.DB_HOST || 'dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com',
     port: parseInt(process.env.DB_PORT) || 5432,
     database: process.env.DB_NAME || 'domain_validator_db',
-    username: process.env.DB_USER || 'username',
-    password: process.env.DB_PASSWORD || 'password'
+    username: process.env.DB_USER || 'jack_nguyen',
+    password: process.env.DB_PASSWORD || 'DumPdGrF9K5y3EXVMzqj7nDggCquRGsv'
   },
   
   // Email Configuration
-  EMAIL_HOST: process.env.EMAIL_HOST || 'smtp-relay.brevo.com',
-  EMAIL_PORT: parseInt(process.env.EMAIL_PORT) || 587,
-  EMAIL_USER: process.env.EMAIL_USER || '459a0c001@smtp-brevo.com',
-  EMAIL_PASS: process.env.EMAIL_PASS || '7qa84DCrOzITKtG5',
-  EMAIL_FROM: process.env.EMAIL_FROM || 'Amberos Pte. Ltd <459a0c001@smtp-brevo.com>',
+  EMAIL_HOST: process.env.EMAIL_HOST || 'smtp.zoho.com',
+  EMAIL_PORT: parseInt(process.env.EMAIL_PORT) || 465,
+  EMAIL_USER: process.env.EMAIL_USER || 'services@globaldevhubs.com',
+  EMAIL_PASS: process.env.EMAIL_PASS || 'BKg49t2uYhZf',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'Amberos-DNS/Email Security Tool <services@globaldevhubs.com>',
   
 
   // DNS Configuration
