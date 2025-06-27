@@ -1,19 +1,17 @@
 import { Sequelize } from 'sequelize';
 import config from '../config.js';
 
-// Use DATABASE_URL if provided, otherwise use individual database config
-const sequelize = new Sequelize(
-  process.env.DATABASE_URL || {
-    host: config.DATABASE.host,
-    port: config.DATABASE.port,
-    database: config.DATABASE.database,
-    username: config.DATABASE.username,
-    password: config.DATABASE.password,
-    dialect: config.DATABASE.dialect,
-    logging: config.DATABASE.logging,
-    pool: config.DATABASE.pool,
-    dialectOptions: config.DATABASE.dialectOptions
+const sequelize = new Sequelize(config.DATABASE.database, config.DATABASE.username, config.DATABASE.password, {
+  host: config.DATABASE.host,
+  dialect: 'postgres',
+  port: config.DATABASE.port,
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false // This is needed for most cloud DBs!
+    }
   }
-);
+});
 
 export default sequelize; 
