@@ -7,11 +7,6 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "test": "jest",
-    "test:endpoints": "node test-endpoints.js",
-    "db:update": "node scripts/update-database.js",
-    "db:force-update": "node scripts/force-update-database.js",
-    "db:test": "node scripts/test-database.js",
-    "test:urls": "node scripts/test-urls.js",
     "swagger:generate": "node scripts/generate-swagger.js"
   },
   "dependencies": {

@@ -28,9 +28,6 @@ router.post('/dmarc/analyze', analyzeDMARC);
 router.get('/dns/records/:domain', getDNSRecords);
 router.get('/dns/records/:domain/all', getAllDNSRecords);
 
-// All domain management routes require authentication
-router.use(auth);
-
 // Get user's domains
 router.get('/', getUserDomains);
 

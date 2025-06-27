@@ -16,7 +16,7 @@ A comprehensive fullstack application for testing and validating DNS records, SP
 
 ```
 ├── backend/                # FastAPI backend
-│   ├── scripts/            # This is auto generate the swagger. The slug is /docs
+│   ├── scripts/            # This is auto generate the swagger. The slug is /api/docs
 │   ├── src/
 │   │   ├── controller/     # Validate the input, process the in/out put
 │   │   ├── routes/         # Collect all of routed
@@ -44,7 +44,7 @@ npm i && npm start
 ```
 
 ## Development
-- Backend: http://localhost:8080/docs
+- Backend: http://localhost:8080/api/docs
 - Frontend: http://localhost:3000
 
 ## Deployment
@@ -56,7 +56,7 @@ GCP_PROJECT_ID=your-project-name
 GCP_REGION=asia-southeast1
 
 ## Production with Cloud Run
-- Backend: https://domain-validator-service-533675451276.asia-southeast1.run.app/docs
+- Backend: https://domain-validator-service-533675451276.asia-southeast1.run.app/api/docs
 - Frontend: https://domain-validator-reactjs-533675451276.asia-southeast1.run.app
 
 ##  Database information - https://dashboard.render.com/new/database

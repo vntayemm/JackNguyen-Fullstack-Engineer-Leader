@@ -40,7 +40,7 @@ try {
   
   console.log('\n🎯 Next steps:');
   console.log('  1. Start your server: npm start');
-  console.log('  2. Visit Swagger UI: http://localhost:8080/docs');
+  console.log('  2. Visit Swagger UI: http://localhost:8080/api/docs');
   console.log('  3. Test your API endpoints');
   
 } catch (error) {

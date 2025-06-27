@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import config from './config.js';
-import nodejsDomainValidatorRoutes from './routes/nodejs-domain-validator.js';
 import swaggerUi from 'swagger-ui-express';
 import oas from 'express-oas-generator';
 import path from 'path';
@@ -14,6 +13,7 @@ import domainRoutes from './routes/domain.js';
 import { HealthCheckResponseDTO, ErrorResponseDTO } from './dto/index.js';
 import { sendSuccessResponse, sendErrorResponse } from './dto/utils.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { auth } from './middleware/auth.js';
 
 const app = express();
 
@@ -41,16 +41,13 @@ app.use(cors({
 
 app.use(express.json());
 
-// Use NodeJS domain validator routes
-app.use(config.API_PREFIX, nodejsDomainValidatorRoutes);
-
 // Use auth and user routes
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/domains', domainRoutes);
+app.use(`${config.API_PREFIX}/auth`, authRoutes);
+app.use(`${config.API_PREFIX}/user`, userRoutes);
+app.use(`${config.API_PREFIX}/domains`, domainRoutes);
 
 // Serve the generated swagger.json file
-app.get('/docs/swagger.json', (req, res) => {
+app.get(`${config.API_PREFIX}/docs/swagger.json`, (req, res) => {
   const swaggerPath = path.join(process.cwd(), 'swagger.json');
   if (fs.existsSync(swaggerPath)) {
     res.sendFile(swaggerPath);
@@ -60,7 +57,7 @@ app.get('/docs/swagger.json', (req, res) => {
   }
 });
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, { swaggerUrl: '/docs/swagger.json' }));
+app.use(`${config.API_PREFIX}/docs`, swaggerUi.serve, swaggerUi.setup(null, { swaggerUrl: `${config.API_PREFIX}/docs/swagger.json` }));
 
 app.get('/health', (req, res) => {
   try {
@@ -86,6 +83,6 @@ sequelize.sync({ alter: config.NODE_ENV === 'development' }).then(() => {
     console.log(`NodeJS Backend running on port ${config.PORT}`);
     console.log(`Environment: ${config.NODE_ENV}`);
     console.log(`API Base: ${config.API_PREFIX}`);
-    console.log(`Swagger UI: http://localhost:${config.PORT}/docs`);
+    console.log(`Swagger UI: http://localhost:${config.PORT}/api/docs`);
   });
 }); 

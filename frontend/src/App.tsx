@@ -16,7 +16,7 @@ import VerifyEmail from './pages/auth/VerifyEmail';
 import TermsOfService from './pages/legal/TermsOfService';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import Profile from './pages/account/Profile';
-import Help from './pages/Help';
+import Document from './pages/Document';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import FloatingButtons from './components/FloatingButtons';
@@ -269,7 +269,7 @@ const AppContent: React.FC = () => {
             <Route path="/dmarc" element={<DMARCAnalyzer />} />
             <Route path="/dns" element={<DNSResolver />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/help" element={<Help />} />
+            <Route path="/document" element={<Document />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<Dashboard />} />
