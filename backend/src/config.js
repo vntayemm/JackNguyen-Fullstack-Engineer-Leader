@@ -32,21 +32,7 @@ const config = {
     port: parseInt(process.env.DB_PORT) || 5432,
     database: process.env.DB_NAME || 'domain_validator_db',
     username: process.env.DB_USER || 'username',
-    password: process.env.DB_PASSWORD || 'password',
-    dialect: 'postgres',
-    logging: process.env.NODE_ENV === 'development',
-    pool: {
-      max: parseInt(process.env.DB_POOL_MAX) || 5,
-      min: parseInt(process.env.DB_POOL_MIN) || 0,
-      acquire: parseInt(process.env.DB_POOL_ACQUIRE) || 30000,
-      idle: parseInt(process.env.DB_POOL_IDLE) || 10000
-    },
-    dialectOptions: {
-      ssl: {
-        require: process.env.DB_SSL_REQUIRE === 'true',
-        rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'true'
-      }
-    }
+    password: process.env.DB_PASSWORD || 'password'
   },
   
   // Email Configuration

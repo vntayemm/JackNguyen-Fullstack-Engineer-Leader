@@ -77,12 +77,9 @@ app.use(notFoundHandler);
 // Global error handler middleware
 app.use(errorHandler);
 
-// Sync DB and start server
-sequelize.sync({ alter: config.NODE_ENV === 'development' }).then(() => {
-  app.listen(config.PORT, () => {
-    console.log(`NodeJS Backend running on port ${config.PORT}`);
-    console.log(`Environment: ${config.NODE_ENV}`);
-    console.log(`API Base: ${config.API_PREFIX}`);
-    console.log(`Swagger UI: http://localhost:${config.PORT}/api/docs`);
-  });
-}); 
+app.listen(config.PORT, () => {
+  console.log(`NodeJS Backend running on port ${config.PORT}`);
+  console.log(`Environment: ${config.NODE_ENV}`);
+  console.log(`API Base: ${config.API_PREFIX}`);
+  console.log(`Swagger UI: http://localhost:${config.PORT}/api/docs`);
+});
