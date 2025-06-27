@@ -30,7 +30,7 @@ const config = {
   EMAIL_PORT: parseInt(process.env.EMAIL_PORT) || 587,
   EMAIL_USER: process.env.EMAIL_USER || '459a0c001@smtp-brevo.com',
   EMAIL_PASS: process.env.EMAIL_PASS || '7qa84DCrOzITKtG5',
-  EMAIL_FROM: process.env.EMAIL_FROM || 'Amberos-DNS/Email Security Tool <459a0c001@smtp-brevo.com>',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'Amberos Pte. Ltd <459a0c001@smtp-brevo.com>',
   
 
   // DNS Configuration

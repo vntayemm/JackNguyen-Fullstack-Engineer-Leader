@@ -43,11 +43,18 @@ api.interceptors.response.use(
   }
 );
 
-// TypeScript interfaces for API responses
+// TypeScript interfaces for API responses - Updated to match swagger.json
+
+// Domain Analysis Interfaces
 export interface DomainValidationResponse {
   domain: string;
   is_valid: boolean;
   errors: string[];
+}
+
+export interface SPFAnalysisRequest {
+  domain: string;
+  spf_record?: string;
 }
 
 export interface SPFAnalysisResponse {
@@ -57,6 +64,11 @@ export interface SPFAnalysisResponse {
   parsed_record?: any;
   warnings: string[];
   errors: string[];
+}
+
+export interface DMARCAnalysisRequest {
+  domain: string;
+  dmarc_record?: string;
 }
 
 export interface DMARCAnalysisResponse {
@@ -80,7 +92,7 @@ export interface DNSResponse {
   errors: string[];
 }
 
-// Auth interfaces
+// Auth Interfaces
 export interface RegisterRequest {
   username: string;
   email: string;
@@ -119,8 +131,7 @@ export interface ForgotPasswordResponse {
 }
 
 export interface ResetPasswordRequest {
-  token: string;
-  newPassword: string;
+  password: string;
 }
 
 export interface ResetPasswordResponse {
@@ -137,8 +148,8 @@ export interface UserProfile {
   email: string;
   firstName?: string;
   lastName?: string;
-  createdAt: string;
   isVerified: boolean;
+  createdAt: string;
 }
 
 export interface UpdateProfileRequest {
@@ -146,6 +157,20 @@ export interface UpdateProfileRequest {
   lastName?: string;
 }
 
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordResponse {
+  message: string;
+}
+
+export interface DeleteAccountResponse {
+  message: string;
+}
+
+// Domain Management Interfaces
 export interface Domain {
   id: number;
   domainName: string;
@@ -161,7 +186,17 @@ export interface AddDomainRequest {
   domainName: string;
 }
 
-// API Service class using axios
+export interface DomainListResponse {
+  domains: Domain[];
+  count: number;
+}
+
+export interface DomainTestResponse {
+  domain: Domain;
+  message: string;
+}
+
+// API Service class using axios - Updated to match swagger.json endpoints
 class ApiService {
   private api: AxiosInstance;
 
@@ -169,55 +204,51 @@ class ApiService {
     this.api = apiInstance;
   }
 
+  // ===== DOMAIN ANALYSIS ENDPOINTS =====
+
   // Domain validation - GET /api/domains/validate/{domain}
   async validateDomain(domain: string): Promise<DomainValidationResponse> {
     const response = await this.api.get<DomainValidationResponse>(`/api/domains/validate/${domain}`);
     return response.data;
   }
 
-  // SPF analysis - POST /api/spf/analyze
+  // SPF analysis - POST /api/domains/spf/analyze
   async analyzeSPF(domain: string, spfRecord?: string): Promise<SPFAnalysisResponse> {
-    const body: any = { domain };
+    const body: SPFAnalysisRequest = { domain };
     if (spfRecord) {
       body.spf_record = spfRecord;
     }
     
-    const response = await this.api.post<SPFAnalysisResponse>('/api/spf/analyze', body);
+    const response = await this.api.post<SPFAnalysisResponse>('/api/domains/spf/analyze', body);
     return response.data;
   }
 
-  // DMARC analysis - POST /api/dmarc/analyze
+  // DMARC analysis - POST /api/domains/dmarc/analyze
   async analyzeDMARC(domain: string, dmarcRecord?: string): Promise<DMARCAnalysisResponse> {
-    const body: any = { domain };
+    const body: DMARCAnalysisRequest = { domain };
     if (dmarcRecord) {
       body.dmarc_record = dmarcRecord;
     }
     
-    const response = await this.api.post<DMARCAnalysisResponse>('/api/dmarc/analyze', body);
+    const response = await this.api.post<DMARCAnalysisResponse>('/api/domains/dmarc/analyze', body);
     return response.data;
   }
 
-  // DNS resolution - GET /api/dns/records/{domain}?record_type={type}
-  async resolveDNS(domain: string, recordType: string): Promise<DNSResponse> {
-    const response = await this.api.get<DNSResponse>(`/api/dns/records/${domain}`, {
+  // DNS resolution - GET /api/domains/dns/records/{domain}?record_type={type}
+  async resolveDNS(domain: string, recordType: string = 'TXT'): Promise<DNSResponse> {
+    const response = await this.api.get<DNSResponse>(`/api/domains/dns/records/${domain}`, {
       params: { record_type: recordType },
     });
     return response.data;
   }
 
-  // Health check - GET /health
-  async healthCheck(): Promise<{ status: string; timestamp: string }> {
-    const response = await this.api.get<{ status: string; timestamp: string }>('/health');
-    return response.data;
-  }
-
-  // Get all DNS records for a domain - GET /api/dns/records/{domain}/all
+  // Get all DNS records for a domain - GET /api/domains/dns/records/{domain}/all
   async getAllDNSRecords(domain: string): Promise<any> {
-    const response = await this.api.get(`/api/dns/records/${domain}/all`);
+    const response = await this.api.get(`/api/domains/dns/records/${domain}/all`);
     return response.data;
   }
 
-  // Authentication methods
+  // ===== AUTHENTICATION ENDPOINTS =====
 
   // Register - POST /api/auth/register
   async register(data: RegisterRequest): Promise<RegisterResponse> {
@@ -238,9 +269,9 @@ class ApiService {
   }
 
   // Reset Password - POST /api/auth/reset-password/{token}
-  async resetPassword(data: ResetPasswordRequest): Promise<ResetPasswordResponse> {
-    const response = await this.api.post<ResetPasswordResponse>(`/api/auth/reset-password/${data.token}`, {
-      password: data.newPassword
+  async resetPassword(token: string, password: string): Promise<ResetPasswordResponse> {
+    const response = await this.api.post<ResetPasswordResponse>(`/api/auth/reset-password/${token}`, {
+      password
     });
     return response.data;
   }
@@ -251,11 +282,13 @@ class ApiService {
     return response.data;
   }
 
-  // Get Profile - GET /api/auth/profile
+  // ===== USER MANAGEMENT ENDPOINTS =====
+
+  // Get Profile - GET /api/user/profile
   async getProfile(): Promise<UserProfile> {
     try {
-      console.log('Making getProfile request to:', `${this.api.defaults.baseURL}/api/auth/profile`);
-      const response = await this.api.get<UserProfile>('/api/auth/profile');
+      console.log('Making getProfile request to:', `${this.api.defaults.baseURL}/api/user/profile`);
+      const response = await this.api.get<UserProfile>('/api/user/profile');
       console.log('getProfile response:', response.data);
       return response.data;
     } catch (error) {
@@ -266,18 +299,30 @@ class ApiService {
     }
   }
 
-  // Update Profile - PUT /api/auth/profile
+  // Update Profile - PUT /api/user/profile
   async updateProfile(data: UpdateProfileRequest): Promise<UserProfile> {
-    const response = await this.api.put<UserProfile>('/api/auth/profile', data);
+    const response = await this.api.put<UserProfile>('/api/user/profile', data);
     return response.data;
   }
 
-  // Domain management methods
+  // Change Password - PUT /api/user/change-password
+  async changePassword(data: ChangePasswordRequest): Promise<ChangePasswordResponse> {
+    const response = await this.api.put<ChangePasswordResponse>('/api/user/change-password', data);
+    return response.data;
+  }
+
+  // Delete Account - DELETE /api/user/delete-account
+  async deleteAccount(): Promise<DeleteAccountResponse> {
+    const response = await this.api.delete<DeleteAccountResponse>('/api/user/delete-account');
+    return response.data;
+  }
+
+  // ===== DOMAIN MANAGEMENT ENDPOINTS =====
 
   // Get user domains - GET /api/domains
   async getDomains(): Promise<Domain[]> {
-    const response = await this.api.get<Domain[]>('/api/domains');
-    return response.data;
+    const response = await this.api.get<DomainListResponse>('/api/domains');
+    return response.data.domains;
   }
 
   // Add domain - POST /api/domains
@@ -293,14 +338,22 @@ class ApiService {
   }
 
   // Test domain - POST /api/domains/{id}/test
-  async testDomain(id: number): Promise<Domain> {
-    const response = await this.api.post<{ domain: Domain; message: string }>(`/api/domains/${id}/test`);
-    return response.data.domain;
+  async testDomain(id: number): Promise<DomainTestResponse> {
+    const response = await this.api.post<DomainTestResponse>(`/api/domains/${id}/test`);
+    return response.data;
   }
 
   // Delete domain - DELETE /api/domains/{id}
   async deleteDomain(id: number): Promise<{ message: string }> {
     const response = await this.api.delete<{ message: string }>(`/api/domains/${id}`);
+    return response.data;
+  }
+
+  // ===== SYSTEM ENDPOINTS =====
+
+  // Health check - GET /health
+  async healthCheck(): Promise<{ status: string; timestamp: string }> {
+    const response = await this.api.get<{ status: string; timestamp: string }>('/health');
     return response.data;
   }
 }

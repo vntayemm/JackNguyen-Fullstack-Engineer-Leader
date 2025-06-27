@@ -1,4 +1,5 @@
 import React from "react";
+import config from "../../config";
 
 const TermsOfService: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const TermsOfService: React.FC = () => {
           
           <div className="prose dark:prose-invert max-w-none">
             <p className="text-gray-600 dark:text-gray-300 mb-4 md:mb-6 text-sm md:text-base">
-              Last updated: {new Date().toLocaleDateString()}
+              Last updated: Jun 27, 2025
             </p>
             
             <section className="mb-6 md:mb-8">
@@ -43,35 +44,35 @@ const TermsOfService: React.FC = () => {
             <section className="mb-6 md:mb-8">
               <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">3. Disclaimer</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                The materials on DNS/Email Security Tool are provided on an 'as is' basis. Amberos makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+                The materials on DNS/Email Security Tool are provided on an 'as is' basis. <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a> makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
               <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">4. Limitations</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                In no event shall Amberos or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on DNS/Email Security Tool.
+                In no event shall <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a> or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on DNS/Email Security Tool.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
               <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">5. Revisions and Errata</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                The materials appearing on DNS/Email Security Tool could include technical, typographical, or photographic errors. Amberos does not warrant that any of the materials on its website are accurate, complete or current.
+                The materials appearing on DNS/Email Security Tool could include technical, typographical, or photographic errors. <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a> does not warrant that any of the materials on its website are accurate, complete or current.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
               <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">6. Links</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                Amberos has not reviewed all of the sites linked to DNS/Email Security Tool and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Amberos of the site.
+                <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a> has not reviewed all of the sites linked to DNS/Email Security Tool and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a> of the site.
               </p>
             </section>
 
             <section className="mb-6 md:mb-8">
               <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">7. Site Terms of Use Modifications</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                Amberos may revise these terms of use for DNS/Email Security Tool at any time without notice. By using this website you are agreeing to be bound by the then current version of these Terms and Conditions of Use.
+                <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a> may revise these terms of use for DNS/Email Security Tool at any time without notice. By using this website you are agreeing to be bound by the then current version of these Terms and Conditions of Use.
               </p>
             </section>
 
@@ -95,7 +96,7 @@ const TermsOfService: React.FC = () => {
           
           {/* Copyright */}
           <div className="mt-6 md:mt-8 text-center text-xs md:text-sm text-gray-500 dark:text-gray-400">
-            &copy; {new Date().getFullYear()} Amberos. All rights reserved.
+            &copy; {new Date().getFullYear()} <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a>. All rights reserved. | <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a> | <a href={`${config.apiUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">API Document</a>
           </div>
         </div>
       </div>

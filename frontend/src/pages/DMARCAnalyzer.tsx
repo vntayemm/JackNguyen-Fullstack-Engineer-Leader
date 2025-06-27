@@ -4,7 +4,7 @@ import { apiService, DMARCAnalysisResponse } from '../services/api';
 
 const DMARCAnalyzer: React.FC = () => {
   const [domain, setDomain] = useState('');
-  const [dmarcRecord, setDmarcRecord] = useState('');
+  const [dmarcRecord, setDmarcRecord] = useState('v=DMARC1; p=quarantine; rua=mailto:minh.nguyen@globaldevhubs.com');
   const [submittedData, setSubmittedData] = useState<{ domain: string; dmarcRecord?: string } | null>(null);
 
   const { data, isLoading, error } = useQuery<DMARCAnalysisResponse>(

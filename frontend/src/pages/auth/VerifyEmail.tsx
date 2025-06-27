@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { apiService } from '../../services/api';
+import config from '../../config';
 
 const VerifyEmail: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -120,7 +121,7 @@ const VerifyEmail: React.FC = () => {
       <div className="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-            <p>© 2025 Amberos. All rights reserved.</p>
+            <p>© 2025 <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a>. All rights reserved. | <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a> | <a href={`${config.apiUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">API Document</a></p>
           </div>
         </div>
       </div>

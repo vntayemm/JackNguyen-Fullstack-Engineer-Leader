@@ -3,7 +3,12 @@
   "info": {
     "title": "DNS/Email Security Tool API",
     "version": "1.0.0",
-    "description": "Comprehensive API for DNS validation, SPF analysis, DMARC analysis, and user authentication. Use the Authorize button at the top to input your Bearer token for protected endpoints."
+    "description": "Comprehensive API for DNS validation, SPF analysis, DMARC analysis, and user authentication. Use the Authorize button at the top to input your Bearer token for protected endpoints.",
+    "contact": {
+      "name": "DNS/Email Security Tool",
+      "email": "enquiries@amberos.com",
+      "url": "https://domain-validator-reactjs-533675451276.asia-southeast1.run.app"
+    }
   },
   "servers": [
     {

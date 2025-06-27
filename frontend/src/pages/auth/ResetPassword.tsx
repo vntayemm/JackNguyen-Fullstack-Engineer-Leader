@@ -39,7 +39,7 @@ const ResetPassword: React.FC = () => {
     try {
       setLoading(true);
       setError('');
-      await apiService.resetPassword({ token, newPassword: password });
+      await apiService.resetPassword(token, password);
       setSuccess('Password reset successfully! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');

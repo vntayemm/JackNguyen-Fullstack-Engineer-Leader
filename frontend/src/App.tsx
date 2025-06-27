@@ -17,7 +17,7 @@ import TermsOfService from './pages/legal/TermsOfService';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import Profile from './pages/account/Profile';
 import Document from './pages/Document';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import FloatingButtons from './components/FloatingButtons';
 import UserDropdown from './components/UserDropdown';
@@ -294,7 +294,7 @@ const AppContent: React.FC = () => {
               </Link>
             </div>
             <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-              &copy; {new Date().getFullYear()} Amberos. All rights reserved.
+              &copy; {new Date().getFullYear()} <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a>. All rights reserved. | <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a> | <a href={`${config.apiUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">API Document</a>
             </p>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { apiService, SPFAnalysisResponse } from '../services/api';
 
 const SPFAnalyzer: React.FC = () => {
   const [domain, setDomain] = useState('');
-  const [spfRecord, setSpfRecord] = useState('');
+  const [spfRecord, setSpfRecord] = useState('v=spf1 include:zoho.com ~all');
   const [submittedData, setSubmittedData] = useState<{ domain: string; spfRecord?: string } | null>(null);
 
   const { data, isLoading, error } = useQuery<SPFAnalysisResponse>(

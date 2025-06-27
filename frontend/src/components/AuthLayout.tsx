@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import AuthInfoPanel from "./AuthInfoPanel";
 import { useTheme } from "../contexts/ThemeContext";
 import { Link } from "react-router-dom";
+import config from "../config";
 
 const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -79,7 +80,7 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </div>
               {/* Copyright text */}
               <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                &copy; {new Date().getFullYear()} Amberos. All rights reserved.
+                &copy; {new Date().getFullYear()} <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a>. All rights reserved. | <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a> | <a href={`${config.apiUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">API Document</a>
               </div>
             </div>
           </div>
@@ -111,7 +112,7 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
             {/* Copyright text */}
             <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-              &copy; {new Date().getFullYear()} Amberos. All rights reserved.
+              &copy; {new Date().getFullYear()} <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a>. All rights reserved. | <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a> | <a href={`${config.apiUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">API Document</a>
             </div>
           </div>
         </div>

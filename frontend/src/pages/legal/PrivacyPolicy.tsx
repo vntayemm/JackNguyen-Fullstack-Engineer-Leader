@@ -1,4 +1,5 @@
 import React from "react";
+import config from "../../config";
 
 const PrivacyPolicy: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const PrivacyPolicy: React.FC = () => {
           
           <div className="prose dark:prose-invert max-w-none">
             <p className="text-gray-600 dark:text-gray-300 mb-4 md:mb-6 text-sm md:text-base">
-              Last updated: {new Date().toLocaleDateString()}
+              Last updated: Jun 27, 2025
             </p>
             
             <section className="mb-6 md:mb-8">
@@ -78,7 +79,7 @@ const PrivacyPolicy: React.FC = () => {
             <section className="mb-6 md:mb-8">
               <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">8. Contact Us</h2>
               <p className="text-gray-600 dark:text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                If you have any questions about this privacy policy, please contact us at privacy@amberos.com.
+                If you have any questions about this privacy policy, please contact us at <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a>.
               </p>
             </section>
           </div>
@@ -95,7 +96,7 @@ const PrivacyPolicy: React.FC = () => {
           
           {/* Copyright */}
           <div className="mt-6 md:mt-8 text-center text-xs md:text-sm text-gray-500 dark:text-gray-400">
-            &copy; {new Date().getFullYear()} Amberos. All rights reserved.
+            &copy; {new Date().getFullYear()} <a href="https://amberos.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">Amberos Pte. Ltd</a>. All rights reserved. | <a href="mailto:enquiries@amberos.com" className="text-blue-600 dark:text-blue-400 hover:underline">enquiries@amberos.com</a> | <a href={`${config.apiUrl}/api/docs`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">API Document</a>
           </div>
         </div>
       </div>

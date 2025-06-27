@@ -82,8 +82,8 @@ const Dashboard: React.FC = () => {
   const handleTestDomain = async (domainId: number) => {
     try {
       setTestingDomain(domainId);
-      const updatedDomain = await apiService.testDomain(domainId);
-      setDomains(domains.map(d => d.id === domainId ? updatedDomain : d));
+      const testResponse = await apiService.testDomain(domainId);
+      setDomains(domains.map(d => d.id === domainId ? testResponse.domain : d));
       setSuccess('Domain test completed!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
