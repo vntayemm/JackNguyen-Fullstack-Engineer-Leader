@@ -12,12 +12,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
-      "description": "Development server"
-    },
-    {
-      "url": "https://domain-validator-service-533675451276.asia-southeast1.run.app",
-      "description": "Production server"
+      "url": ""
     }
   ],
   "components": {
