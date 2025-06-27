@@ -20,20 +20,29 @@ class UpdateProfileRequestDTO {
   constructor(data) {
     this.firstName = data.firstName;
     this.lastName = data.lastName;
+    this._errors = [];
   }
 
   validate() {
-    const errors = [];
+    this._errors = [];
     
-    if (this.firstName && this.firstName.trim().length === 0) {
-      errors.push('First name cannot be empty');
+    if (this.firstName !== undefined && (!this.firstName || this.firstName.trim().length === 0)) {
+      this._errors.push('First name cannot be empty');
     }
     
-    if (this.lastName && this.lastName.trim().length === 0) {
-      errors.push('Last name cannot be empty');
+    if (this.lastName !== undefined && (!this.lastName || this.lastName.trim().length === 0)) {
+      this._errors.push('Last name cannot be empty');
     }
     
-    return errors;
+    return this._errors;
+  }
+
+  isValid() {
+    return this.validate().length === 0;
+  }
+
+  getErrors() {
+    return this._errors;
   }
 
   sanitize() {
@@ -49,24 +58,33 @@ class ChangePasswordRequestDTO {
   constructor(data) {
     this.oldPassword = data.oldPassword;
     this.newPassword = data.newPassword;
+    this._errors = [];
   }
 
   validate() {
-    const errors = [];
+    this._errors = [];
     
     if (!this.oldPassword) {
-      errors.push('Current password is required');
+      this._errors.push('Current password is required');
     }
     
     if (!this.newPassword || this.newPassword.length < 6) {
-      errors.push('New password must be at least 6 characters long');
+      this._errors.push('New password must be at least 6 characters long');
     }
     
     if (this.oldPassword === this.newPassword) {
-      errors.push('New password must be different from current password');
+      this._errors.push('New password must be different from current password');
     }
     
-    return errors;
+    return this._errors;
+  }
+
+  isValid() {
+    return this.validate().length === 0;
+  }
+
+  getErrors() {
+    return this._errors;
   }
 }
 

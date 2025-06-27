@@ -114,7 +114,17 @@ class DNSResponseDTO {
   constructor(result) {
     this.domain = result.domain;
     this.record_type = result.record_type;
-    this.records = (result.records || []).map(record => new DNSRecordDTO(record));
+    // Map all record types to objects with value field
+    if (Array.isArray(result.records)) {
+      this.records = result.records.map(record => ({
+        value: record
+      }));
+    } else {
+      this.records = [];
+    }
+    this.txt_records = result.txt_records || [];
+    this.spf_records = result.spf_records || [];
+    this.dmarc_records = result.dmarc_records || [];
     this.errors = result.errors || [];
   }
 }

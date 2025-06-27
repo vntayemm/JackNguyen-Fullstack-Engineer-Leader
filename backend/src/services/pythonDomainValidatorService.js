@@ -29,7 +29,7 @@ class PythonDomainValidatorService {
   // SPF analysis using Python script
   async analyzeSPF(domain, spf_record) {
     try {
-      const result = await this.runPythonTest(domain, 'spf');
+      const result = await this.runPythonTest(domain, 'spf', null, spf_record);
       return result.result || {
         domain,
         spf_record: null,
@@ -40,6 +40,26 @@ class PythonDomainValidatorService {
       return {
         domain,
         spf_record: null,
+        is_valid: false,
+        errors: [error.message]
+      };
+    }
+  }
+
+  // DMARC analysis using Python script
+  async analyzeDMARC(domain, dmarc_record) {
+    try {
+      const result = await this.runPythonTest(domain, 'dmarc', null, null, dmarc_record);
+      return result.result || {
+        domain,
+        dmarc_record: null,
+        is_valid: false,
+        errors: ['Python script execution failed']
+      };
+    } catch (error) {
+      return {
+        domain,
+        dmarc_record: null,
         is_valid: false,
         errors: [error.message]
       };
@@ -100,11 +120,13 @@ class PythonDomainValidatorService {
     }
   }
 
-  async getDNSRecords(domain) {
+  async getDNSRecords(domain, record_type = null) {
     try {
-      const result = await this.runPythonTest(domain, 'dns');
+      const result = await this.runPythonTest(domain, 'dns', record_type);
       return result.result || {
         domain,
+        record_type: record_type || 'TXT',
+        records: [],
         txt_records: [],
         spf_records: [],
         dmarc_records: [],
@@ -114,6 +136,8 @@ class PythonDomainValidatorService {
     } catch (error) {
       return {
         domain,
+        record_type: record_type || 'TXT',
+        records: [],
         txt_records: [],
         spf_records: [],
         dmarc_records: [],
@@ -123,10 +147,22 @@ class PythonDomainValidatorService {
     }
   }
 
-  async runPythonTest(domain, testType = 'comprehensive') {
+  async runPythonTest(domain, testType = 'comprehensive', record_type = null, spf_record = null, dmarc_record = null) {
     return new Promise((resolve, reject) => {
       const pythonScript = 'scripts/test-domain.py';
       const args = [domain, '--test-type', testType];
+      
+      if (record_type) {
+        args.push('--record-type', record_type);
+      }
+      
+      if (spf_record) {
+        args.push('--spf-record', spf_record);
+      }
+      
+      if (dmarc_record) {
+        args.push('--dmarc-record', dmarc_record);
+      }
       
       const pythonProcess = spawn('python3', [pythonScript, ...args]);
       

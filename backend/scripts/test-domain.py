@@ -188,7 +188,7 @@ def test_dmarc_records(test_record=None, test_domain=None) -> dict:
         }
 
 
-def get_dns_records(domain) -> dict:
+def get_dns_records(domain, record_type="TXT") -> dict:
     """Get DNS Records"""
     try:
         # Set timeout for DNS resolution
@@ -196,15 +196,22 @@ def get_dns_records(domain) -> dict:
         resolver.timeout = 10
         resolver.lifetime = 10
         
-        answers = resolver.resolve(domain, "TXT")
+        answers = resolver.resolve(domain, record_type)
         records = [str(answer) for answer in answers]
-        spf_records = [record for record in records if record.startswith('"v=spf1')]
-        dmarc_records = [record for record in records if record.startswith('"v=DMARC1')]
+        
+        # For TXT records, also extract SPF and DMARC records
+        spf_records = []
+        dmarc_records = []
+        if record_type == "TXT":
+            spf_records = [record for record in records if record.startswith('"v=spf1')]
+            dmarc_records = [record for record in records if record.startswith('"v=DMARC1')]
         
         return {
             "domain": domain,
-            "txt_records": records,
-            "all_txt_records": records,
+            "record_type": record_type,
+            "records": records,
+            "txt_records": records if record_type == "TXT" else [],
+            "all_txt_records": records if record_type == "TXT" else [],
             "spf_records": spf_records,
             "dmarc_records": dmarc_records,
             "success": True
@@ -212,6 +219,8 @@ def get_dns_records(domain) -> dict:
     except Exception as e:
         return {
             "domain": domain,
+            "record_type": record_type,
+            "records": [],
             "txt_records": [],
             "all_txt_records": [],
             "spf_records": [],
@@ -250,13 +259,17 @@ def main():
                        default='comprehensive', help='Type of test to run')
     parser.add_argument('--spf-record', help='SPF record to test (for spf test type)')
     parser.add_argument('--dmarc-record', help='DMARC record to test (for dmarc test type)')
+    parser.add_argument('--record-type', help='Record type to test (for dns test type)')
     
     args = parser.parse_args()
     
     if args.test_type == 'validation':
         result = test_domain_check(args.domain)
     elif args.test_type == 'dns':
-        result = get_dns_records(args.domain)
+        if args.record_type:
+            result = get_dns_records(args.domain, args.record_type)
+        else:
+            result = get_dns_records(args.domain)
     elif args.test_type == 'spf':
         if args.spf_record:
             result = test_spf_records(args.spf_record, args.domain)

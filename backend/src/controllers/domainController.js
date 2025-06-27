@@ -155,7 +155,7 @@ export const analyzeDMARC = asyncHandler(async (req, res) => {
     throw new ValidationError('Invalid DMARC analysis data', dmarcData.getErrors());
   }
 
-  const result = await pythonDomainValidatorService.comprehensiveDomainTest(dmarcData.domain);
+  const result = await pythonDomainValidatorService.analyzeDMARC(dmarcData.domain, dmarcData.dmarc_record);
   const response = new DMARCAnalysisResponseDTO(result);
   
   return sendSuccessResponse(res, response);

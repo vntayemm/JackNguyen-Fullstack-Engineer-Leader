@@ -1,5 +1,4 @@
 import Domain from '../models/domain.js';
-import nodejsDomainValidatorService from './nodejsDomainValidatorService.js';
 import pythonDomainValidatorService from './pythonDomainValidatorService.js';
 
 class DomainService {
@@ -96,32 +95,25 @@ class DomainService {
     const results = {};
     
     try {
-      // Test SPF using NodeJS service
+      // Test SPF using Python service
       try {
-        const spfResult = await nodejsDomainValidatorService.analyzeSPF(domainName);
+        const spfResult = await pythonDomainValidatorService.analyzeSPF(domainName);
         results.spf = spfResult;
       } catch (error) {
         results.spf = { error: error.message };
       }
       
-      // Test DMARC and other comprehensive tests using Python service
+      // Test DMARC using Python service
       try {
-        const comprehensiveResult = await pythonDomainValidatorService.comprehensiveDomainTest(domainName);
-        if (comprehensiveResult.tests && comprehensiveResult.tests.dmarc_analysis) {
-          results.dmarc = comprehensiveResult.tests.dmarc_analysis;
-        } else if (comprehensiveResult.tests && comprehensiveResult.tests.spf_analysis) {
-          // Fallback to SPF if DMARC not available
-          results.dmarc = comprehensiveResult.tests.spf_analysis;
-        } else {
-          results.dmarc = { error: 'DMARC test not available' };
-        }
+        const dmarcResult = await pythonDomainValidatorService.analyzeDMARC(domainName);
+        results.dmarc = dmarcResult;
       } catch (error) {
         results.dmarc = { error: error.message };
       }
       
-      // Test DNS (MX records)
+      // Test DNS (MX records) using Python service
       try {
-        const dnsResult = await nodejsDomainValidatorService.getDNSRecords(domainName, 'MX');
+        const dnsResult = await pythonDomainValidatorService.getDNSRecords(domainName, 'MX');
         results.dns = dnsResult;
       } catch (error) {
         results.dns = { error: error.message };
