@@ -253,8 +253,7 @@ The project uses **Docker** for containerization and **GitHub Actions** for cont
 
 ### Configuration Required
 
-#### Frontend Configuration
-**Environment Variables:**
+**Frontend Environment Variables:**
 ```env
 REACT_APP_API_URL=https://domain-validator-service-533675451276.asia-southeast1.run.app
 REACT_APP_ENVIRONMENT=production
@@ -265,8 +264,7 @@ REACT_APP_ENVIRONMENT=production
 - Nginx for serving static files
 - Environment-specific builds
 
-#### Backend Configuration
-**Environment Variables:**
+**Backend Environment Variables:**
 ```env
 NODE_ENV=production
 PORT=8080
@@ -298,7 +296,8 @@ EMAIL_FROM=Amberos-DNS/Email Security Tool <services@globaldevhubs.com>
 **Workflow Triggers:**
 - Push to `main` branch
 - Manual workflow dispatch
-- Path-based triggers (commented out for full deployment)
+- triggers build fontend when change code in the /frontend folder
+- triggers build backend when change code in the /backend folder
 
 ### Deployment Process
 
@@ -347,12 +346,6 @@ Password: Xr9$e2@LmVq#74Wd
   - Domain validation and formatting
   - Duplicate prevention
   - Historical data tracking
-
-**Analysis Capabilities:**
-- **DNS Provider Detection**: Automatic detection of DNS providers (Cloudflare, GoDaddy, etc.)
-- **Hosting Provider Detection**: Identifies hosting providers (AWS, DigitalOcean, etc.)
-- **Record Publication Status**: Checks if DNS, SPF, and DMARC records are properly published
-- **Use Case Analysis**: Comprehensive analysis of each DNS record type with goals, purposes, and expected outcomes
 
 ### User Authentication Features
 
@@ -419,24 +412,11 @@ Password: Xr9$e2@LmVq#74Wd
 - Accessible UI components
 - Cross-browser compatibility
 
-**Real-time Features:**
-- Live DNS analysis results
-- Instant form validation
-- Real-time error feedback
-- Loading states and progress indicators
-
 **User Interface:**
 - Clean, modern design
 - Intuitive navigation
 - Comprehensive error handling
 - Success notifications
 - Loading animations
-
-**Performance:**
-- Optimized bundle size
-- Lazy loading for routes
-- Efficient API calls with React Query
-- Caching strategies
-- Image optimization
 
 This comprehensive developer guide provides everything needed to understand, develop, and deploy the DNS/Email Security Tool project. 
