@@ -28,24 +28,14 @@ import {
 
 // Domain and DNS DTOs
 import {
-  DomainValidationResponseDTO,
-  SPFAnalysisRequestDTO,
-  SPFAnalysisResponseDTO,
-  DMARCAnalysisRequestDTO,
-  DMARCAnalysisResponseDTO,
-  DNSRecordDTO,
-  DNSResponseDTO,
   DomainDTO,
   AddDomainRequestDTO,
-  DomainListResponseDTO,
-  DomainTestResponseDTO
+  DomainListResponseDTO
 } from './domain.dto.js';
 
 // System DTOs
 import {
-  HealthCheckResponseDTO,
-  APIStatusDTO,
-  SystemInfoDTO
+  HealthCheckResponseDTO
 } from './system.dto.js';
 
 export {
@@ -70,20 +60,10 @@ export {
   ErrorResponseDTO,
   
   // Domain and DNS
-  DomainValidationResponseDTO,
-  SPFAnalysisRequestDTO,
-  SPFAnalysisResponseDTO,
-  DMARCAnalysisRequestDTO,
-  DMARCAnalysisResponseDTO,
-  DNSRecordDTO,
-  DNSResponseDTO,
   DomainDTO,
   AddDomainRequestDTO,
   DomainListResponseDTO,
-  DomainTestResponseDTO,
   
   // System
-  HealthCheckResponseDTO,
-  APIStatusDTO,
-  SystemInfoDTO
+  HealthCheckResponseDTO
 }; 

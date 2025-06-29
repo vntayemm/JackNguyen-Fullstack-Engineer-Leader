@@ -2,133 +2,6 @@
  * Domain and DNS DTOs
  */
 
-// Domain Validation DTO
-class DomainValidationResponseDTO {
-  constructor(result) {
-    this.domain = result.domain;
-    this.is_valid = result.is_valid;
-    this.errors = result.errors || [];
-  }
-}
-
-// SPF Analysis DTO
-class SPFAnalysisRequestDTO {
-  constructor(data) {
-    this.domain = data.domain;
-    this.spf_record = data.spf_record;
-    this._errors = [];
-  }
-
-  validate() {
-    this._errors = [];
-    
-    if (!this.domain) {
-      this._errors.push('Domain is required');
-    }
-    
-    return this._errors;
-  }
-
-  isValid() {
-    return this.validate().length === 0;
-  }
-
-  getErrors() {
-    return this._errors;
-  }
-
-  sanitize() {
-    return {
-      domain: this.domain ? this.domain.toLowerCase().trim() : null,
-      spf_record: this.spf_record ? this.spf_record.trim() : null
-    };
-  }
-}
-
-class SPFAnalysisResponseDTO {
-  constructor(result) {
-    this.domain = result.domain;
-    this.is_valid = result.is_valid;
-    this.spf_record = result.spf_record;
-    this.parsed_record = result.parsed_record;
-    this.warnings = result.warnings || [];
-    this.errors = result.errors || [];
-  }
-}
-
-// DMARC Analysis DTO
-class DMARCAnalysisRequestDTO {
-  constructor(data) {
-    this.domain = data.domain;
-    this.dmarc_record = data.dmarc_record;
-    this._errors = [];
-  }
-
-  validate() {
-    this._errors = [];
-    
-    if (!this.domain) {
-      this._errors.push('Domain is required');
-    }
-    
-    return this._errors;
-  }
-
-  isValid() {
-    return this.validate().length === 0;
-  }
-
-  getErrors() {
-    return this._errors;
-  }
-
-  sanitize() {
-    return {
-      domain: this.domain ? this.domain.toLowerCase().trim() : null,
-      dmarc_record: this.dmarc_record ? this.dmarc_record.trim() : null
-    };
-  }
-}
-
-class DMARCAnalysisResponseDTO {
-  constructor(result) {
-    this.domain = result.domain;
-    this.is_valid = result.is_valid;
-    this.dmarc_record = result.dmarc_record;
-    this.parsed_record = result.parsed_record;
-    this.warnings = result.warnings || [];
-    this.errors = result.errors || [];
-  }
-}
-
-// DNS Record DTO
-class DNSRecordDTO {
-  constructor(record) {
-    this.value = record.value;
-    this.ttl = record.ttl;
-  }
-}
-
-// DNS Response DTO
-class DNSResponseDTO {
-  constructor(result) {
-    this.domain = result.domain;
-    this.record_type = result.record_type;
-    // Map all record types to objects with value field
-    if (Array.isArray(result.records)) {
-      this.records = result.records.map(record => ({
-        value: record
-      }));
-    } else {
-      this.records = [];
-    }
-    this.txt_records = result.txt_records || [];
-    this.spf_records = result.spf_records || [];
-    this.dmarc_records = result.dmarc_records || [];
-    this.errors = result.errors || [];
-  }
-}
-
 // Domain Management DTO
 class DomainDTO {
   constructor(domain) {
@@ -188,24 +61,8 @@ class DomainListResponseDTO {
   }
 }
 
-// Domain Test Response DTO
-class DomainTestResponseDTO {
-  constructor(result) {
-    this.domain = new DomainDTO(result.domain);
-    this.message = result.message || 'Domain tests completed successfully';
-  }
-}
-
 export {
-  DomainValidationResponseDTO,
-  SPFAnalysisRequestDTO,
-  SPFAnalysisResponseDTO,
-  DMARCAnalysisRequestDTO,
-  DMARCAnalysisResponseDTO,
-  DNSRecordDTO,
-  DNSResponseDTO,
   DomainDTO,
   AddDomainRequestDTO,
-  DomainListResponseDTO,
-  DomainTestResponseDTO
+  DomainListResponseDTO
 }; 

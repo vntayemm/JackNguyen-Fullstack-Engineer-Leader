@@ -1,17 +1,8 @@
 import domainService from '../services/domainService.js';
 import pythonDomainValidatorService from '../services/pythonDomainValidatorService.js';
-import dnsAnalysisService from '../services/dnsAnalysisService.js';
 import { 
   DomainDTO,
   AddDomainRequestDTO,
-  DomainListResponseDTO,
-  DomainTestResponseDTO,
-  DomainValidationResponseDTO,
-  SPFAnalysisRequestDTO,
-  SPFAnalysisResponseDTO,
-  DMARCAnalysisRequestDTO,
-  DMARCAnalysisResponseDTO,
-  DNSResponseDTO
 } from '../dto/index.js';
 import { sendSuccessResponse } from '../dto/utils.js';
 import { asyncHandler, AuthenticationError, ValidationError, NotFoundError } from '../middleware/errorHandler.js';
@@ -86,21 +77,6 @@ export const deleteDomain = asyncHandler(async (req, res) => {
   }
   
   return sendSuccessResponse(res, { message: 'Domain deleted successfully' });
-});
-
-// Get DNS records
-export const getDNSRecords = asyncHandler(async (req, res) => {
-  const { domain } = req.params;
-  const { record_type } = req.query;
-  
-  if (!domain) {
-    throw new ValidationError('Domain name is required');
-  }
-
-  const result = await pythonDomainValidatorService.getDNSRecords(domain, record_type);
-  const response = new DNSResponseDTO(result);
-  
-  return sendSuccessResponse(res, response);
 });
 
 // Analyze individual DNS record type (chỉ lưu vào DNSAnalysis, không update Domains)
@@ -219,94 +195,5 @@ export const analyzeIndividualDNSRecord = asyncHandler(async (req, res) => {
     
     return sendSuccessResponse(res, analysisData);
   }
-  return sendSuccessResponse(res, result);
-});
-
-// Get user's DNS analyses
-export const getUserDNSAnalyses = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { limit = 50 } = req.query;
-  
-  if (!userId) {
-    throw new AuthenticationError('User not authenticated');
-  }
-
-  const analyses = await dnsAnalysisService.getUserAnalyses(userId, parseInt(limit));
-  
-  return sendSuccessResponse(res, { analyses });
-});
-
-// Get DNS analysis by ID
-export const getDNSAnalysisById = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { id } = req.params;
-  
-  if (!userId) {
-    throw new AuthenticationError('User not authenticated');
-  }
-  
-  if (!id || isNaN(parseInt(id))) {
-    throw new ValidationError('Valid analysis ID is required');
-  }
-
-  const analysis = await dnsAnalysisService.getAnalysisById(userId, parseInt(id));
-  
-  if (!analysis) {
-    throw new NotFoundError('DNS analysis not found');
-  }
-  
-  return sendSuccessResponse(res, { analysis });
-});
-
-// Get domain's DNS analyses
-export const getDomainDNSAnalyses = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { domain } = req.params;
-  const { limit = 10 } = req.query;
-  
-  if (!userId) {
-    throw new AuthenticationError('User not authenticated');
-  }
-  
-  if (!domain) {
-    throw new ValidationError('Domain name is required');
-  }
-
-  const analyses = await dnsAnalysisService.getDomainAnalyses(userId, domain, parseInt(limit));
-  
-  return sendSuccessResponse(res, { analyses });
-});
-
-// API lấy bản ghi mới nhất cho domain
-export const getLatestDNSAnalysis = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { domain } = req.params;
-  if (!userId) throw new AuthenticationError('User not authenticated');
-  if (!domain) throw new ValidationError('Domain name is required');
-  const latest = await DNSAnalysis.findOne({
-    where: { domain_name: domain, user_id: userId },
-    order: [['createdAt', 'DESC']]
-  });
-  if (latest) {
-    return sendSuccessResponse(res, latest.analysis_data);
-  }
-  return sendSuccessResponse(res, null);
-});
-
-// Delete DNS analysis
-export const deleteDNSAnalysis = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { id } = req.params;
-  
-  if (!userId) {
-    throw new AuthenticationError('User not authenticated');
-  }
-  
-  if (!id || isNaN(parseInt(id))) {
-    throw new ValidationError('Valid analysis ID is required');
-  }
-
-  const result = await dnsAnalysisService.deleteAnalysis(userId, parseInt(id));
-  
   return sendSuccessResponse(res, result);
 }); 
