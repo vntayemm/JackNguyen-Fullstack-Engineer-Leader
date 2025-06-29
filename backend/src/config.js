@@ -17,7 +17,7 @@ const config = {
   HELMET_ENABLED: process.env.HELMET_ENABLED === 'true',
   
   // JWT Configuration
-  JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key-change-this-in-production',
+  JWT_SECRET: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
   
   
