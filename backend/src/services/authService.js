@@ -1,8 +1,10 @@
-import User from '../models/user.js';
-import { hashPassword, comparePassword } from '../utils/hash.js';
-import { signToken } from '../utils/jwt.js';
-import { sendMail } from '../utils/mailer.js';
+import { User } from '../models/index.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import config from '../config.js';
+import { sendMail } from '../utils/mailer.js';
+import { signToken } from '../utils/jwt.js';
+import { hashPassword, comparePassword } from '../utils/hash.js';
 import crypto from 'crypto';
 import { Op } from 'sequelize';
 

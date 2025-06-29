@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import path from 'path';
 
 class PythonDomainValidatorService {
   constructor() {
@@ -33,15 +34,19 @@ class PythonDomainValidatorService {
       return result.result || {
         domain,
         spf_record: null,
-        is_valid: false,
-        errors: ['Python script execution failed']
+        parsed_record: null,
+        warnings: [],
+        errors: ['Python script execution failed'],
+        is_valid: false
       };
     } catch (error) {
       return {
         domain,
         spf_record: null,
-        is_valid: false,
-        errors: [error.message]
+        parsed_record: null,
+        warnings: [],
+        errors: [error.message],
+        is_valid: false
       };
     }
   }
@@ -53,15 +58,19 @@ class PythonDomainValidatorService {
       return result.result || {
         domain,
         dmarc_record: null,
-        is_valid: false,
-        errors: ['Python script execution failed']
+        parsed_record: null,
+        warnings: [],
+        errors: ['Python script execution failed'],
+        is_valid: false
       };
     } catch (error) {
       return {
         domain,
         dmarc_record: null,
-        is_valid: false,
-        errors: [error.message]
+        parsed_record: null,
+        warnings: [],
+        errors: [error.message],
+        is_valid: false
       };
     }
   }
@@ -73,13 +82,15 @@ class PythonDomainValidatorService {
       return result.result || {
         domain,
         records: {},
-        errors: ['Python script execution failed']
+        success: false,
+        error: 'Python script execution failed'
       };
     } catch (error) {
       return {
         domain,
         records: {},
-        errors: [error.message]
+        success: false,
+        error: error.message
       };
     }
   }
@@ -107,15 +118,19 @@ class PythonDomainValidatorService {
       return result.result || {
         domain,
         spf_record: null,
-        is_valid: false,
-        errors: ['Python script execution failed']
+        parsed_record: null,
+        warnings: [],
+        errors: ['Python script execution failed'],
+        is_valid: false
       };
     } catch (error) {
       return {
         domain,
         spf_record: null,
-        is_valid: false,
-        errors: [error.message]
+        parsed_record: null,
+        warnings: [],
+        errors: [error.message],
+        is_valid: false
       };
     }
   }
@@ -147,21 +162,53 @@ class PythonDomainValidatorService {
     }
   }
 
-  async runPythonTest(domain, testType = 'comprehensive', record_type = null, spf_record = null, dmarc_record = null) {
+  async analyzeIndividualDNSRecord(domain, record_type) {
+    try {
+      // If record_type is null, run comprehensive analysis
+      if (!record_type) {
+        const result = await this.runPythonTest(domain, 'individual', null);
+        return result.result || {
+          domain,
+          record_type: 'comprehensive',
+          use_cases: {},
+          success: false,
+          error: 'Python script execution failed'
+        };
+      }
+      
+      // Run individual record type analysis
+      const result = await this.runPythonTest(domain, 'individual', record_type);
+      return result.result || {
+        domain,
+        record_type,
+        use_cases: {},
+        success: false,
+        error: 'Python script execution failed'
+      };
+    } catch (error) {
+      return {
+        domain,
+        record_type: record_type || 'comprehensive',
+        use_cases: {},
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  async runPythonTest(domain, testType = 'individual', record_type = null, spf_record = null, dmarc_record = null) {
     return new Promise((resolve, reject) => {
-      const pythonScript = 'scripts/test-domain.py';
-      const args = [domain, '--test-type', testType];
+      let args;
+      
+      // Use dns_individual.py script for all tests
+      const pythonScript = 'scripts/dns_individual.py';
       
       if (record_type) {
-        args.push('--record-type', record_type);
-      }
-      
-      if (spf_record) {
-        args.push('--spf-record', spf_record);
-      }
-      
-      if (dmarc_record) {
-        args.push('--dmarc-record', dmarc_record);
+        // Individual record type analysis
+        args = [domain, '--test-type', record_type];
+      } else {
+        // Comprehensive analysis (no test-type specified)
+        args = [domain];
       }
       
       const pythonProcess = spawn('python3', [pythonScript, ...args]);
@@ -217,60 +264,6 @@ class PythonDomainValidatorService {
         });
       });
     });
-  }
-
-  async comprehensiveDomainTest(domain) {
-    try {
-      const results = {
-        domain,
-        timestamp: new Date().toISOString(),
-        tests: {}
-      };
-
-      // Run comprehensive test using Python script
-      try {
-        const pythonResult = await this.runPythonTest(domain, 'comprehensive');
-        results.tests.python_comprehensive = pythonResult;
-        
-        // Extract individual test results from comprehensive test
-        if (pythonResult.success && pythonResult.result && pythonResult.result.tests) {
-          results.tests.validation = pythonResult.result.tests.domain_validation;
-          results.tests.spf = pythonResult.result.tests.spf_analysis;
-          results.tests.dns = pythonResult.result.tests.dns_records;
-        }
-      } catch (error) {
-        results.tests.python_comprehensive = {
-          success: false,
-          error: error.message
-        };
-        
-        // Fallback: run individual tests if comprehensive fails
-        try {
-          const [validation, spf, dns] = await Promise.all([
-            this.runPythonTest(domain, 'validation'),
-            this.runPythonTest(domain, 'spf'),
-            this.runPythonTest(domain, 'dns')
-          ]);
-          
-          results.tests.validation = validation.result;
-          results.tests.spf = spf.result;
-          results.tests.dns = dns.result;
-        } catch (fallbackError) {
-          results.tests.validation = { error: fallbackError.message };
-          results.tests.spf = { error: fallbackError.message };
-          results.tests.dns = { error: fallbackError.message };
-        }
-      }
-
-      return results;
-    } catch (error) {
-      return {
-        domain,
-        timestamp: new Date().toISOString(),
-        error: error.message,
-        success: false
-      };
-    }
   }
 }
 

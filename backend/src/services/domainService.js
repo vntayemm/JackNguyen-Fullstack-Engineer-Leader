@@ -1,4 +1,4 @@
-import Domain from '../models/domain.js';
+import { DNSAnalysis } from '../models/index.js';
 import pythonDomainValidatorService from './pythonDomainValidatorService.js';
 
 class DomainService {
@@ -10,20 +10,23 @@ class DomainService {
   }
 
   async getUserDomains(userId) {
-    const domains = await Domain.findAll({
+    const analyses = await DNSAnalysis.findAll({
       where: { user_id: userId },
-      order: [['updatedAt', 'DESC']]
+      order: [['createdAt', 'DESC']]
     });
     
-    return domains.map(domain => ({
-      id: domain.id,
-      domainName: domain.domain_name,
-      spfResult: domain.spf_result,
-      dmarcResult: domain.dmarc_result,
-      dnsResult: domain.dns_result,
-      lastTested: domain.last_tested,
-      createdAt: domain.createdAt,
-      updatedAt: domain.updatedAt
+    // Group by domain and get latest for each
+    const domainMap = new Map();
+    analyses.forEach(analysis => {
+      const domainName = analysis.domain_name;
+      if (!domainMap.has(domainName)) {
+        domainMap.set(domainName, analysis.analysis_data);
+      }
+    });
+    
+    return Array.from(domainMap.entries()).map(([domainName, analysisData]) => ({
+      domainName,
+      ...analysisData
     }));
   }
 
@@ -33,65 +36,80 @@ class DomainService {
     
     const cleanDomain = domainName.toLowerCase();
     
-    // Check if domain already exists for this user
-    const existingDomain = await Domain.findOne({
+    // Check if domain already has analysis for this user
+    const existingAnalysis = await DNSAnalysis.findOne({
       where: { 
         domain_name: cleanDomain,
         user_id: userId
       }
     });
     
-    if (existingDomain) {
+    if (existingAnalysis) {
       throw new Error('Domain already exists in your list');
     }
     
-    // Create new domain
-    const domain = await Domain.create({
+    // Create initial analysis record
+    const now = new Date();
+    const initialAnalysisData = {
+      domain: cleanDomain,
+      dns_provider: 'Unknown',
+      hosting_provider: 'Unknown',
+      dns_record_published: false,
+      dmarc_record_published: false,
+      spf_record_published: false,
+      status: 'pending',
+      createdAt: now,
+      updatedAt: now,
+      use_cases: {}
+    };
+    
+    const analysis = await DNSAnalysis.create({
       domain_name: cleanDomain,
-      user_id: userId
+      user_id: userId,
+      analysis_data: initialAnalysisData
     });
     
     return {
-      id: domain.id,
-      domainName: domain.domain_name,
-      spfResult: domain.spf_result,
-      dmarcResult: domain.dmarc_result,
-      dnsResult: domain.dns_result,
-      lastTested: domain.last_tested,
-      createdAt: domain.createdAt,
-      updatedAt: domain.updatedAt
+      domainName: cleanDomain,
+      ...initialAnalysisData
     };
   }
 
-  async deleteDomain(userId, domainId) {
-    const domain = await Domain.findOne({
+  async deleteDomain(userId, domainName) {
+    const analyses = await DNSAnalysis.findAll({
       where: { 
-        id: domainId,
+        domain_name: domainName,
         user_id: userId
       }
     });
     
-    if (!domain) {
+    if (analyses.length === 0) {
       throw new Error('Domain not found');
     }
     
-    await domain.destroy();
+    await DNSAnalysis.destroy({
+      where: { 
+        domain_name: domainName,
+        user_id: userId
+      }
+    });
+    
     return { message: 'Domain deleted successfully' };
   }
 
-  async testDomain(userId, domainId) {
-    const domain = await Domain.findOne({
+  async testDomain(userId, domainName) {
+    const latestAnalysis = await DNSAnalysis.findOne({
       where: { 
-        id: domainId,
+        domain_name: domainName,
         user_id: userId
-      }
+      },
+      order: [['createdAt', 'DESC']]
     });
     
-    if (!domain) {
+    if (!latestAnalysis) {
       throw new Error('Domain not found');
     }
     
-    const domainName = domain.domain_name;
     const results = {};
     
     try {
@@ -119,23 +137,37 @@ class DomainService {
         results.dns = { error: error.message };
       }
       
-      // Update domain with results
-      domain.spf_result = results.spf;
-      domain.dmarc_result = results.dmarc;
-      domain.dns_result = results.dns;
-      domain.last_tested = new Date();
-      await domain.save();
+      // Create new analysis record with updated results
+      const now = new Date();
+      const analysisData = {
+        domain: domainName,
+        dns_provider: 'Unknown',
+        hosting_provider: 'Unknown',
+        dns_record_published: false,
+        dmarc_record_published: false,
+        spf_record_published: false,
+        status: 'completed',
+        createdAt: now,
+        updatedAt: now,
+        use_cases: {
+          SPF: { ...results.spf, createdAt: now, updatedAt: now },
+          DMARC: { ...results.dmarc, createdAt: now, updatedAt: now },
+          MX: { ...results.dns, createdAt: now, updatedAt: now },
+          createdAt: now,
+          updatedAt: now
+        }
+      };
+      
+      await DNSAnalysis.create({
+        domain_name: domainName,
+        user_id: userId,
+        analysis_data: analysisData
+      });
       
       const response = {
         domain: {
-          id: domain.id,
-          domainName: domain.domain_name,
-          spfResult: results.spf,
-          dmarcResult: results.dmarc,
-          dnsResult: results.dns,
-          lastTested: domain.last_tested,
-          createdAt: domain.createdAt,
-          updatedAt: domain.updatedAt
+          domainName,
+          ...analysisData
         },
         message: 'Domain tests completed successfully'
       };
@@ -148,27 +180,22 @@ class DomainService {
     }
   }
 
-  async getDomainDetails(userId, domainId) {
-    const domain = await Domain.findOne({
+  async getDomainDetails(userId, domainName) {
+    const latestAnalysis = await DNSAnalysis.findOne({
       where: { 
-        id: domainId,
+        domain_name: domainName,
         user_id: userId
-      }
+      },
+      order: [['createdAt', 'DESC']]
     });
     
-    if (!domain) {
+    if (!latestAnalysis) {
       throw new Error('Domain not found');
     }
     
     return {
-      id: domain.id,
-      domainName: domain.domain_name,
-      spfResult: domain.spf_result,
-      dmarcResult: domain.dmarc_result,
-      dnsResult: domain.dns_result,
-      lastTested: domain.last_tested,
-      createdAt: domain.createdAt,
-      updatedAt: domain.updatedAt
+      domainName,
+      ...latestAnalysis.analysis_data
     };
   }
 }

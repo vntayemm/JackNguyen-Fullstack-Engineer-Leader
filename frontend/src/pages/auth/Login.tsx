@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/AuthLayout';
 import { apiService } from '../../services/api';
-import config from '../../config';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { setToken, setUser } = useAuth();
+  const { setUser } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -16,11 +15,13 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // Debug: Log the API URL being used
   useEffect(() => {
-    console.log('Login component - API URL:', config.apiUrl);
-    console.log('Login component - Environment:', process.env.NODE_ENV);
-  }, []);
+    // Check if user is already logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/account/dashboard');
+    }
+  }, [navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,48 +39,18 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.username.trim() || !formData.password) {
-      setError('Username and password are required');
-      return;
-    }
-
     setLoading(true);
     setError('');
 
     try {
-      console.log('Attempting login with API URL:', config.apiUrl);
-      const response = await apiService.login({
-        username: formData.username,
-        password: formData.password
-      });
-
-      console.log('Login successful:', response);
-
-      // Store token first
-      setToken(response.token);
-      
-      // Fetch complete user profile to get firstName and lastName
-      try {
-        const userProfile = await apiService.getProfile();
-        console.log('User profile fetched:', userProfile);
-        setUser(userProfile);
-      } catch (profileError) {
-        console.warn('Failed to fetch user profile, using login response:', profileError);
-        setUser(response.user);
-      }
-      
-      // Redirect to dashboard
-      navigate('/dashboard');
-    } catch (err: any) {
-      console.error('Login error:', err);
-      console.error('Login error response:', err.response);
-      console.error('Login error config:', err.config);
-      
-      const errorMessage = err.response?.data?.error || 'Login failed. Please try again.';
-      setError(errorMessage);
-    } finally {
+      const response = await apiService.login({ username: formData.username, password: formData.password });
+      localStorage.setItem('token', response.token);
+      setUser(response.user);
       setLoading(false);
+      window.location.href = '/dashboard';
+    } catch (err: any) {
+      setLoading(false);
+      setError(err.response?.data?.error || 'Login failed');
     }
   };
 

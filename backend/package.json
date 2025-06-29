@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "jest"
+    "test": "jest",
+    "migrate": "node scripts/migrate-database.js",
+    "migrate:create-env": "node scripts/migrate-database.js --create-env",
+    "migrate:dry-run": "node scripts/migrate-database.js --dry-run"
   },
   "dependencies": {
     "axios": "^1.10.0",

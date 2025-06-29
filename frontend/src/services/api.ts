@@ -172,14 +172,16 @@ export interface DeleteAccountResponse {
 
 // Domain Management Interfaces
 export interface Domain {
-  id: number;
-  domainName: string;
-  spfResult?: any;
-  dmarcResult?: any;
-  dnsResult?: any;
-  lastTested?: string;
-  createdAt: string;
-  updatedAt: string;
+  domain_name: string;
+  dns_provider?: string;
+  hosting_provider?: string;
+  dns_record_published?: boolean;
+  dmarc_record_published?: boolean;
+  spf_record_published?: boolean;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  use_cases?: Record<string, any>;
 }
 
 export interface AddDomainRequest {
@@ -245,6 +247,23 @@ class ApiService {
   // Get all DNS records for a domain - GET /api/domains/dns/records/{domain}/all
   async getAllDNSRecords(domain: string): Promise<any> {
     const response = await this.api.get(`/api/domains/dns/records/${domain}/all`);
+    return response.data;
+  }
+
+  // Individual DNS analysis - GET /api/domains/dns/records/{domain}/individual?record_type={type}
+  async analyzeIndividualDNSRecord(domain: string, recordType?: string): Promise<any> {
+    const params = recordType ? { record_type: recordType } : {};
+    const response = await this.api.get(`/api/domains/dns/records/${domain}/individual`, { params });
+    return response.data;
+  }
+
+  // Individual DNS analysis without saving to database - GET /api/domains/dns/records/{domain}/individual?record_type={type}&no_save=true
+  async analyzeDNSRecordWithoutSave(domain: string, recordType?: string): Promise<any> {
+    const params: any = { no_save: 'true' };
+    if (recordType) {
+      params.record_type = recordType;
+    }
+    const response = await this.api.get(`/api/domains/dns/records/${domain}/individual`, { params });
     return response.data;
   }
 
@@ -331,21 +350,21 @@ class ApiService {
     return response.data;
   }
 
-  // Get domain details - GET /api/domains/{id}
-  async getDomainDetails(id: number): Promise<Domain> {
-    const response = await this.api.get<Domain>(`/api/domains/${id}`);
+  // Get domain details - GET /api/domains/domain/{domain}
+  async getDomainDetails(domain: string): Promise<Domain> {
+    const response = await this.api.get<Domain>(`/api/domains/domain/${domain}`);
     return response.data;
   }
 
-  // Test domain - POST /api/domains/{id}/test
-  async testDomain(id: number): Promise<DomainTestResponse> {
-    const response = await this.api.post<DomainTestResponse>(`/api/domains/${id}/test`);
+  // Delete domain - DELETE /api/domains/domain/{domain}
+  async deleteDomain(domain: string): Promise<{ message: string }> {
+    const response = await this.api.delete<{ message: string }>(`/api/domains/domain/${domain}`);
     return response.data;
   }
 
-  // Delete domain - DELETE /api/domains/{id}
-  async deleteDomain(id: number): Promise<{ message: string }> {
-    const response = await this.api.delete<{ message: string }>(`/api/domains/${id}`);
+  // Get latest DNS analysis - GET /api/domains/dns/analyses/domain/{domain}/latest
+  async getLatestDNSAnalysis(domain: string): Promise<Domain | null> {
+    const response = await this.api.get<Domain>(`/api/domains/dns/analyses/domain/${domain}/latest`);
     return response.data;
   }
 
