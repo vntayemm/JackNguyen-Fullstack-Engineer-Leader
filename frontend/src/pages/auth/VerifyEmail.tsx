@@ -23,8 +23,16 @@ const VerifyEmail: React.FC = () => {
         setStatus('success');
         setMessage(response.message);
       } catch (error: any) {
-        setStatus('error');
-        setMessage(error.response?.data?.error || 'Email verification failed. Please try again.');
+        const errorMessage = error.response?.data?.error || 'Email verification failed. Please try again.';
+        
+        // If the error is "Email already verified", treat it as success
+        if (errorMessage.includes('Email already verified')) {
+          setStatus('success');
+          setMessage('Your email is already verified! You can now log in.');
+        } else {
+          setStatus('error');
+          setMessage(errorMessage);
+        }
       }
     };
 

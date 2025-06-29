@@ -24,7 +24,8 @@ class AuthService {
     }
     
     if (user.is_verified) {
-      throw new Error('Email already verified');
+      // Return success response for already verified email
+      return { message: 'Your email is already verified! You can now log in.' };
     }
     
     user.is_verified = true;
@@ -49,28 +50,36 @@ class AuthService {
       is_verified: false
     });
     
-    // Send verification email
-    const verificationLink = `${config.FRONTEND_URL}/verify-email?token=${verification_token}`;
-    await sendMail({
-      to: user.email,
-      subject: 'Welcome to DNS/Email Security Tool - Verify Your Email',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2563eb;">Welcome to DNS/Email Security Tool!</h2>
-          <p>Hi ${user.username},</p>
-          <p>Thank you for registering with DNS/Email Security Tool. To complete your registration, please verify your email address by clicking the button below:</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${verificationLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Verify Email Address</a>
+    // Send verification email (but don't fail registration if email fails)
+    try {
+      const verificationLink = `${config.FRONTEND_URL}/verify-email?token=${verification_token}`;
+      await sendMail({
+        to: user.email,
+        subject: 'Welcome to DNS/Email Security Tool - Verify Your Email',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #2563eb;">Welcome to DNS/Email Security Tool!</h2>
+            <p>Hi ${user.username},</p>
+            <p>Thank you for registering with DNS/Email Security Tool. To complete your registration, please verify your email address by clicking the button below:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Verify Email Address</a>
+            </div>
+            <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; color: #6b7280;">${verificationLink}</p>
+            <p>This link will expire in 24 hours.</p>
+            <p>If you didn't create an account with us, please ignore this email.</p>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
           </div>
-          <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
-          <p style="word-break: break-all; color: #6b7280;">${verificationLink}</p>
-          <p>This link will expire in 24 hours.</p>
-          <p>If you didn't create an account with us, please ignore this email.</p>
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
-          <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
-        </div>
-      `
-    });
+        `
+      });
+      
+      console.log('✅ Verification email sent successfully to:', user.email);
+    } catch (emailError) {
+      console.error('❌ Failed to send verification email:', emailError.message);
+      console.log('⚠️  User registration completed, but verification email failed to send');
+      console.log('💡 User can still verify their email later using the verification token');
+    }
     
     return { 
       message: 'Registration successful! Please check your email to verify your account.',
@@ -129,28 +138,35 @@ class AuthService {
     user.reset_token_expires = reset_token_expires;
     await user.save();
     
-    // Send password reset email
-    const resetLink = `${config.FRONTEND_URL}/reset-password?token=${reset_token}`;
-    await sendMail({
-      to: user.email,
-      subject: 'Reset Your Password - DNS/Email Security Tool',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2563eb;">Reset Your Password</h2>
-          <p>Hi ${user.username},</p>
-          <p>We received a request to reset your password for your DNS/Email Security Tool account. Click the button below to reset your password:</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Reset Password</a>
+    // Send password reset email (but don't fail if email fails)
+    try {
+      const resetLink = `${config.FRONTEND_URL}/reset-password?token=${reset_token}`;
+      await sendMail({
+        to: user.email,
+        subject: 'Reset Your Password - DNS/Email Security Tool',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #2563eb;">Reset Your Password</h2>
+            <p>Hi ${user.username},</p>
+            <p>We received a request to reset your password for your DNS/Email Security Tool account. Click the button below to reset your password:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Reset Password</a>
+            </div>
+            <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; color: #6b7280;">${resetLink}</p>
+            <p>This link will expire in 24 hours.</p>
+            <p>If you didn't request a password reset, please ignore this email. Your password will remain unchanged.</p>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
           </div>
-          <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
-          <p style="word-break: break-all; color: #6b7280;">${resetLink}</p>
-          <p>This link will expire in 24 hours.</p>
-          <p>If you didn't request a password reset, please ignore this email. Your password will remain unchanged.</p>
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
-          <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
-        </div>
-      `
-    });
+        `
+      });
+      
+      console.log('✅ Password reset email sent successfully to:', user.email);
+    } catch (emailError) {
+      console.error('❌ Failed to send password reset email:', emailError.message);
+      console.log('⚠️  Password reset token generated, but email failed to send');
+    }
     
     return { message: 'If an account with this email exists, a password reset link has been sent.' };
   }
@@ -176,21 +192,28 @@ class AuthService {
     user.reset_token_expires = null;
     await user.save();
     
-    // Send confirmation email
-    await sendMail({
-      to: user.email,
-      subject: 'Password Changed Successfully - DNS/Email Security Tool',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #059669;">Password Changed Successfully</h2>
-          <p>Hi ${user.username},</p>
-          <p>Your password for DNS/Email Security Tool has been successfully changed.</p>
-          <p>If you didn't make this change, please contact our support team immediately.</p>
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
-          <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
-        </div>
-      `
-    });
+    // Send confirmation email (but don't fail if email fails)
+    try {
+      await sendMail({
+        to: user.email,
+        subject: 'Password Changed Successfully - DNS/Email Security Tool',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #059669;">Password Changed Successfully</h2>
+            <p>Hi ${user.username},</p>
+            <p>Your password for DNS/Email Security Tool has been successfully changed.</p>
+            <p>If you didn't make this change, please contact our support team immediately.</p>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 14px;">Best regards,<br>The DNS/Email Security Tool Team</p>
+          </div>
+        `
+      });
+      
+      console.log('✅ Password change confirmation email sent successfully to:', user.email);
+    } catch (emailError) {
+      console.error('❌ Failed to send password change confirmation email:', emailError.message);
+      console.log('⚠️  Password changed successfully, but confirmation email failed to send');
+    }
     
     return { message: 'Password updated successfully' };
   }
