@@ -20,16 +20,14 @@ const config = {
   JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key-change-this-in-production',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
   
-  // Database Configuration
-  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://username:password@localhost:5432/database',
   
   // Database Configuration Details
   DATABASE: {
-    host: process.env.DB_HOST || 'dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com',
+    host: process.env.DB_HOST || 'dpg-d1g9stili9vc73ado8e0-a.singapore-postgres.render.com',
     port: parseInt(process.env.DB_PORT) || 5432,
-    database: process.env.DB_NAME || 'domain_validator_db',
-    username: process.env.DB_USER || 'jack_nguyen',
-    password: process.env.DB_PASSWORD || 'DumPdGrF9K5y3EXVMzqj7nDggCquRGsv'
+    database: process.env.DB_NAME || 'dns_email_security_tool_db_lujg',
+    username: process.env.DB_USER || 'dns_email_security_tool_db_user',
+    password: process.env.DB_PASSWORD || '6srHbe0qg8NugLjb8ffQJsvteepi8FOA'
   },
   
   // Email Configuration
