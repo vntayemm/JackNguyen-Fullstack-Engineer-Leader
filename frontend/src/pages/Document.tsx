@@ -4,18 +4,18 @@ import config from '../config';
 
 const Document: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto space-y-8 p-6">
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+        <div className="flex items-start justify-between mb-6">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Technical Documentation & Help
           </h1>
-          <Link
-            to="/profile"
-            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-          >
-            Back to Profile
-          </Link>
+          <button style={{ minWidth: '50px' }}
+                onClick={() => window.history.back()}
+                className="text-blue-600 dark:text-blue-400 hover:underline text-sm md:text-base"
+              >
+                ← Back
+              </button>
         </div>
 
         <div className="space-y-8">
@@ -25,7 +25,7 @@ const Document: React.FC = () => {
               📋 Full-Stack Engineer Test Requirements Implementation
             </h2>
             <div className="space-y-6">
-              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border-l-4 border-green-500">
+              <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border-l-4 border-green-500">
                 <h3 className="text-xl font-semibold text-green-900 dark:text-green-100 mb-4">
                   ✅ Core Requirements - COMPLETED
                 </h3>
@@ -69,7 +69,7 @@ const Document: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border-l-4 border-blue-500">
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border-l-4 border-blue-500">
                 <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-4">
                   🔐 Authentication System - COMPLETED
                 </h3>
@@ -95,7 +95,7 @@ const Document: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg border-l-4 border-purple-500">
+              <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg border-l-4 border-purple-500">
                 <h3 className="text-xl font-semibold text-purple-900 dark:text-purple-100 mb-4">
                   🗄️ Domain Management - COMPLETED
                 </h3>
