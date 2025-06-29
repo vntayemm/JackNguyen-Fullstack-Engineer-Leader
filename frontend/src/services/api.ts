@@ -308,9 +308,9 @@ class ApiService {
     return response.data;
   }
 
-  // Delete domain - DELETE /api/domains/domain/{domain}
+  // Delete domain - DELETE /api/domains/:domain
   async deleteDomain(domain: string): Promise<{ message: string }> {
-    const response = await this.api.delete<{ message: string }>(`/api/domains/domain/${domain}`);
+    const response = await this.api.delete<{ message: string }>(`/api/domains/${domain}`);
     return response.data;
   }
 

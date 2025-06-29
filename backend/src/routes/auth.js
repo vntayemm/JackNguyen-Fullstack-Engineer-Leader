@@ -4,13 +4,8 @@ import {
   register, 
   forgotPassword, 
   resetPassword, 
-  verifyEmail, 
-  getProfile, 
-  updateProfile,
-  changePassword,
-  deleteAccount
+  verifyEmail
 } from '../controllers/authController.js';
-import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
 

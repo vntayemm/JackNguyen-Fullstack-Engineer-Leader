@@ -88,48 +88,6 @@ export const deleteDomain = asyncHandler(async (req, res) => {
   return sendSuccessResponse(res, { message: 'Domain deleted successfully' });
 });
 
-// Validate domain name
-export const validateDomain = asyncHandler(async (req, res) => {
-  const { domain } = req.params;
-  
-  if (!domain) {
-    throw new ValidationError('Domain name is required');
-  }
-
-  const result = await pythonDomainValidatorService.validateDomain(domain);
-  const response = new DomainValidationResponseDTO(result);
-  
-  return sendSuccessResponse(res, response);
-});
-
-// Analyze SPF record
-export const analyzeSPF = asyncHandler(async (req, res) => {
-  const spfData = new SPFAnalysisRequestDTO(req.body);
-  
-  if (!spfData.isValid()) {
-    throw new ValidationError('Invalid SPF analysis data', spfData.getErrors());
-  }
-
-  const result = await pythonDomainValidatorService.analyzeSPF(spfData.domain, spfData.spf_record);
-  const response = new SPFAnalysisResponseDTO(result);
-  
-  return sendSuccessResponse(res, response);
-});
-
-// Analyze DMARC record
-export const analyzeDMARC = asyncHandler(async (req, res) => {
-  const dmarcData = new DMARCAnalysisRequestDTO(req.body);
-  
-  if (!dmarcData.isValid()) {
-    throw new ValidationError('Invalid DMARC analysis data', dmarcData.getErrors());
-  }
-
-  const result = await pythonDomainValidatorService.analyzeDMARC(dmarcData.domain, dmarcData.dmarc_record);
-  const response = new DMARCAnalysisResponseDTO(result);
-  
-  return sendSuccessResponse(res, response);
-});
-
 // Get DNS records
 export const getDNSRecords = asyncHandler(async (req, res) => {
   const { domain } = req.params;
@@ -143,19 +101,6 @@ export const getDNSRecords = asyncHandler(async (req, res) => {
   const response = new DNSResponseDTO(result);
   
   return sendSuccessResponse(res, response);
-});
-
-// Get all DNS records
-export const getAllDNSRecords = asyncHandler(async (req, res) => {
-  const { domain } = req.params;
-  
-  if (!domain) {
-    throw new ValidationError('Domain name is required');
-  }
-
-  const result = await pythonDomainValidatorService.getAllDNSRecords(domain);
-  
-  return sendSuccessResponse(res, result);
 });
 
 // Analyze individual DNS record type (chỉ lưu vào DNSAnalysis, không update Domains)

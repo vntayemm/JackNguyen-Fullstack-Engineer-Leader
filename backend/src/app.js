@@ -6,14 +6,12 @@ import swaggerUi from 'swagger-ui-express';
 import oas from 'express-oas-generator';
 import path from 'path';
 import fs from 'fs';
-import sequelize from './models/index.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import domainRoutes from './routes/domain.js';
 import { HealthCheckResponseDTO, ErrorResponseDTO } from './dto/index.js';
 import { sendSuccessResponse, sendErrorResponse } from './dto/utils.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
-import { auth } from './middleware/auth.js';
 
 const app = express();
 
