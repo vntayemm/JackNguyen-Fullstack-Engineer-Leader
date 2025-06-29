@@ -66,30 +66,6 @@ export const addDomain = asyncHandler(async (req, res) => {
   return sendSuccessResponse(res, response, 201);
 });
 
-// Get domain by name
-export const getDomainById = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { domain } = req.params;
-  
-  if (!userId) {
-    throw new AuthenticationError('User not authenticated');
-  }
-  
-  if (!domain) {
-    throw new ValidationError('Domain name is required');
-  }
-
-  const result = await domainService.getDomainDetails(userId, domain);
-  
-  if (!result) {
-    throw new NotFoundError('Domain not found');
-  }
-  
-  const response = new DomainDTO(result);
-  
-  return sendSuccessResponse(res, response);
-});
-
 // Delete domain
 export const deleteDomain = asyncHandler(async (req, res) => {
   const userId = req.user.id;
@@ -110,30 +86,6 @@ export const deleteDomain = asyncHandler(async (req, res) => {
   }
   
   return sendSuccessResponse(res, { message: 'Domain deleted successfully' });
-});
-
-// Test domain
-export const testDomain = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { domain } = req.params;
-  
-  if (!userId) {
-    throw new AuthenticationError('User not authenticated');
-  }
-  
-  if (!domain) {
-    throw new ValidationError('Domain name is required');
-  }
-
-  const result = await domainService.testDomain(userId, domain);
-  
-  if (!result) {
-    throw new NotFoundError('Domain not found');
-  }
-  
-  const response = new DomainTestResponseDTO(result);
-  
-  return sendSuccessResponse(res, response);
 });
 
 // Validate domain name

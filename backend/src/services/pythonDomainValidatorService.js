@@ -95,23 +95,6 @@ class PythonDomainValidatorService {
     }
   }
 
-  async testDomainValidation(domain) {
-    try {
-      const result = await this.runPythonTest(domain, 'validation');
-      return result.result || {
-        domain,
-        is_valid: false,
-        errors: ['Python script execution failed']
-      };
-    } catch (error) {
-      return {
-        domain,
-        is_valid: false,
-        errors: [error.message]
-      };
-    }
-  }
-
   async testSPFRecord(domain) {
     try {
       const result = await this.runPythonTest(domain, 'spf');

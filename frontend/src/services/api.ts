@@ -208,48 +208,6 @@ class ApiService {
 
   // ===== DOMAIN ANALYSIS ENDPOINTS =====
 
-  // Domain validation - GET /api/domains/validate/{domain}
-  async validateDomain(domain: string): Promise<DomainValidationResponse> {
-    const response = await this.api.get<DomainValidationResponse>(`/api/domains/validate/${domain}`);
-    return response.data;
-  }
-
-  // SPF analysis - POST /api/domains/spf/analyze
-  async analyzeSPF(domain: string, spfRecord?: string): Promise<SPFAnalysisResponse> {
-    const body: SPFAnalysisRequest = { domain };
-    if (spfRecord) {
-      body.spf_record = spfRecord;
-    }
-    
-    const response = await this.api.post<SPFAnalysisResponse>('/api/domains/spf/analyze', body);
-    return response.data;
-  }
-
-  // DMARC analysis - POST /api/domains/dmarc/analyze
-  async analyzeDMARC(domain: string, dmarcRecord?: string): Promise<DMARCAnalysisResponse> {
-    const body: DMARCAnalysisRequest = { domain };
-    if (dmarcRecord) {
-      body.dmarc_record = dmarcRecord;
-    }
-    
-    const response = await this.api.post<DMARCAnalysisResponse>('/api/domains/dmarc/analyze', body);
-    return response.data;
-  }
-
-  // DNS resolution - GET /api/domains/dns/records/{domain}?record_type={type}
-  async resolveDNS(domain: string, recordType: string = 'TXT'): Promise<DNSResponse> {
-    const response = await this.api.get<DNSResponse>(`/api/domains/dns/records/${domain}`, {
-      params: { record_type: recordType },
-    });
-    return response.data;
-  }
-
-  // Get all DNS records for a domain - GET /api/domains/dns/records/{domain}/all
-  async getAllDNSRecords(domain: string): Promise<any> {
-    const response = await this.api.get(`/api/domains/dns/records/${domain}/all`);
-    return response.data;
-  }
-
   // Individual DNS analysis - GET /api/domains/dns/records/{domain}/individual?record_type={type}
   async analyzeIndividualDNSRecord(domain: string, recordType?: string): Promise<any> {
     const params = recordType ? { record_type: recordType } : {};
@@ -350,21 +308,9 @@ class ApiService {
     return response.data;
   }
 
-  // Get domain details - GET /api/domains/domain/{domain}
-  async getDomainDetails(domain: string): Promise<Domain> {
-    const response = await this.api.get<Domain>(`/api/domains/domain/${domain}`);
-    return response.data;
-  }
-
   // Delete domain - DELETE /api/domains/domain/{domain}
   async deleteDomain(domain: string): Promise<{ message: string }> {
     const response = await this.api.delete<{ message: string }>(`/api/domains/domain/${domain}`);
-    return response.data;
-  }
-
-  // Get latest DNS analysis - GET /api/domains/dns/analyses/domain/{domain}/latest
-  async getLatestDNSAnalysis(domain: string): Promise<Domain | null> {
-    const response = await this.api.get<Domain>(`/api/domains/dns/analyses/domain/${domain}/latest`);
     return response.data;
   }
 

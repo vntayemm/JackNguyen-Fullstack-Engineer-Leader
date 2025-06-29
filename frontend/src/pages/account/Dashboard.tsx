@@ -627,7 +627,7 @@ const Dashboard: React.FC = () => {
                             )}
 
                             {/* Record Type Details */}
-                            {(() => {
+                      {(() => {
                               // Use domain use_cases directly since individual testing updates the domain
                               const recordTypesArray = Object.keys(domain.use_cases || {}).filter(recordType => 
                                 recordType !== 'createdAt' && recordType !== 'updatedAt'
@@ -648,7 +648,7 @@ const Dashboard: React.FC = () => {
                                     // Use the domain's use_cases directly
                                     const useCase = domain.use_cases?.[recordType];
                                     
-                                    return (
+                        return (
                                       <div key={recordType} className="p-3">
                                         <RecordItemResult
                                           recordType={recordType}
