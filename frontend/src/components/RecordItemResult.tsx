@@ -100,7 +100,7 @@ const RecordItemResult: React.FC<RecordItemResultProps> = ({
                   displayRecord = rest;
                 }
                 return (
-                  <div key={index} className="px-2 py-1 rounded text-xs font-mono text-gray-900 dark:text-gray-100">
+                  <div key={index} className="px-2 py-1 rounded text-xs font-mono text-gray-900 dark:text-gray-100" style={{ wordWrap: 'break-word' }}>
                     {typeof displayRecord === 'object' && displayRecord !== null
                       ? <pre className="whitespace-pre-wrap break-all m-0">{JSON.stringify(displayRecord, null, 2)}</pre>
                       : String(displayRecord)
