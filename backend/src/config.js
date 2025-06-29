@@ -33,9 +33,9 @@ const config = {
   // Email Configuration
   EMAIL_HOST: process.env.EMAIL_HOST || 'smtp.zoho.com',
   EMAIL_PORT: parseInt(process.env.EMAIL_PORT) || 465,
-  EMAIL_USER: process.env.EMAIL_USER || 'services@globaldevhubs.com',
-  EMAIL_PASS: process.env.EMAIL_PASS || 'BKg49t2uYhZf',
-  EMAIL_FROM: process.env.EMAIL_FROM || 'Amberos-DNS/Email Security Tool <services@globaldevhubs.com>',
+  EMAIL_USER: process.env.EMAIL_USER || 'minh.nguyen@globaldevhubs.com',
+  EMAIL_PASS: process.env.EMAIL_PASS || 'dFM4k3TQEh33',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'Amberos-DNS/Email Security Tool <minh.nguyen@globaldevhubs.com>',
   
 
   // DNS Configuration

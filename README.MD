@@ -277,9 +277,9 @@ DB_PASSWORD=6srHbe0qg8NugLjb8ffQJsvteepi8FOA
 
 EMAIL_HOST=smtp.zoho.com
 EMAIL_PORT=465
-EMAIL_USER=services@globaldevhubs.com
-EMAIL_PASS=BKg49t2uYhZf
-EMAIL_FROM=Amberos-DNS/Email Security Tool <services@globaldevhubs.com>
+EMAIL_USER=minh.nguyen@globaldevhubs.com
+EMAIL_PASS=dFM4k3TQEh33
+EMAIL_FROM=Amberos-DNS/Email Security Tool <minh.nguyen@globaldevhubs.com>
 ```
 
 **Docker Configuration:**
