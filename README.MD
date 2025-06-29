@@ -205,21 +205,11 @@ npm run migrate
 
 **Environment Variables for Database:**
 ```env
-# For local development
-DB_HOST=localhost
+DB_HOST=dpg-d1g9stili9vc73ado8e0-a.singapore-postgres.render.com
 DB_PORT=5432
-DB_NAME=dns_validator
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_DIALECT=postgres
-DB_SSL=false
-
-# For cloud deployment (auto-configured)
-DB_HOST=dpg-d1eaaf2li9vc739r9nbg-a.singapore-postgres.render.com
-DB_NAME=domain_validator_db
-DB_USER=jack_nguyen
-DB_PASSWORD=DumPdGrF9K5y3EXVMzqj7nDggCquRGsv
-DB_SSL=true
+DB_NAME=dns_email_security_tool_db_lujg
+DB_USER=dns_email_security_tool_db_user
+DB_PASSWORD=6srHbe0qg8NugLjb8ffQJsvteepi8FOA
 ```
 
 ### Starting the Application
@@ -253,12 +243,7 @@ npm run test:login-api
 
 ### Docker and GitHub Actions Overview
 
-The project uses **Docker** for containerization and **GitHub Actions** for continuous deployment to **Google Cloud Run**.
-Update github Secrets:
-GCP_SA_KEY=key.json
-GCP_PROJECT_ID=your-project-name
-GCP_REGION=asia-southeast1
-
+The project uses **Docker** for containerization and **GitHub Actions** for continuous deployment to 
 **Deployment Architecture:**
 - **Frontend**: React app deployed to Cloud Run
 - **Backend**: Node.js API deployed to Cloud Run
@@ -285,12 +270,18 @@ REACT_APP_ENVIRONMENT=production
 ```env
 NODE_ENV=production
 PORT=8080
-DATABASE_URL=postgresql://user:password@host:5432/database
-JWT_SECRET=your-secure-jwt-secret
-EMAIL_HOST=smtp-relay.brevo.com
-EMAIL_USER=your-email@domain.com
-EMAIL_PASS=your-email-password
-EMAIL_FROM=Amberos Pte. Ltd <your-email@domain.com>
+
+DB_HOST=dpg-d1g9stili9vc73ado8e0-a.singapore-postgres.render.com
+DB_PORT=5432
+DB_NAME=dns_email_security_tool_db_lujg
+DB_USER=dns_email_security_tool_db_user
+DB_PASSWORD=6srHbe0qg8NugLjb8ffQJsvteepi8FOA
+
+EMAIL_HOST=smtp.zoho.com
+EMAIL_PORT=465
+EMAIL_USER=services@globaldevhubs.com
+EMAIL_PASS=BKg49t2uYhZf
+EMAIL_FROM=Amberos-DNS/Email Security Tool <services@globaldevhubs.com>
 ```
 
 **Docker Configuration:**
@@ -328,7 +319,8 @@ git push origin main
 - **Frontend**: https://domain-validator-reactjs-533675451276.asia-southeast1.run.app
 - **Backend**: https://domain-validator-service-533675451276.asia-southeast1.run.app
 - **API Docs**: https://domain-validator-service-533675451276.asia-southeast1.run.app/api/docs
-**TEST ACCOUNT**:
+
+## TEST ACCOUNT
 Account: jack.nguyen
 Password: Xr9$e2@LmVq#74Wd
 
