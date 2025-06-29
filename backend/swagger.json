@@ -246,150 +246,6 @@
           }
         }
       },
-      "DomainValidationResponse": {
-        "type": "object",
-        "properties": {
-          "domain": {
-            "type": "string",
-            "example": "example.com"
-          },
-          "is_valid": {
-            "type": "boolean",
-            "example": true
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "example": []
-          }
-        }
-      },
-      "SPFAnalysisRequest": {
-        "type": "object",
-        "required": [
-          "domain"
-        ],
-        "properties": {
-          "domain": {
-            "type": "string",
-            "description": "Domain to analyze"
-          },
-          "spf_record": {
-            "type": "string",
-            "description": "Optional SPF record to analyze (if not provided, will fetch from DNS)"
-          }
-        }
-      },
-      "SPFAnalysisResponse": {
-        "type": "object",
-        "properties": {
-          "domain": {
-            "type": "string"
-          },
-          "is_valid": {
-            "type": "boolean"
-          },
-          "spf_record": {
-            "type": "string"
-          },
-          "parsed_record": {
-            "type": "object"
-          },
-          "warnings": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "DMARCAnalysisRequest": {
-        "type": "object",
-        "required": [
-          "domain"
-        ],
-        "properties": {
-          "domain": {
-            "type": "string",
-            "description": "Domain to analyze"
-          },
-          "dmarc_record": {
-            "type": "string",
-            "description": "Optional DMARC record to analyze (if not provided, will fetch from DNS)"
-          }
-        }
-      },
-      "DMARCAnalysisResponse": {
-        "type": "object",
-        "properties": {
-          "domain": {
-            "type": "string"
-          },
-          "is_valid": {
-            "type": "boolean"
-          },
-          "dmarc_record": {
-            "type": "string"
-          },
-          "parsed_record": {
-            "type": "object"
-          },
-          "warnings": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "DNSRecord": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string"
-          },
-          "ttl": {
-            "type": "integer"
-          }
-        }
-      },
-      "DNSResponse": {
-        "type": "object",
-        "properties": {
-          "domain": {
-            "type": "string"
-          },
-          "record_type": {
-            "type": "string"
-          },
-          "records": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DNSRecord"
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
       "Domain": {
         "type": "object",
         "properties": {
@@ -499,18 +355,6 @@
           }
         }
       },
-      "DomainTestResponse": {
-        "type": "object",
-        "properties": {
-          "domain": {
-            "$ref": "#/components/schemas/Domain"
-          },
-          "message": {
-            "type": "string",
-            "example": "Domain tests completed successfully"
-          }
-        }
-      },
       "ErrorResponse": {
         "type": "object",
         "properties": {
@@ -536,114 +380,6 @@
           },
           "message": {
             "type": "string"
-          }
-        }
-      },
-      "DNSAnalysis": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "Unique identifier for the analysis"
-          },
-          "domain_name": {
-            "type": "string",
-            "description": "Domain name that was analyzed"
-          },
-          "dns_provider": {
-            "type": "string",
-            "description": "Detected DNS provider (e.g., Cloudflare, GoDaddy)"
-          },
-          "hosting_provider": {
-            "type": "string",
-            "description": "Detected hosting provider (e.g., AWS, DigitalOcean)"
-          },
-          "dns_record_published": {
-            "type": "boolean",
-            "description": "Whether DNS records are properly published"
-          },
-          "dmarc_record_published": {
-            "type": "boolean",
-            "description": "Whether DMARC record is published"
-          },
-          "spf_record_published": {
-            "type": "boolean",
-            "description": "Whether SPF record is published"
-          },
-          "success": {
-            "type": "boolean",
-            "description": "Overall analysis success status"
-          },
-          "analysis_data": {
-            "type": "object",
-            "description": "Complete DNS analysis with use cases for each record type",
-            "properties": {
-              "domain": {
-                "type": "string"
-              },
-              "dns_provider": {
-                "type": "string"
-              },
-              "hosting_provider": {
-                "type": "string"
-              },
-              "use_cases": {
-                "type": "object",
-                "description": "Analysis results for each DNS record type",
-                "additionalProperties": {
-                  "type": "object",
-                  "properties": {
-                    "Goal": {
-                      "type": "string"
-                    },
-                    "Purpose": {
-                      "type": "string"
-                    },
-                    "Expected": {
-                      "type": "string"
-                    },
-                    "Notes": {
-                      "type": "string"
-                    },
-                    "Status": {
-                      "type": "string",
-                      "enum": ["Valid", "Not present", "Error"]
-                    },
-                    "records": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "Error": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "dns_record_published": {
-                "type": "boolean"
-              },
-              "dmarc_record_published": {
-                "type": "boolean"
-              },
-              "spf_record_published": {
-                "type": "boolean"
-              },
-              "success": {
-                "type": "boolean"
-              }
-            }
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "When the analysis was created"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "When the analysis was last updated"
           }
         }
       }
@@ -728,46 +464,6 @@
         }
       }
     },
-    "/api/auth/verify-email/{token}": {
-      "get": {
-        "tags": ["Authentication"],
-        "summary": "Verify email address",
-        "description": "Verify user email address using verification token",
-        "parameters": [
-          {
-            "name": "token",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Email verification token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Email verified successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VerifyEmailResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid or expired token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/auth/forgot-password": {
       "post": {
         "tags": ["Authentication"],
@@ -793,6 +489,16 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -801,7 +507,7 @@
       "post": {
         "tags": ["Authentication"],
         "summary": "Reset password",
-        "description": "Reset user password using reset token",
+        "description": "Reset password using token from email",
         "parameters": [
           {
             "name": "token",
@@ -825,7 +531,7 @@
         },
         "responses": {
           "200": {
-            "description": "Password reset successfully",
+            "description": "Password reset successful",
             "content": {
               "application/json": {
                 "schema": {
@@ -835,7 +541,47 @@
             }
           },
           "400": {
-            "description": "Invalid or expired token",
+            "description": "Invalid token or password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/verify-email/{token}": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Verify email",
+        "description": "Verify user email using token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Email verification token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyEmailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid token",
             "content": {
               "application/json": {
                 "schema": {
@@ -851,7 +597,7 @@
       "get": {
         "tags": ["User Management"],
         "summary": "Get user profile",
-        "description": "Get current user profile information",
+        "description": "Retrieve current user's profile information",
         "security": [
           {
             "bearerAuth": []
@@ -883,7 +629,7 @@
       "put": {
         "tags": ["User Management"],
         "summary": "Update user profile",
-        "description": "Update current user profile information",
+        "description": "Update current user's profile information",
         "security": [
           {
             "bearerAuth": []
@@ -937,7 +683,7 @@
       "put": {
         "tags": ["User Management"],
         "summary": "Change password",
-        "description": "Change current user password",
+        "description": "Change current user's password",
         "security": [
           {
             "bearerAuth": []
@@ -965,7 +711,7 @@
             }
           },
           "400": {
-            "description": "Invalid input data",
+            "description": "Invalid current password",
             "content": {
               "application/json": {
                 "schema": {
@@ -991,7 +737,7 @@
       "delete": {
         "tags": ["User Management"],
         "summary": "Delete account",
-        "description": "Delete current user account",
+        "description": "Delete current user's account",
         "security": [
           {
             "bearerAuth": []
@@ -1025,7 +771,7 @@
       "get": {
         "tags": ["Domain Management"],
         "summary": "Get user domains",
-        "description": "Get all domains for the authenticated user",
+        "description": "Retrieve all domains for the authenticated user",
         "security": [
           {
             "bearerAuth": []
@@ -1033,7 +779,7 @@
         ],
         "responses": {
           "200": {
-            "description": "User domains retrieved successfully",
+            "description": "Domains retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1057,7 +803,7 @@
       "post": {
         "tags": ["Domain Management"],
         "summary": "Add domain",
-        "description": "Add a new domain to user's list",
+        "description": "Add a new domain for the authenticated user",
         "security": [
           {
             "bearerAuth": []
@@ -1085,7 +831,7 @@
             }
           },
           "400": {
-            "description": "Invalid input data",
+            "description": "Invalid domain name",
             "content": {
               "application/json": {
                 "schema": {
@@ -1096,6 +842,16 @@
           },
           "401": {
             "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Domain already exists",
             "content": {
               "application/json": {
                 "schema": {
@@ -1107,64 +863,11 @@
         }
       }
     },
-    "/api/domains/domain/{domain}": {
-      "get": {
-        "tags": ["Domain Management"],
-        "summary": "Get domain details",
-        "description": "Get details of a specific domain",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Domain details retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Domain"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Domain not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/domains/{domain}": {
       "delete": {
         "tags": ["Domain Management"],
         "summary": "Delete domain",
-        "description": "Delete a domain from user's list",
+        "description": "Delete a domain for the authenticated user",
         "security": [
           {
             "bearerAuth": []
@@ -1178,7 +881,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Domain name"
+            "description": "Domain name to delete"
           }
         ],
         "responses": {
@@ -1221,327 +924,11 @@
         }
       }
     },
-    "/api/domains/domain/{domain}/test": {
-      "post": {
-        "tags": ["Domain Management"],
-        "summary": "Test domain",
-        "description": "Run comprehensive tests on a domain (SPF, DMARC, DNS)",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Domain tests completed successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DomainTestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Domain not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/validate/{domain}": {
-      "get": {
-        "tags": ["Domain Analysis"],
-        "summary": "Validate domain",
-        "description": "Validate domain name format",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name to validate"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Domain validation completed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DomainValidationResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/spf/analyze": {
-      "post": {
-        "tags": ["Domain Analysis"],
-        "summary": "Analyze SPF record",
-        "description": "Analyze SPF record for a domain",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SPFAnalysisRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "SPF analysis completed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SPFAnalysisResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/dmarc/analyze": {
-      "post": {
-        "tags": ["Domain Analysis"],
-        "summary": "Analyze DMARC record",
-        "description": "Analyze DMARC record for a domain",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DMARCAnalysisRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "DMARC analysis completed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DMARCAnalysisResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/dns/records/{domain}": {
-      "get": {
-        "tags": ["Domain Analysis"],
-        "summary": "Get DNS records",
-        "description": "Get DNS records for a domain",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name"
-          },
-          {
-            "name": "record_type",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "TXT"
-            },
-            "description": "DNS record type (A, AAAA, MX, TXT, CNAME, NS, SOA)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "DNS records retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DNSResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/dns/records/{domain}/all": {
-      "get": {
-        "tags": ["Domain Analysis"],
-        "summary": "Get all DNS records",
-        "description": "Get all DNS record types for a domain",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "All DNS records retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "domain": {
-                      "type": "string"
-                    },
-                    "records": {
-                      "type": "object"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/domains/dns/records/{domain}/individual": {
       "get": {
         "tags": ["Domain Analysis"],
-        "summary": "Analyze individual DNS record types",
-        "description": "Analyze specific DNS record types or run comprehensive analysis for a domain using the dns_individual.py script",
+        "summary": "Analyze individual DNS record",
+        "description": "Analyze a specific DNS record type for a domain",
         "security": [
           {
             "bearerAuth": []
@@ -1563,87 +950,45 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "CAA", "TXT", "SPF", "DMARC", "DKIM"]
+              "enum": ["A", "AAAA", "CNAME", "MX", "TXT", "NS", "PTR", "SOA", "SRV", "CAA"]
             },
-            "description": "DNS record type to analyze. If not provided, runs comprehensive analysis of all record types"
+            "description": "DNS record type to analyze"
+          },
+          {
+            "name": "no_save",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["true", "false"]
+            },
+            "description": "Whether to save the analysis to database (default: false)"
           }
         ],
         "responses": {
           "200": {
-            "description": "DNS analysis completed successfully",
+            "description": "DNS analysis completed",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": {
-                      "type": "boolean"
+                    "domain": {
+                      "type": "string"
                     },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "domain": {
-                          "type": "string",
-                          "description": "Domain name analyzed"
-                        },
-                        "dns_provider": {
-                          "type": "string",
-                          "description": "Detected DNS provider"
-                        },
-                        "hosting_provider": {
-                          "type": "string",
-                          "description": "Detected hosting provider"
-                        },
-                        "use_cases": {
-                          "type": "object",
-                          "description": "Analysis results for each record type",
-                          "additionalProperties": {
-                            "type": "object",
-                            "properties": {
-                              "Goal": {
-                                "type": "string"
-                              },
-                              "Purpose": {
-                                "type": "string"
-                              },
-                              "Expected": {
-                                "type": "string"
-                              },
-                              "Notes": {
-                                "type": "string"
-                              },
-                              "Status": {
-                                "type": "string",
-                                "enum": ["Valid", "Not present", "Error"]
-                              },
-                              "records": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                              },
-                              "Error": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        },
-                        "dns_record_published": {
-                          "type": "boolean",
-                          "description": "Whether DNS records are published"
-                        },
-                        "dmarc_record_published": {
-                          "type": "boolean",
-                          "description": "Whether DMARC record is published"
-                        },
-                        "spf_record_published": {
-                          "type": "boolean",
-                          "description": "Whether SPF record is published"
-                        },
-                        "success": {
-                          "type": "boolean",
-                          "description": "Overall analysis success status"
-                        }
+                    "record_type": {
+                      "type": "string"
+                    },
+                    "records": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
                       }
                     }
                   }
@@ -1652,341 +997,11 @@
             }
           },
           "400": {
-            "description": "Invalid input data",
+            "description": "Invalid domain or record type",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/dns/analyses": {
-      "get": {
-        "tags": ["DNS Analysis"],
-        "summary": "Get user's DNS analyses",
-        "description": "Retrieve all DNS analyses for the authenticated user",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 50,
-              "minimum": 1,
-              "maximum": 100
-            },
-            "description": "Maximum number of analyses to return"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "DNS analyses retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "analyses": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/DNSAnalysis"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/dns/analyses/{id}": {
-      "get": {
-        "tags": ["DNS Analysis"],
-        "summary": "Get DNS analysis by ID",
-        "description": "Retrieve a specific DNS analysis by its ID",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "DNS analysis ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "DNS analysis retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "analysis": {
-                          "$ref": "#/components/schemas/DNSAnalysis"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "DNS analysis not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": ["DNS Analysis"],
-        "summary": "Delete DNS analysis",
-        "description": "Delete a specific DNS analysis by its ID",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "DNS analysis ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "DNS analysis deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string",
-                          "example": "DNS analysis deleted successfully"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "DNS analysis not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/dns/analyses/domain/{domain}": {
-      "get": {
-        "tags": ["DNS Analysis"],
-        "summary": "Get domain's DNS analyses",
-        "description": "Retrieve all DNS analyses for a specific domain",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 10,
-              "minimum": 1,
-              "maximum": 50
-            },
-            "description": "Maximum number of analyses to return"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Domain DNS analyses retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "analyses": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/DNSAnalysis"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/domains/dns/analyses/domain/{domain}/latest": {
-      "get": {
-        "tags": ["DNS Analysis"],
-        "summary": "Get latest DNS analysis for domain",
-        "description": "Retrieve the most recent DNS analysis for a specific domain",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Domain name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Latest DNS analysis retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "analysis": {
-                          "$ref": "#/components/schemas/DNSAnalysis"
-                        }
-                      }
-                    }
-                  }
                 }
               }
             }
