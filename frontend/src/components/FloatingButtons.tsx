@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 
 const FloatingButtons: React.FC = () => {
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode, toggleTheme, setThemeColorMeta } = useTheme();
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -21,11 +21,18 @@ const FloatingButtons: React.FC = () => {
     });
   };
 
+  const handleThemeToggle = () => {
+    toggleTheme();
+    // Set theme color meta when toggling theme
+    const newThemeColor = !isDarkMode ? '#1f2937' : '#ffffff';
+    setThemeColorMeta(newThemeColor);
+  };
+
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
       {/* Theme Toggle Button */}
       <button
-        onClick={toggleTheme}
+        onClick={handleThemeToggle}
         className="w-12 h-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
         title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       >
