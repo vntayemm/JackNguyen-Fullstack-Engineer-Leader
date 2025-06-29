@@ -598,7 +598,7 @@ const Dashboard: React.FC = () => {
                       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] relative flex flex-col">
                           {/* Fixed Header */}
-                          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10">
+                          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 top-0 bg-white dark:bg-gray-800 z-10">
                             <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Detailed Analysis Results – {domain.domain_name || 'Unknown Domain'}</h4>
                             <button
                               onClick={() => toggleExpanded(domain.domain_name || '')}
