@@ -18,6 +18,7 @@ import DomainValidator from './pages/DomainValidator';
 import Document from './pages/Document';
 import TermsOfService from './pages/legal/TermsOfService';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import DNSCharts from './components/DNSCharts';
 import { apiService } from './services/api';
 import config from './config';
 import './App.css';
@@ -94,6 +95,7 @@ const AppContent: React.FC = () => {
             <Route path="/account/dashboard" element={<Dashboard />} />
             <Route path="/domain-validator" element={<DomainValidator />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/charts" element={<DNSCharts />} />
             <Route path="/document" element={<Document />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
