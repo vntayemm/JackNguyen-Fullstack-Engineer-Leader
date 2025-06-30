@@ -46,7 +46,11 @@ app.use(`${config.API_PREFIX}/domains`, domainRoutes);
 
 // Serve the generated swagger.json file
 app.get(`${config.API_PREFIX}/docs/swagger.json`, (req, res) => {
-  const swaggerPath = path.join(process.cwd(), 'swagger.json');
+  let swaggerPath = path.join(process.cwd(), 'swagger.json');
+  if (!fs.existsSync(swaggerPath)) {
+    swaggerPath = path.join(process.cwd(), 'backend/swagger.json');
+  }
+  console.log(swaggerPath);
   if (fs.existsSync(swaggerPath)) {
     res.sendFile(swaggerPath);
   } else {

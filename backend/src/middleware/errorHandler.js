@@ -3,7 +3,6 @@
  * Handles all errors and formats them consistently using DTOs
  */
 
-import { ErrorResponseDTO } from '../dto/index.js';
 import { sendErrorResponse } from '../dto/utils.js';
 import config from '../config.js';
 
@@ -62,6 +61,15 @@ export class NotFoundError extends APIError {
  */
 export class ConflictError extends APIError {
   constructor(message = 'Resource conflict') {
+    super(message, 409);
+  }
+}
+
+/**
+ * Domain conflict error class for business exceptions
+ */
+export class BusinessException extends APIError {
+  constructor(message = 'Domain already exists in your list') {
     super(message, 409);
   }
 }
@@ -164,7 +172,8 @@ export const errorHandler = (err, req, res, next) => {
       'Please verify your email address before logging in. Check your email for the verification link.',
       'Invalid or expired reset token',
       'User not found',
-      'Current password is incorrect'
+      'Current password is incorrect',
+      'Domain already exists in your list'
     ];
     
     if (knownErrors.includes(err.message)) {
@@ -178,6 +187,8 @@ export const errorHandler = (err, req, res, next) => {
         statusCode = 409;
       } else if (err.message.includes('User not found')) {
         statusCode = 404;
+      } else if (err.message.includes('Domain already exists')) {
+        statusCode = 409;
       }
     } else {
       // For unknown errors, use generic message in production

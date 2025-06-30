@@ -5,16 +5,11 @@ import {
   ChangePasswordRequestDTO,
   ChangePasswordResponseDTO,
   DeleteAccountResponseDTO,
-  ErrorResponseDTO
 } from '../dto/index.js';
 import {
-  validateRequest,
-  handleValidationErrors,
-  sendSuccessResponse,
-  sendErrorResponse,
-  sanitizeRequest
+  sendSuccessResponse
 } from '../dto/utils.js';
-import { asyncHandler, AuthenticationError, ValidationError, NotFoundError } from '../middleware/errorHandler.js';
+import { asyncHandler, AuthenticationError, ValidationError } from '../middleware/errorHandler.js';
 
 export const getProfile = asyncHandler(async (req, res) => {
   const userId = req.user.id;

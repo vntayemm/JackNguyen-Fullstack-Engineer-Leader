@@ -1,5 +1,5 @@
 import { DNSAnalysis } from '../models/index.js';
-import pythonDomainValidatorService from './pythonDomainValidatorService.js';
+import { BusinessException } from '../middleware/errorHandler.js';
 
 class DomainService {
   constructor() {
@@ -45,7 +45,7 @@ class DomainService {
     });
     
     if (existingAnalysis) {
-      throw new Error('Domain already exists in your list');
+      throw new BusinessException('Domain already exists in your list');
     }
     
     // Create initial analysis record

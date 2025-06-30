@@ -16,13 +16,9 @@ import {
   DeleteAccountResponseDTO
 } from '../dto/index.js';
 import {
-  validateRequest,
-  handleValidationErrors,
   sendSuccessResponse,
-  sendErrorResponse,
-  sanitizeRequest
 } from '../dto/utils.js';
-import { asyncHandler, AuthenticationError, ValidationError, NotFoundError } from '../middleware/errorHandler.js';
+import { asyncHandler, AuthenticationError, ValidationError } from '../middleware/errorHandler.js';
 
 export const register = asyncHandler(async (req, res) => {
   const registerData = new RegisterRequestDTO(req.body);
